@@ -42,12 +42,11 @@ class COCOSegDataset(torch.utils.data.Dataset):
         ----------
         path : Path towards coco root directory. It should be structured as default.
         spilt : str `"train"` or `"val"`.
-        transform : transform towards the image. For resizing, please use `resize` parameter,
-          for torch transforms might have issues transforming masks.
+        transform : transform towards the image.
         class_limit : Limit class index from 0 to the value. Set to `None` for no limit.
         num_limit : Limit maximum number of images to use. Only works with `preprocess`.
         resize : tuple (h,w) to resize the image and its mask. Uses Image from PIL to avoid
-          artifacts on the mask
+          artifacts on the mask. Will be ignored if transforms.Resize is defined in transform.
         preprocess : Set true to allow preprocess that filter out all images with mask that
           have lesser than `least_pix` pixels.
         least_pix : filter out thersold of preprocess.
@@ -75,11 +74,19 @@ class COCOSegDataset(torch.utils.data.Dataset):
         self.num_classes = len(self.coco.getCatIds())
         self.masks = []
         self.resize = resize
+        ## Resizing the mask should be handled seperately, or there might be significant artifacts.
+        for i in transform.transforms:
+            if i.__class__==transforms.Resize:
+                self.resize=(i.size,i.size)
         self.limit_classes = class_limit
         self.num_limit = num_limit
         self.class_list = class_list
         self.no_missing_img = False
-        self.mask_transform = transforms.Compose([transforms.ToTensor()])
+        lst = []
+        for i in transform.transforms:
+            if i.__class__!=transforms.Resize and i.__class__!=transforms.Normalize:
+                lst.append(i)
+        self.mask_transform = transforms.Compose(lst)
         if preprocess:
             self.ids = []
             self.__preprocess__(list(self.coco.imgs.keys()),least_pix=least_pix,spilt=spilt)
