@@ -44,10 +44,10 @@ class COCOSegDataset(torch.utils.data.Dataset):
         path : Path towards coco root directory. It should be structured as default.
         spilt : str `"train"` or `"val"`.
         transform : transform towards the image. If transform.Resize is specified, 
-          it will overwrite `resize` parameter, BUT ONLY accepts Sequence (h,w)
+          it will overwrite `resize` parameter, BUT ONLY accepts Sequence (w,h)
         class_limit : Limit class index from 0 to the value. Set to `None` for no limit.
         num_limit : Limit maximum number of images to use. Only works with `preprocess`.
-        resize : tuple (h,w) to resize the image and its mask. Uses Image from PIL to avoid
+        resize : tuple (w,h) to resize the image and its mask. Uses Image from PIL to avoid
           artifacts on the mask. Will be ignored if transforms.Resize is defined in transform.
         preprocess : Set true to allow preprocess that filter out all images with mask that
           have lesser than `least_pix` pixels.
@@ -72,17 +72,22 @@ class COCOSegDataset(torch.utils.data.Dataset):
             raise Exception(f"Invalid spilt: {spilt}")
         if not exists(self.root):
             mkdir(self.root)
-        self.transform = transform
+        
         self.num_classes = len(self.coco.getCatIds())
         self.masks = []
         self.resize = resize
         ## Resizing the mask should be handled seperately, or there might be significant artifacts.
+        lst_tsf = []
         for i in transform.transforms:
             if i.__class__==transforms.Resize:
                 if isinstance(i.size, Sequence):
-                    self.resize=i.size
+                    h,w = i.size
+                    self.resize=(w,h)
                 else:
                     raise TypeError(f"Size in transform should be only sequence. Got {type(i.size)}")
+            else:
+                lst_tsf.append(i)
+        self.transform = transforms.Compose(lst_tsf)
         self.limit_classes = class_limit
         self.num_limit = num_limit
         self.class_list = class_list
