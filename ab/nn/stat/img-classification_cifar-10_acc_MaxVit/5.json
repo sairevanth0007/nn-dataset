@@ -1,0 +1,55 @@
+[
+    {
+        "accuracy": 0.6803,
+        "attention_dropout": 0.0,
+        "batch": 4,
+        "dropout": 0.0,
+        "lr": 0.0061,
+        "momentum": 0.7549,
+        "stochastic_depth_prob": 0.2,
+        "duration": 1983531745718,
+        "transform": "cifar-10_norm_299"
+    },
+    {
+        "accuracy": 0.6395,
+        "attention_dropout": 0.0,
+        "batch": 4,
+        "dropout": 0.0,
+        "lr": 0.0061,
+        "momentum": 0.7549,
+        "stochastic_depth_prob": 0.2,
+        "duration": 3147452969851,
+        "transform": "cifar-10_norm_299"
+    },
+    {
+        "accuracy": 0.6247,
+        "attention_dropout": 0.0,
+        "batch": 4,
+        "dropout": 0.0,
+        "lr": 0.0061,
+        "momentum": 0.7549,
+        "stochastic_depth_prob": 0.2,
+        "duration": 1985820127850,
+        "transform": "cifar-10_norm_299"
+    },
+    {
+        "accuracy": 0.1,
+        "attention_dropout": 0.0,
+        "batch": 1,
+        "dropout": 0.0,
+        "lr": 0.5563510128959211,
+        "momentum": 0.062068808579240846,
+        "stochastic_depth_prob": 0.2,
+        "transform": "cifar-10_norm_299"
+    },
+    {
+        "accuracy": 0.0,
+        "attention_dropout": 0.0,
+        "batch": 4096,
+        "dropout": 0.0,
+        "lr": 0.0012038065628955453,
+        "momentum": 0.5408665567109844,
+        "stochastic_depth_prob": 0.2,
+        "transform": "cifar-10_norm_299"
+    }
+]

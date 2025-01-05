@@ -26,9 +26,9 @@ class MIoU(object):
     """
     Computes mIoU metric scores
     """
-    def __init__(self, nclass):
+    def __init__(self, out_shape):
         super(MIoU, self).__init__()
-        self.nclass = nclass
+        self.nclass = out_shape[0]
         self.reset()
 
     def update(self, preds, labels):

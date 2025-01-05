@@ -112,13 +112,16 @@ class _Transition(nn.Sequential):
         self.conv = nn.Conv2d(num_input_features, num_output_features, kernel_size=1, stride=1, bias=False)
         self.pool = nn.AvgPool2d(kernel_size=2, stride=2)
 
+
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'dropout'}
+
 class Net(nn.Module):
 
-
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -130,23 +133,19 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(
-        self,
-        growth_rate: int = 32,
-        block_config: Tuple[int, int, int, int] = (6, 12, 24, 16),
-        num_init_features: int = 64,
-        bn_size: int = 4,
-        drop_rate: float = 0,
-        num_classes: int = 1000,
-        memory_efficient: bool = False,
-    ) -> None:
-
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
-
+        num_classes: int = out_shape[0]
+        growth_rate: int = 32
+        block_config: Tuple[int, int, int, int] = (6, 12, 24, 16)
+        num_init_features: int = 64
+        bn_size: int = in_shape[0]
+        drop_rate: float = prms['dropout']
+        memory_efficient: bool = False
         self.features = nn.Sequential(
             OrderedDict(
                 [
-                    ("conv0", nn.Conv2d(3, num_init_features, kernel_size=7, stride=2, padding=3, bias=False)),
+                    ("conv0", nn.Conv2d(in_shape[1], num_init_features, kernel_size=7, stride=2, padding=3, bias=False)),
                     ("norm0", nn.BatchNorm2d(num_init_features)),
                     ("relu0", nn.ReLU(inplace=True)),
                     ("pool0", nn.MaxPool2d(kernel_size=3, stride=2, padding=1)),

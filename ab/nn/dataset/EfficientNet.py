@@ -189,13 +189,16 @@ class FusedMBConv(nn.Module):
         return result
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'dropout'}
+
+
 class Net(nn.Module):
 
-
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -207,16 +210,14 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(
-        self,
-        inverted_residual_setting: Sequence[Union[MBConvConfig, FusedMBConvConfig]] = None,
-        dropout: float = 0.2,
-        stochastic_depth_prob: float = 0.2,
-        num_classes: int = 1000,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
-        last_channel: Optional[int] = None,
-    ) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
+        inverted_residual_setting: Sequence[Union[MBConvConfig, FusedMBConvConfig]] = None
+        dropout: float = prms['dropout']
+        stochastic_depth_prob: float = 0.2
+        num_classes: int = out_shape[0]
+        norm_layer: Optional[Callable[..., nn.Module]] = None
+        last_channel: Optional[int] = None
         if inverted_residual_setting is None:
             bneck_conf = partial(MBConvConfig, width_mult=1.0, depth_mult=1.0)
             inverted_residual_setting = [
@@ -245,7 +246,7 @@ class Net(nn.Module):
         firstconv_output_channels = inverted_residual_setting[0].input_channels
         layers.append(
             Conv2dNormActivation(
-                3, firstconv_output_channels, kernel_size=3, stride=2, norm_layer=norm_layer, activation_layer=nn.SiLU
+                in_shape[1], firstconv_output_channels, kernel_size=3, stride=2, norm_layer=norm_layer, activation_layer=nn.SiLU
             )
         )
 

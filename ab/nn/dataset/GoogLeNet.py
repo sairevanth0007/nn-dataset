@@ -12,13 +12,17 @@ GoogLeNetOutputs.__annotations__ = {"logits": Tensor, "aux_logits2": Optional[Te
 _GoogLeNetOutputs = GoogLeNetOutputs
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'dropout', 'dropout_aux'}
+
+
 class Net(nn.Module):
 
 
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -31,12 +35,13 @@ class Net(nn.Module):
 
     __constants__ = ["aux_logits", "transform_input"]
 
-    def __init__(self, num_classes: int = 1000) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
         transform_input: bool = False
         blocks: Optional[List[Callable[..., nn.Module]]] = None
-        dropout: float = 0.2
-        dropout_aux: float = 0.7
+        num_classes: int = out_shape[0]
+        dropout = prms['dropout']
+        dropout_aux: float = prms['dropout_aux']
 
         if blocks is None:
             blocks = [BasicConv2d, Inception, InceptionAux]
@@ -50,7 +55,7 @@ class Net(nn.Module):
         self.aux_logits = True
         self.transform_input = transform_input
 
-        self.conv1 = conv_block(3, 64, kernel_size=7, stride=2, padding=3)
+        self.conv1 = conv_block(in_shape[1], 64, kernel_size=7, stride=2, padding=3)
         self.maxpool1 = nn.MaxPool2d(3, stride=2, ceil_mode=True)
         self.conv2 = conv_block(64, 64, kernel_size=1)
         self.conv3 = conv_block(64, 192, kernel_size=3, padding=1)

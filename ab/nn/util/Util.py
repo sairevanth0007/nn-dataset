@@ -1,7 +1,6 @@
 import argparse
 import math
 from os.path import exists, join
-from pathlib import Path
 
 import ab.nn.util.Const as Const
 from ab.nn.util.Const import *
@@ -15,37 +14,18 @@ def get_attr (mod, f):
 
 
 def conf_to_names(c: str) -> list[str]:
-    return c.split('-')
+    return c.split('_')
 
 
 def is_full_config(s: str):
     l = conf_to_names(s)
-    return 4 == len(l) and exists(join(Const.dataset_dir_global, l[-1] + '.py'))
+    return 4 == len(l) and exists(join(dataset_dir, l[-1] + '.py'))
 
 
 def merge_prm(prm: dict, d: dict):
     prm.update(d)
     prm = dict(sorted(prm.items()))
     return prm
-
-
-def define_global_paths():
-    """
-    Defines project paths from current directory.
-    """
-    stat_dir = 'stat'
-
-    import ab.nn.__init__ as init_file
-    pref = Path(init_file.__file__).parent.absolute()
-    Const.stat_dir_global = join(pref, stat_dir)
-    Const.dataset_dir_global = join(pref, 'dataset')
-
-    Const.data_dir_global = 'data'
-    Const.db_dir_global = join('db', 'ab.nn.db')
-    if exists(stat_dir):
-        project_root = ['..'] * len(to_nn)
-        Const.data_dir_global = join(*project_root, Const.data_dir_global)
-        Const.db_dir_global = join(*project_root, Const.db_dir_global)
 
 def max_batch (binary_power):
     return 2 ** binary_power
@@ -68,9 +48,9 @@ def args():
     parser.add_argument('-c', '--config', type=str, default=default_config,
                         help="Configuration specifying the model training pipelines. The default value for all configurations.")
     parser.add_argument('-e', '--epochs', type=int, default=default_epochs,
-                        help="Numbers of training epochs")
+                        help="Numbers of training epochs.")
     parser.add_argument('-t', '--trials', type=int, default=default_trials,
-                        help="Number of Optuna trials")
+                        help="The total number of Optuna trials the model should have. If negative, its absolute value represents the number of additional trials.")
     parser.add_argument('--min_batch_binary_power', type=int, default=default_min_batch_power,
                         help="Minimum power of two for batch size. E.g., with a value of 0, batch size equals 2**0 = 1.")
     parser.add_argument('-b', '--max_batch_binary_power', type=int, default=default_max_batch_power,
@@ -88,7 +68,7 @@ def args():
     parser.add_argument('-a', '--nn_fail_attempts', type=int, default=default_nn_fail_attempts,
                         help="Number of attempts if the neural network model throws exceptions.")
     parser.add_argument('-r', '--random_config_order', type=bool, default=default_random_config_order,
-                        help="If random shuffling of the config list is required before training.")
+                        help="If random shuffling of the config list is required.")
     return parser.parse_args()
 
 

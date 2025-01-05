@@ -96,14 +96,16 @@ class InvertedResidual(nn.Module):
         return result
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'dropout', 'norm_eps', 'norm_momentum'}
+
 
 class Net(nn.Module):
 
-
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -115,19 +117,18 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(
-        self,
-        inverted_residual_setting=None,
-        last_channel: int = None,
-        num_classes: int = 1000,
-        block: Optional[Callable[..., nn.Module]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
-            dropout: float = 0.2
-    ) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
         reduce_divider = 2
         width_mult = 1.0
         dilation = 2
+        
+        inverted_residual_setting = None
+        last_channel: int = None
+        num_classes: int = out_shape[0]
+        block: Optional[Callable[..., nn.Module]] = None
+        norm_layer: Optional[Callable[..., nn.Module]] = None
+        dropout: float = prms['dropout']
 
         if inverted_residual_setting is None:
             bneck_conf = partial(InvertedResidualConfig, width_mult=width_mult)
@@ -157,16 +158,15 @@ class Net(nn.Module):
 
         if block is None:
             block = InvertedResidual
-
         if norm_layer is None:
-            norm_layer = partial(nn.BatchNorm2d, eps=0.001, momentum=0.01)
+            norm_layer = partial(nn.BatchNorm2d, eps=prms['norm_eps'], momentum=prms['norm_momentum'])
 
         layers: List[nn.Module] = []
 
         firstconv_output_channels = inverted_residual_setting[0].input_channels
         layers.append(
             Conv2dNormActivation(
-                3,
+                in_shape[1],
                 firstconv_output_channels,
                 kernel_size=3,
                 stride=2,

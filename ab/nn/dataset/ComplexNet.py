@@ -234,13 +234,16 @@ class ComplexLinear(Module):
         return apply_complex(self.fc_r, self.fc_i, input)
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum'}
+
 class Net(nn.Module):
 
 
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -252,13 +255,13 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict):
         super(Net, self).__init__()
-        self.conv1 = ComplexConv2d(3, 10, 5, 1)
+        self.conv1 = ComplexConv2d(in_shape[1], 10, 5, 1)
         self.bn  = ComplexBatchNorm2d(10)
         self.conv2 = ComplexConv2d(10, 20, 5, 1)
         self.fc1 = ComplexLinear(500, 500)
-        self.fc2 = ComplexLinear(500, 10)
+        self.fc2 = ComplexLinear(500, out_shape[0])
 
     def forward(self, x):
         x = x.view(-1, 3, 32, 32)

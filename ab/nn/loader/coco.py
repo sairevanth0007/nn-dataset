@@ -1,23 +1,23 @@
-import torch
-from PIL import Image
-from torchvision import transforms
-from pycocotools.coco import COCO
-from pycocotools import mask as cocmask
-import numpy as np
 import os
-import tqdm
+from os import makedirs, mkdir
+from os.path import join, exists
 
+import numpy as np
 import requests
-
+import torch
+import tqdm
+from PIL import Image
+from pycocotools import mask as cocmask
+from pycocotools.coco import COCO
+from torchvision import transforms
 from torchvision.datasets.utils import download_and_extract_archive
-import ab.nn.util.Const as Const
+from ab.nn.util.Const import data_dir
 
 coco_ann_url = "http://images.cocodataset.org/annotations/annotations_trainval2017.zip"
 coco_img_url = "http://images.cocodataset.org/zips/{}2017.zip"
 
 # Reduce COCOS classes:
-MIN_CLASS_LIST = [0, 1, 2, 16, 9, 44, 6, 3, 17, 62, 21, 67, 18, 19, 4,
-                  5, 64, 20, 63, 7, 72]
+MIN_CLASS_LIST = [0, 1, 2, 16, 9, 44, 6, 3, 17, 62, 21, 67, 18, 19, 4, 5, 64, 20, 63, 7, 72]
 MIN_CLASS_N = len(MIN_CLASS_LIST)
 
 def class_n ():
@@ -27,10 +27,10 @@ def get_class_list():
     return MIN_CLASS_LIST
 
 def loader(resize=(128,128), **kwargs):
-    path= os.path.join(Const.data_dir_global, 'coco')
+    path = join(data_dir, 'coco')
     train_set = COCOSegDataset(root=path,spilt="train",resize=resize,preprocess=True,**kwargs)
     val_set = COCOSegDataset(root=path,spilt="val",resize=resize,preprocess=True,**kwargs)
-    return class_n(), train_set, val_set
+    return (class_n(),), train_set, val_set
 
 
 class COCOSegDataset(torch.utils.data.Dataset):
@@ -58,18 +58,18 @@ class COCOSegDataset(torch.utils.data.Dataset):
         self.root = root
         if spilt in valid_split:
             try:
-                self.coco = COCO(os.path.join(root,"annotations",f"instances_{spilt}2017.json"))
+                self.coco = COCO(join(root, "annotations", f"instances_{spilt}2017.json"))
             except:
                 # annFile doesn't exist, download the annotation file to root.
                 print("Annotation file doesn't exists! Downloading")
-                os.makedirs(root,exist_ok=True)
+                makedirs(root,exist_ok=True)
                 download_and_extract_archive(coco_ann_url, self.root, filename="annotations_trainval2017.zip")
                 print("Annotation file preparation complete")
-                self.coco = COCO(os.path.join(root,"annotations",f"instances_{spilt}2017.json"))
+                self.coco = COCO(join(root, "annotations", f"instances_{spilt}2017.json"))
         else:
             raise Exception(f"Invalid spilt: {spilt}")
-        if not os.path.exists(self.root):
-            os.mkdir(self.root)
+        if not exists(self.root):
+            mkdir(self.root)
         self.transform = transform
         self.num_classes = len(self.coco.getCatIds())
         self.masks = []
@@ -92,13 +92,13 @@ class COCOSegDataset(torch.utils.data.Dataset):
             self.__preprocess__(list(self.coco.imgs.keys()),least_pix=least_pix,spilt=spilt)
         else:
             self.ids = list(self.coco.imgs.keys())
-        self.root = os.path.join(root,spilt+"2017")
+        self.root = join(root, spilt + "2017")
 
     def __getitem__(self, index):
         coco = self.coco
         img_id = self.ids[index]
         image_info = coco.loadImgs(img_id)[0]
-        file_Path = os.path.join(self.root,image_info['file_name'])
+        file_Path = join(self.root, image_info['file_name'])
         try:
             image = Image.open(file_Path).convert('RGB') # Read RGB image
         except:
@@ -146,15 +146,15 @@ class COCOSegDataset(torch.utils.data.Dataset):
         coco = self.coco
         ## Test on first image to figure out if dataset itself exists
         first_image_info = coco.loadImgs(ids[0])[0]
-        first_file_Path = os.path.join(self.root,spilt+"2017",first_image_info['file_name'])
-        list_file_path = os.path.join(self.root,spilt+"2017.list")
-        if not os.path.exists(first_file_Path):
+        first_file_Path = join(self.root, spilt + "2017", first_image_info['file_name'])
+        list_file_path = join(self.root, spilt + "2017.list")
+        if not exists(first_file_Path):
             print("Image dataset doesn't exists! Downloading...")
             download_and_extract_archive(coco_img_url.format(spilt), self.root, filename=f"{spilt}2017.zip") ## Download using torchvision download API
             print("Image dataset preparation complete")
         ## Check whether the configuration matches or not.
         no_mismatch = False
-        if os.path.exists(list_file_path):
+        if exists(list_file_path):
             print("List file found, loading...")
             no_mismatch = True
             length = 0

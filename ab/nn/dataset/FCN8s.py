@@ -76,15 +76,19 @@ class FCNHead(nn.Sequential):
         super().__init__(*layers)
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'dropout'}
+
+
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(device),)
-        params_list = [{'params': self.backbone.parameters(), 'lr': prm['lr']}]
+        params_list = [{'params': self.backbone.parameters(), 'lr': prms['lr']}]
         for module in self.exclusive:
-            params_list.append({'params': getattr(self, module).parameters(), 'lr': prm['lr'] * 10})
-        self.optimizer = torch.optim.SGD(params_list, lr=prm['lr'], momentum=prm['momentum'])
+            params_list.append({'params': getattr(self, module).parameters(), 'lr': prms['lr'] * 10})
+        self.optimizer = torch.optim.SGD(params_list, lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -96,11 +100,12 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, num_classes = 21):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict):
         super(Net, self).__init__()
+        num_classes = out_shape[0]
         backbone_num_classes = None
         init_weights = True
-        dropout = 0.5
+        dropout = prms['dropout']
         backbone = VGG(make_layers(vgg_cfgs["D"]),num_classes=num_classes if (backbone_num_classes == None) else backbone_num_classes,init_weights=init_weights,dropout=dropout)
 
         features = list(backbone.features.children())

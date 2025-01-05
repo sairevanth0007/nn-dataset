@@ -1,5 +1,5 @@
 from functools import partial
-from typing import Any, Callable, List, Optional, Sequence
+from typing import Callable, List, Optional, Sequence
 
 import torch
 from torch import nn, Tensor
@@ -67,12 +67,16 @@ class CNBlockConfig:
         return s.format(**self.__dict__)
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'stochastic_depth_prob', 'norm_eps', 'norm_std'}
+
+
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -83,18 +87,14 @@ class Net(nn.Module):
             loss.backward()
             self.optimizer.step()
 
-    def __init__(
-        self,
-        block_setting=None,
-        stochastic_depth_prob: float = 0.0,
-        layer_scale: float = 1e-6,
-        num_classes: int = 1000,
-        block: Optional[Callable[..., nn.Module]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
-        **kwargs: Any,
-    ) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
-
+        num_classes: int = out_shape[0]
+        stochastic_depth_prob: float = prms['stochastic_depth_prob']
+        layer_scale: float = 1e-6
+        block_setting = None
+        block: Optional[Callable[..., nn.Module]] = None
+        norm_layer: Optional[Callable[..., nn.Module]] = None
         if block_setting is None:
             block_setting = [
                 CNBlockConfig(96, 192, 3),
@@ -110,12 +110,12 @@ class Net(nn.Module):
         if block is None:
             block = CNBlock
         if norm_layer is None:
-            norm_layer = partial(LayerNorm2d, eps=1e-6)
+            norm_layer = partial(LayerNorm2d, eps=prms['norm_eps'])
         layers: List[nn.Module] = []
         firstconv_output_channels = block_setting[0].input_channels
         layers.append(
             Conv2dNormActivation(
-                3,
+                in_shape[1],
                 firstconv_output_channels,
                 kernel_size=4,
                 stride=4,
@@ -156,7 +156,7 @@ class Net(nn.Module):
 
         for m in self.modules():
             if isinstance(m, (nn.Conv2d, nn.Linear)):
-                nn.init.trunc_normal_(m.weight, std=0.02)
+                nn.init.trunc_normal_(m.weight, std=prms['norm_std'])
                 if m.bias is not None:
                     nn.init.zeros_(m.bias)
 

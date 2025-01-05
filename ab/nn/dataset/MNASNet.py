@@ -1,4 +1,5 @@
 from typing import Dict, List
+
 import torch
 import torch.nn as nn
 from torch import Tensor
@@ -59,12 +60,15 @@ def _get_depths(alpha: float) -> List[int]:
     return [_round_to_multiple_of(depth * alpha, 8) for depth in depths]
 
 
-class Net(torch.nn.Module):
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'dropout'}
 
-    def train_setup(self, device, prm):
+class Net(nn.Module):
+
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -78,15 +82,18 @@ class Net(torch.nn.Module):
 
     _version = 2
 
-    def __init__(self, alpha: float = 0.75, num_classes: int = 1000, dropout: float = 0.2) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
+        alpha: float = 0.75
+        num_classes: int = out_shape[0]
+        dropout: float = prms['dropout']
         if alpha <= 0.0:
             raise ValueError(f"alpha should be greater than 0.0 instead of {alpha}")
         self.alpha = alpha
         self.num_classes = num_classes
         depths = _get_depths(alpha)
         layers = [
-            nn.Conv2d(3, depths[0], 3, padding=1, stride=2, bias=False),
+            nn.Conv2d(in_shape[1], depths[0], 3, padding=1, stride=2, bias=False),
             nn.BatchNorm2d(depths[0], momentum=_BN_MOMENTUM),
             nn.ReLU(inplace=True),
             nn.Conv2d(depths[0], depths[0], 3, padding=1, stride=1, groups=depths[0], bias=False),

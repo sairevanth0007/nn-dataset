@@ -7,10 +7,10 @@ if __name__ == "__main__":
     # NN pipeline configuration examples
     conf = a.config  # From the command line argument --config
     # conf = ''  # For all configurations
-    # conf = 'img_classification' # For all image classification configurations
-    # conf = 'img_classification-cifar10-acc-cifar10_norm' # For a particular configuration for all models
-    # conf = 'img_classification-cifar10-acc-cifar10_norm-GoogLeNet'  # For a particular configuration and model
-    # conf = ('img_classification', 'img_segmentation')  # For all image classification and segmentation configurations
+    # conf = 'img-classification' # For all image classification configurations
+    # conf = 'img-classification_cifar-10_acc' # For a particular configuration for all models
+    # conf = 'img-classification_cifar-10_acc_GoogLeNet'  # For a particular configuration and model
+    # conf = ('img-classification', 'img-segmentation')  # For all image classification and segmentation configurations
 
     # Number of epochs.
     epochs = a.epochs
@@ -18,8 +18,8 @@ if __name__ == "__main__":
     # Number of Optuna trial examples.
     trials = a.trials  # From the command line argument --trials
     # trials = 100  # 100 trials
-    # trials = "+1"  # Try once more: for quick verification of model training process after code modifications.
-    # trials = "+5"  # Try 5 more times: to thoroughly verify model training after code modifications.
+    # trials = -1  # Try once more: for quick verification of model training process after code modifications.
+    # trials = -5  # Try 5 more times: to thoroughly verify model training after code modifications.
 
     # Other command line arguments
     min_batch_power = a.min_batch_binary_power

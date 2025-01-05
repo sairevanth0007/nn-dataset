@@ -51,13 +51,15 @@ class InvertedResidual(nn.Module):
             return self.conv(x)
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'dropout'}
+
 class Net(nn.Module):
 
-
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -69,18 +71,15 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(
-        self,
-        num_classes: int = 1000,
-        width_mult: float = 1.0,
-        inverted_residual_setting: Optional[List[List[int]]] = None,
-        round_nearest: int = 8,
-        block: Optional[Callable[..., nn.Module]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
-        dropout: float = 0.2,
-    ) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
-
+        num_classes: int = out_shape[0]
+        width_mult: float = 1.0
+        inverted_residual_setting: Optional[List[List[int]]] = None
+        round_nearest: int = 8
+        block: Optional[Callable[..., nn.Module]] = None
+        norm_layer: Optional[Callable[..., nn.Module]] = None
+        dropout: float = prms['dropout']
         if block is None:
             block = InvertedResidual
 
@@ -109,7 +108,7 @@ class Net(nn.Module):
         input_channel = _make_divisible(input_channel * width_mult, round_nearest)
         self.last_channel = _make_divisible(last_channel * max(1.0, width_mult), round_nearest)
         features: List[nn.Module] = [
-            Conv2dNormActivation(3, input_channel, stride=2, norm_layer=norm_layer, activation_layer=nn.ReLU6)
+            Conv2dNormActivation(in_shape[1], input_channel, stride=2, norm_layer=norm_layer, activation_layer=nn.ReLU6)
         ]
         for t, c, n, s in inverted_residual_setting:
             output_channel = _make_divisible(c * width_mult, round_nearest)

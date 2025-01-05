@@ -123,12 +123,15 @@ class Bottleneck(nn.Module):
         return out
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum'}
+
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -140,18 +143,16 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(
-        self,
-        block: Type[Union[BasicBlock, Bottleneck]] = BasicBlock,
-        layers=None,
-        num_classes: int = 1000,
-        zero_init_residual: bool = False,
-        groups: int = 1,
-        width_per_group: int = 64,
-        replace_stride_with_dilation: Optional[List[bool]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
-    ) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
+        block: Type[Union[BasicBlock, Bottleneck]] = BasicBlock
+        layers = None
+        num_classes: int = out_shape[0]
+        zero_init_residual: bool = False
+        groups: int = 1
+        width_per_group: int = 64
+        replace_stride_with_dilation: Optional[List[bool]] = None
+        norm_layer: Optional[Callable[..., nn.Module]] = None
         if layers is None:
             layers = [2, 2, 2, 2]
         if norm_layer is None:
@@ -169,7 +170,7 @@ class Net(nn.Module):
             )
         self.groups = groups
         self.base_width = width_per_group
-        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
+        self.conv1 = nn.Conv2d(in_shape[1], self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)

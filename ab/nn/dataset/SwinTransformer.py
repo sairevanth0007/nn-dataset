@@ -365,12 +365,16 @@ class SwinTransformerBlockV2(SwinTransformerBlock):
         return x
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'dropout', 'attention_dropout', 'stochastic_depth_prob'}
+
+
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -381,23 +385,21 @@ class Net(nn.Module):
             loss.backward()
             self.optimizer.step()
 
-    def __init__(
-            self,
-            patch_size=None,
-            embed_dim: int = 96,
-            depths=None,
-            num_heads=None,
-            window_size=None,
-            mlp_ratio: float = 4.0,
-            dropout: float = 0.0,
-            attention_dropout: float = 0.0,
-            stochastic_depth_prob: float = 0.1,
-            num_classes: int = 1000,
-            norm_layer: Optional[Callable[..., nn.Module]] = None,
-            block: Optional[Callable[..., nn.Module]] = None,
-            downsample_layer: Callable[..., nn.Module] = PatchMerging,
-    ):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict):
         super().__init__()
+        patch_size = None
+        embed_dim: int = 96
+        depths = None
+        num_heads = None
+        window_size = None
+        mlp_ratio: float = 4.0
+        dropout: float = prms['dropout']
+        attention_dropout: float = prms['attention_dropout']
+        stochastic_depth_prob: float = prms['stochastic_depth_prob']
+        num_classes: int = out_shape[0]
+        norm_layer: Optional[Callable[..., nn.Module]] = None
+        block: Optional[Callable[..., nn.Module]] = None
+        downsample_layer: Callable[..., nn.Module] = PatchMerging
         if window_size is None:
             window_size = [7, 7]
         if num_heads is None:
@@ -417,7 +419,7 @@ class Net(nn.Module):
         layers.append(
             nn.Sequential(
                 nn.Conv2d(
-                    3, embed_dim, kernel_size=(patch_size[0], patch_size[1]), stride=(patch_size[0], patch_size[1])
+                    in_shape[1], embed_dim, kernel_size=(patch_size[0], patch_size[1]), stride=(patch_size[0], patch_size[1])
                 ),
                 Permute([0, 2, 3, 1]),
                 norm_layer(embed_dim),

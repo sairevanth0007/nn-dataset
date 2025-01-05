@@ -1,5 +1,6 @@
 from functools import partial
 from typing import Any, Callable, Dict, List, Optional, Sequence
+
 import torch
 import torch.nn.functional as F
 from torch import nn, Tensor
@@ -98,6 +99,7 @@ class InvertedResidual(nn.Module):
 class MobileNetV3(nn.Module):
     def __init__(
         self,
+        channels: int,
         inverted_residual_setting: List[InvertedResidualConfig],
         last_channel: int,
         num_classes: int = 1000,
@@ -126,7 +128,7 @@ class MobileNetV3(nn.Module):
         firstconv_output_channels = inverted_residual_setting[0].input_channels
         layers.append(
             Conv2dNormActivation(
-                3,
+                channels,
                 firstconv_output_channels,
                 kernel_size=3,
                 stride=2,
@@ -248,15 +250,19 @@ def mobilenet_v3_large(
     return _mobilenet_v3(inverted_residual_setting, last_channel, weights, progress, **kwargs)
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum'}
+
+
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(device),)
-        params_list = [{'params': self.backbone.parameters(), 'lr': prm['lr']}]
+        params_list = [{'params': self.backbone.parameters(), 'lr': prms['lr']}]
         for module in self.exclusive:
-            params_list.append({'params': getattr(self, module).parameters(), 'lr': prm['lr'] * 10})
-        self.optimizer = torch.optim.SGD(params_list, lr=prm['lr'], momentum=prm['momentum'])
+            params_list.append({'params': getattr(self, module).parameters(), 'lr': prms['lr'] * 10})
+        self.optimizer = torch.optim.SGD(params_list, lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -268,9 +274,10 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, num_classes: int = 21) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
-        backbone: MobileNetV3 | nn.Module = MobileNetV3(*_mobilenet_v3_conf("mobilenet_v3_large"), num_classes=100)
+        num_classes: int = out_shape[0]
+        backbone: MobileNetV3 | nn.Module = MobileNetV3(in_shape[1], *_mobilenet_v3_conf("mobilenet_v3_large"), num_classes=100)
         low_channels: int | None = None
         high_channels: int | None = None
         inter_channels: int = 128

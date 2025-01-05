@@ -212,13 +212,15 @@ class BlockParams:
         return stage_widths, group_widths_min
 
 
+def supported_hyperparameters():
+    return {'lr', 'momentum'}
+
 class Net(nn.Module):
 
-
-    def train_setup(self, device, prm):
+    def train_setup(self, device, prms):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prms['lr'], momentum=prms['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -230,18 +232,15 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(
-        self,
-        block_params: BlockParams = BlockParams.from_init_params(depth=16, w_0=48, w_a=27.89, w_m=2.09, group_width=8, se_ratio=0.25),
-        num_classes: int = 1000,
-        stem_width: int = 32,
-        stem_type: Optional[Callable[..., nn.Module]] = None,
-        block_type: Optional[Callable[..., nn.Module]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
-        activation: Optional[Callable[..., nn.Module]] = None,
-    ) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prms: dict) -> None:
         super().__init__()
-
+        block_params: BlockParams = BlockParams.from_init_params(depth=16, w_0=48, w_a=27.89, w_m=2.09, group_width=8, se_ratio=0.25)
+        num_classes: int = out_shape[0]
+        stem_width: int = 32
+        stem_type: Optional[Callable[..., nn.Module]] = None
+        block_type: Optional[Callable[..., nn.Module]] = None
+        norm_layer: Optional[Callable[..., nn.Module]] = None
+        activation: Optional[Callable[..., nn.Module]] = None
         if stem_type is None:
             stem_type = SimpleStemIN
         if norm_layer is None:
@@ -252,7 +251,7 @@ class Net(nn.Module):
             activation = nn.ReLU
 
         self.stem = stem_type(
-            3,
+            in_shape[1],
             stem_width,
             norm_layer,
             activation,
