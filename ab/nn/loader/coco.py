@@ -1,6 +1,7 @@
 import os
 from os import makedirs, mkdir
 from os.path import join, exists
+from typing import Sequence
 
 import numpy as np
 import requests
@@ -42,7 +43,8 @@ class COCOSegDataset(torch.utils.data.Dataset):
         ----------
         path : Path towards coco root directory. It should be structured as default.
         spilt : str `"train"` or `"val"`.
-        transform : transform towards the image.
+        transform : transform towards the image. If transform.Resize is specified, 
+          it will overwrite `resize` parameter, BUT ONLY accepts Sequence (h,w)
         class_limit : Limit class index from 0 to the value. Set to `None` for no limit.
         num_limit : Limit maximum number of images to use. Only works with `preprocess`.
         resize : tuple (h,w) to resize the image and its mask. Uses Image from PIL to avoid
@@ -77,7 +79,10 @@ class COCOSegDataset(torch.utils.data.Dataset):
         ## Resizing the mask should be handled seperately, or there might be significant artifacts.
         for i in transform.transforms:
             if i.__class__==transforms.Resize:
-                self.resize=(i.size,i.size)
+                if isinstance(i.size, Sequence):
+                    self.resize=i.size
+                else:
+                    raise TypeError(f"Size in transform should be only sequence. Got {type(i.size)}")
         self.limit_classes = class_limit
         self.num_limit = num_limit
         self.class_list = class_list
@@ -137,6 +142,7 @@ class COCOSegDataset(torch.utils.data.Dataset):
             else:
                 mask[:, :] += (mask == 0) * (((np.sum(m, axis=2)) > 0) * c).astype(np.uint8)
         image = image.resize(size=self.resize, resample=Image.BILINEAR)
+        ## Bilinear will cause problem when resizing the Mask, but is commonly used when resizing image
         mask = Image.fromarray(mask).resize(size=self.resize, resample=Image.NEAREST)
         image = self.transform(image)
         mask = self.mask_transform(mask).long()
