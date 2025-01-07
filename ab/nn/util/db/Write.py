@@ -1,9 +1,9 @@
 import json
-import sqlite3
 import uuid
 
 from ab.nn.util.Util import *
 from ab.nn.util.db.Init import init_db, sql_conn, close_conn
+
 
 def init_population():
     if not exists(db_file):

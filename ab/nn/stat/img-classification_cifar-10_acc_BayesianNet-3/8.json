@@ -1,10 +1,26 @@
 [
     {
+        "accuracy": 0.4115,
+        "batch": 2,
+        "duration": 647086402692,
+        "lr": 0.00016786676500028417,
+        "momentum": 0.6017778295524047,
+        "transform": "cifar-10_norm_32"
+    },
+    {
         "accuracy": 0.3378,
         "batch": 2048,
         "duration": 19190541639,
         "lr": 0.0018022835944323382,
         "momentum": 0.9411274726396857,
+        "transform": "cifar-10_norm_32"
+    },
+    {
+        "accuracy": 0.1998,
+        "batch": 8,
+        "duration": 179475117670,
+        "lr": 2.309998102320844e-05,
+        "momentum": 0.11907158662261574,
         "transform": "cifar-10_norm_32"
     }
 ]

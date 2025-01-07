@@ -16,6 +16,14 @@
         "transform": "echo"
     },
     {
+        "accuracy": 0.3363,
+        "batch": 2,
+        "duration": 243211737569,
+        "lr": 0.00016786676500028417,
+        "momentum": 0.6017778295524047,
+        "transform": "cifar-10_norm_32"
+    },
+    {
         "accuracy": 0.2176,
         "batch": 2048,
         "duration": 7216536613,
@@ -30,5 +38,13 @@
         "transform": "cifar-10_norm_32",
         "duration": 20805880724,
         "accuracy": 0.1793
+    },
+    {
+        "accuracy": 0.1432,
+        "batch": 8,
+        "duration": 66503496266,
+        "lr": 2.309998102320844e-05,
+        "momentum": 0.11907158662261574,
+        "transform": "cifar-10_norm_32"
     }
 ]

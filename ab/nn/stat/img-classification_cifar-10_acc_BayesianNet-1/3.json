@@ -48,6 +48,22 @@
         "accuracy": 0.2407
     },
     {
+        "accuracy": 0.1475,
+        "batch": 2048,
+        "duration": 36721407310,
+        "lr": 0.0029108399425003513,
+        "momentum": 0.11486523169870655,
+        "transform": "cifar-10_norm_32"
+    },
+    {
+        "accuracy": 0.1157,
+        "batch": 128,
+        "duration": 32336271052,
+        "lr": 2.6298587460641664e-05,
+        "momentum": 0.7928141032165655,
+        "transform": "cifar-10_norm_32"
+    },
+    {
         "accuracy": 0.1,
         "batch": 1,
         "duration": 594538845515,

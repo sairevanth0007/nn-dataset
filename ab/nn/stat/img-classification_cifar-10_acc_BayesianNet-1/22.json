@@ -16,6 +16,22 @@
         "transform": "echo"
     },
     {
+        "accuracy": 0.2523,
+        "batch": 2048,
+        "duration": 268865839836,
+        "lr": 0.0029108399425003513,
+        "momentum": 0.11486523169870655,
+        "transform": "cifar-10_norm_32"
+    },
+    {
+        "accuracy": 0.1981,
+        "batch": 128,
+        "duration": 236432825127,
+        "lr": 2.6298587460641664e-05,
+        "momentum": 0.7928141032165655,
+        "transform": "cifar-10_norm_32"
+    },
+    {
         "accuracy": 0.1,
         "batch": 1,
         "duration": 4390669104675,
