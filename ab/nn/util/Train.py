@@ -1,15 +1,15 @@
 import importlib
 import math
-import time as time_f
-import numpy as np
+import time as time
 from os.path import join
 
+import numpy as np
 import torch
 from tqdm import tqdm
 
-from ab.nn.util.db.Calc import save_results
-from ab.nn.util.Util import nn_mod, merge_prm, get_attr
 import ab.nn.util.db.Write as DB_Write
+from ab.nn.util.Util import nn_mod, merge_prm, get_attr
+from ab.nn.util.db.Calc import save_results
 
 
 class Train:
@@ -80,7 +80,7 @@ class Train:
     def train_n_eval(self, num_epochs):
         """ Training and evaluation """
 
-        duration = time_f.time_ns()
+        start_time = time.time_ns()
         self.model.train_setup(self.device, self.prm)
         accuracy = None
         for epoch in range(1, num_epochs + 1):
@@ -89,8 +89,9 @@ class Train:
             self.model.learn(tqdm(self.train_loader))
             accuracy = self.eval(self.test_loader)
             accuracy = 0.0 if math.isnan(accuracy) or math.isinf(accuracy) else accuracy
-            prm = merge_prm(self.prm, {'duration': time_f.time_ns() - duration,
-                        'accuracy': accuracy})
+            prm = merge_prm(self.prm, {'duration': time.time_ns() - start_time,
+                                       'accuracy': accuracy,
+                                       'uid': DB_Write.uuid4()})
             save_results(self.config, epoch, join(self.model_stat_dir, f"{epoch}.json"), prm)
 
         return accuracy
