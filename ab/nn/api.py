@@ -1,5 +1,5 @@
 import ab.nn.util.db.Read as DB_Read
-import ab.nn.util.db.Write as DB_Write
+import ab.nn.util.Train as Train
 from pandas import DataFrame
 
 def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None) -> DataFrame:
@@ -10,11 +10,10 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
     dt: tuple[dict,...] = DB_Read.data(only_best_accuracy, task=task, dataset=dataset, metric=metric, nn=nn, epoch=epoch)
     return DataFrame.from_records(dt)
 
-def save_nn(nn_code : str, task : str, dataset : str, metric : str) -> str:
+def check_nn(nn_code : str, task : str, dataset : str, metric : str, prm: dict) -> str:
     """
-    Saving a new NN model and its default training configuration into database
+    Train the new NN model with the provided hyperparameters (prm) and save it to the database if training is successful.
     for argument description see :ref:`ab.nn.util.db.Write.save_nn()`
     :return: Automatically generated name of NN model.
-
     """
-    return DB_Write.save_nn(nn_code, task, dataset, metric)
+    return Train.train_new(nn_code, task, dataset, metric, prm)

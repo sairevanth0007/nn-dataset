@@ -9,6 +9,7 @@ from tqdm import tqdm
 
 from ab.nn.util.db.Calc import save_results
 from ab.nn.util.Util import nn_mod, merge_prm, get_attr
+import ab.nn.util.db.Write as DB_Write
 
 
 class Train:
@@ -117,3 +118,9 @@ class Train:
         else:
             result = total_correct / total_samples
         return result
+
+
+def train_new(nn_code, task, dataset, metric, prm):
+    # todo: train and if result is appropriate save the code of the new NN model into database
+    DB_Write.save_nn(nn_code, task, dataset, metric)
+    return None

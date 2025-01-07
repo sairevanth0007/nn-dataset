@@ -44,7 +44,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
     for sub_config in sub_configs:
             task, dataset_name, metric, model_name = conf_to_names(sub_config)
             model_stat_dir: str = join(stat_dir, sub_config)
-            trials_file = join(model_stat_dir, str(n_epochs), 'trials.json')
+            trials_file = join(model_stat_dir, str(n_epochs) + '.json')
             n_optuna_trials_left = remaining_trials(trials_file, model_name, n_optuna_trials)
             if n_optuna_trials_left == 0:
                 print(f"The model {model_name} has already passed all trials for task: {task}, dataset: {dataset_name},"

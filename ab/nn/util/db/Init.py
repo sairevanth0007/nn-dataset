@@ -2,7 +2,7 @@ import sqlite3
 from os import makedirs
 from pathlib import Path
 
-from ab.nn.util.Const import db_file, db_dir, main_tables, code_tables, dependent_columns, all_tables, index_colum
+from ab.nn.util.Const import param_tables, db_file, db_dir, main_tables, code_tables, dependent_columns, all_tables, index_colum
 
 
 def create_code_table(name, cursor):
@@ -39,10 +39,12 @@ def init_db():
     conn, cursor = sql_conn()
 
     # Create all tables with code
-    for name in code_tables:
-        create_code_table(name, cursor)
+    for nm in code_tables:
+        create_code_table(nm, cursor)
 
-    create_param_table('prm', cursor)
+    # Create all tables with parameters
+    for nm in param_tables:
+        create_param_table(nm, cursor)
 
     # Create main stat tables
     for nm in main_tables:
