@@ -6,15 +6,17 @@
         "duration": 1163988741681,
         "lr": 0.0005491397462551408,
         "momentum": 0.9528167666147869,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "8599a8b5-b728-4176-862f-51273d60d634"
     },
     {
         "accuracy": 0.697,
         "batch": 4,
         "dropout": 0.5,
+        "duration": 3757313845775,
         "lr": 0.0061,
         "momentum": 0.7549,
-        "duration": 3757313845775,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "12e30651-6def-4c67-bde5-86ac61093f24"
     }
 ]

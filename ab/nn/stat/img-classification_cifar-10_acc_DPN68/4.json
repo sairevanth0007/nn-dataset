@@ -2,105 +2,118 @@
     {
         "accuracy": 0.6465,
         "batch": 4,
+        "duration": 213103752580,
         "lr": 0.013182533142354562,
         "momentum": 0.418067039563664,
-        "duration": 213103752580,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "cecb462b-41f0-4508-81e3-529acfa61878"
     },
     {
         "accuracy": 0.6357,
         "batch": 16,
+        "duration": 190077006389,
         "lr": 0.7676704161615502,
         "momentum": 0.2507685655678955,
-        "duration": 190077006389,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "b1bfcfa8-96d1-4247-8cdb-5cf29c6bbfd1"
     },
     {
         "accuracy": 0.6325,
         "batch": 4,
+        "duration": 343954883198,
         "lr": 0.06645822969105253,
         "momentum": 0.8380354711442795,
-        "duration": 343954883198,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "28d16a7f-95d8-4647-8575-321688bab3f0"
     },
     {
         "accuracy": 0.5465,
         "batch": 32,
+        "duration": 97839135271,
         "lr": 0.01827112522264678,
         "momentum": 0.40733956860513165,
-        "duration": 97839135271,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "7daedaa5-0c1c-4a7d-8433-c11a54592871"
     },
     {
         "accuracy": 0.4988,
         "batch": 128,
+        "duration": 17550811354,
         "lr": 0.08179358950230887,
         "momentum": 0.7749402646177931,
-        "duration": 17550811354,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "9bd8d568-b6e5-4090-902d-e9f151eeb024"
     },
     {
         "accuracy": 0.4619,
         "batch": 128,
+        "duration": 37454297832,
         "lr": 0.03747067667347168,
         "momentum": 0.16242570055689975,
-        "duration": 37454297832,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "bab62930-ca81-4548-a260-3ff54376f15e"
     },
     {
         "accuracy": 0.4593,
         "batch": 1024,
+        "duration": 19689424625,
         "lr": 0.11151880745188743,
         "momentum": 0.5487699189809091,
-        "duration": 19689424625,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "de8ecae6-73a1-4953-9258-5a4cb3912e35"
     },
     {
         "accuracy": 0.3828,
         "batch": 256,
+        "duration": 15921740218,
         "lr": 0.001457162956700888,
         "momentum": 0.9668541048958156,
-        "duration": 15921740218,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "b7253fba-6604-436a-abdf-e57057d47256"
     },
     {
         "accuracy": 0.2613,
         "batch": 8,
+        "duration": 1533227848191,
         "lr": 2.042068950991701e-05,
         "momentum": 0.6545054299241577,
-        "duration": 1533227848191,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "aa724685-7c53-44dd-9a26-330216ff4c03"
     },
     {
         "accuracy": 0.1759,
         "batch": 1024,
+        "duration": 13172575257,
         "lr": 0.00030608103104566657,
         "momentum": 0.6289497777486941,
-        "duration": 13172575257,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "121bcea0-5da2-4006-b994-28d6bc57033d"
     },
     {
         "accuracy": 0.1266,
         "batch": 1,
+        "duration": 2847724349776,
         "lr": 0.0059902246971227455,
         "momentum": 0.07286011758329991,
-        "duration": 2847724349776,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "0b61b9a5-1d23-418a-8dcc-9368aa50359b"
     },
     {
         "accuracy": 0.1187,
         "batch": 512,
+        "duration": 18821701383,
         "lr": 1.3083305936118939e-05,
         "momentum": 0.874544666538735,
-        "duration": 18821701383,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "e908ee20-3bc9-4c7a-ab62-437e9488bb2b"
     },
     {
         "accuracy": 0.0931,
         "batch": 1,
+        "duration": 1959368370689,
         "lr": 0.0005381131794006005,
         "momentum": 0.2588081603881155,
-        "duration": 1959368370689,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "936a7525-932d-4f67-8401-b600ac5872e8"
     }
 ]

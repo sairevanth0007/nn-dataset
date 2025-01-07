@@ -5,25 +5,28 @@
         "dropout": 0.5,
         "lr": 0.37179604336462935,
         "momentum": 0.05775294912486685,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "19a96686-296e-46e1-97e0-917c715946ea"
     },
     {
         "accuracy": 0.7754,
         "batch": 4,
         "dropout": 0.5,
+        "duration": 1379539387771,
         "lr": 0.0061,
         "momentum": 0.7549,
-        "duration": 1379539387771,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "1834ec86-5bc4-4f09-b0cf-db1add7cad28"
     },
     {
         "accuracy": 0.7699,
         "batch": 4,
         "dropout": 0.5,
+        "duration": 1151017834818,
         "lr": 0.0061,
         "momentum": 0.7549,
-        "duration": 1151017834818,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "02990aa7-f177-4115-be99-cc563cda64bc"
     },
     {
         "accuracy": 0.5858,
@@ -32,16 +35,18 @@
         "duration": 305775356434,
         "lr": 0.0005491397462551408,
         "momentum": 0.9528167666147869,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "2fa4d871-7b73-4985-87d4-1d45195385fc"
     },
     {
         "accuracy": 0.5662,
         "batch": 4,
         "dropout": 0.5,
+        "duration": 987698298772,
         "lr": 0.0061,
         "momentum": 0.7549,
-        "duration": 987698298772,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "5aba2cf4-c40b-4eb8-b16a-3db092a5b73f"
     },
     {
         "accuracy": 0.4833,
@@ -49,7 +54,8 @@
         "dropout": 0.5,
         "lr": 0.5274821798949797,
         "momentum": 0.013646617880252175,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "8ff19e06-16c4-4d39-9762-5ea47a7511a0"
     },
     {
         "accuracy": 0.0,
@@ -57,6 +63,7 @@
         "dropout": 0.5,
         "lr": 0.00532151586110216,
         "momentum": 0.6528802496966843,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "ee4d98a8-f283-4872-b89a-9c5662ba0396"
     }
 ]

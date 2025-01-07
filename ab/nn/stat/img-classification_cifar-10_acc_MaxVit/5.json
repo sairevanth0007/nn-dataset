@@ -4,33 +4,36 @@
         "attention_dropout": 0.0,
         "batch": 4,
         "dropout": 0.0,
+        "duration": 1983531745718,
         "lr": 0.0061,
         "momentum": 0.7549,
         "stochastic_depth_prob": 0.2,
-        "duration": 1983531745718,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "ba21e72a-6130-42e0-b60d-2e92e644aaef"
     },
     {
         "accuracy": 0.6395,
         "attention_dropout": 0.0,
         "batch": 4,
         "dropout": 0.0,
+        "duration": 3147452969851,
         "lr": 0.0061,
         "momentum": 0.7549,
         "stochastic_depth_prob": 0.2,
-        "duration": 3147452969851,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "d9745561-581a-4820-9c1c-b1fdcb2a8ce9"
     },
     {
         "accuracy": 0.6247,
         "attention_dropout": 0.0,
         "batch": 4,
         "dropout": 0.0,
+        "duration": 1985820127850,
         "lr": 0.0061,
         "momentum": 0.7549,
         "stochastic_depth_prob": 0.2,
-        "duration": 1985820127850,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "e02e6082-139a-4b1a-aaea-67df8eb91423"
     },
     {
         "accuracy": 0.3004,
@@ -41,7 +44,8 @@
         "lr": 0.0004935958553570921,
         "momentum": 0.7061701346354543,
         "stochastic_depth_prob": 0.4239057709728352,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "749a5726-8074-45ca-9115-a2524dbfd0dd"
     },
     {
         "accuracy": 0.1,
@@ -51,7 +55,8 @@
         "lr": 0.5563510128959211,
         "momentum": 0.062068808579240846,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "75681d63-d57b-437f-ba68-237b7a763931"
     },
     {
         "accuracy": 0.0,
@@ -61,6 +66,7 @@
         "lr": 0.0012038065628955453,
         "momentum": 0.5408665567109844,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "39e7a03e-212e-47a4-9feb-8fde5bbf6490"
     }
 ]

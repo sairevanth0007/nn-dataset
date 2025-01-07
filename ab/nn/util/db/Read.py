@@ -56,6 +56,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             for stat in content:
                 with open(transform_dir / (stat['transform'] + '.py'), 'r') as code_file:
                     transform_code = str(code_file.read())
+                stat.pop('uid')
                 next_row = {
                     'task': curr_task,
                     'dataset': curr_dataset,

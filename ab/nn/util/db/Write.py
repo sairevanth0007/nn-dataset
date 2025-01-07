@@ -44,26 +44,26 @@ def populate_code_table(table_name, cursor, name=None):
     print(f"{table_name} added/updated in the `{table_name}` table: {[f.stem for f in code_files]}")
 
 
-def populate_prm_table(table_name, cursor, prm):
+def populate_prm_table(table_name, cursor, prm, uid):
     """
     Populate the parameter table with variable number of parameters of different types.
     """
-    uid = uuid4()
     for nm, value in prm.items():
         cursor.execute(f"INSERT INTO {table_name} (uid, name, value, type) VALUES (?, ?, ?, ?)",
                        (uid, nm, str(value), type(value).__name__))
-    return uid
 
 
 def save_stat(task, dataset, nn, metric, epoch, prm, cursor):
     # Insert each trial into the database with epoch
     transform = prm.pop('transform')
+    uid = prm.pop('uid')
     extra_main_column_values = [prm.pop(nm, None) for nm in extra_main_columns]
-    prm_uid = populate_prm_table('prm', cursor, prm)
+    for nm in param_tables:
+        populate_prm_table(nm, cursor, prm, uid)
     cursor.execute(f"""
     INSERT INTO stat (id, task, dataset, nn, transform, metric, epoch, prm, {', '.join(extra_main_columns)}) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (uuid4(), task, dataset, nn, transform, metric, epoch, prm_uid, *extra_main_column_values))
+    """, (uid, task, dataset, nn, transform, metric, epoch, uid, *extra_main_column_values))
 
 
 def json_n_code_to_db():

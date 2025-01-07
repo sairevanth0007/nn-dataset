@@ -2,18 +2,20 @@
     {
         "accuracy": 0.5509,
         "batch": 4,
+        "duration": 255146839533,
         "lr": 0.0061,
         "momentum": 0.7549,
-        "duration": 255146839533,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "f5577871-a7ee-477c-b1eb-482fc8762a70"
     },
     {
         "accuracy": 0.5344,
         "batch": 4,
+        "duration": 418748059016,
         "lr": 0.0061,
         "momentum": 0.7549,
-        "duration": 418748059016,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "38c2f6fd-35c7-4133-84ba-b630e58328e3"
     },
     {
         "accuracy": 0.3715,
@@ -21,7 +23,8 @@
         "duration": 405528476334,
         "lr": 0.00016786676500028417,
         "momentum": 0.6017778295524047,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "af961141-4833-4708-8fe2-b3fe3848dbd6"
     },
     {
         "accuracy": 0.2845,
@@ -29,22 +32,25 @@
         "duration": 12007845012,
         "lr": 0.0018022835944323382,
         "momentum": 0.9411274726396857,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "78a5e306-3454-4f3d-82e6-d6e00c95ea27"
     },
     {
         "accuracy": 0.2815,
         "batch": 32,
         "lr": 0.7894873379456815,
         "momentum": 0.4274625137191661,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "0d90309d-bf86-4935-9f2a-81de4f07a038"
     },
     {
+        "accuracy": 0.2174,
+        "batch": 64,
+        "duration": 34682419210,
         "lr": 3.6964037961655975e-05,
         "momentum": 0.8638483980462572,
-        "batch": 64,
         "transform": "cifar-10_norm_32",
-        "duration": 34682419210,
-        "accuracy": 0.2174
+        "uid": "8f251e39-3e01-4ec5-ac5a-044cd2a75505"
     },
     {
         "accuracy": 0.1734,
@@ -52,13 +58,15 @@
         "duration": 110885979806,
         "lr": 2.309998102320844e-05,
         "momentum": 0.11907158662261574,
-        "transform": "cifar-10_norm_32"
+        "transform": "cifar-10_norm_32",
+        "uid": "48a3db3b-0b3a-4aca-ad64-3e73efc04aa8"
     },
     {
         "accuracy": 0.0,
         "batch": 128,
         "lr": 0.00025181687000219613,
         "momentum": 0.3465288884282577,
-        "transform": "cifar-10_norm_299"
+        "transform": "cifar-10_norm_299",
+        "uid": "00862d19-e765-4756-a827-87c2a54b30c6"
     }
 ]
