@@ -8,7 +8,7 @@
         "lr": 0.02224363133240767,
         "momentum": 0.5256083475835729,
         "patch_size": 0.9006158750085224,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "7eac752f-77c2-4c4b-a948-579474ed8cfb"
     },
     {
@@ -20,7 +20,7 @@
         "lr": 0.0077890763966540835,
         "momentum": 0.28676172401673483,
         "patch_size": 0.428047823287949,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "2dc376d0-3d36-4fd7-991d-d1d43864fa8e"
     },
     {
@@ -32,7 +32,7 @@
         "lr": 0.0008414270103390952,
         "momentum": 0.9934172655719724,
         "patch_size": 0.07857152911935805,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "22162567-df3f-4726-8d01-52e117374121"
     },
     {
@@ -56,7 +56,7 @@
         "lr": 3.185854548561571e-05,
         "momentum": 0.08900408539646887,
         "patch_size": 0.7307099034370808,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "00ba9b87-d338-4ae9-a56d-b164a5916d19"
     },
     {
@@ -68,7 +68,7 @@
         "lr": 0.00020650464495974939,
         "momentum": 0.19546120460830352,
         "patch_size": 0.516647981219023,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "1d82017c-f40e-40cf-ac0d-24f9c92ef3e5"
     },
     {
@@ -80,7 +80,7 @@
         "lr": 0.34780878866408027,
         "momentum": 0.5922082385580734,
         "patch_size": 0.08798530695749696,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "2870e5d1-fbd4-459c-b6ac-541efc01928a"
     },
     {

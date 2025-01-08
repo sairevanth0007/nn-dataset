@@ -877,7 +877,7 @@
         "batch": 64,
         "lr": 0.0064834723874768845,
         "momentum": 0.9121939362609595,
-        "transform": "cifar-10_complex_32",
+        "transform": "complex_32",
         "uid": "66b057e3-b5b3-46e5-bb06-a310f8941f3c"
     },
     {
@@ -885,7 +885,7 @@
         "batch": 1024,
         "lr": 3.738944540356621e-05,
         "momentum": 0.7210837939000807,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "071805ee-3c6f-4a15-8584-894f78bde7f4"
     }
 ]

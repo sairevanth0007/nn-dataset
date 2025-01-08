@@ -8,7 +8,7 @@
         "norm_eps": 0.015571550088127828,
         "norm_std": 0.6431214714721933,
         "stochastic_depth_prob": 0.5450608458214764,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "e856e519-5de8-4665-b706-11d827b54af0"
     },
     {
@@ -20,7 +20,7 @@
         "norm_eps": 0.18268722145218874,
         "norm_std": 0.1167349995623671,
         "stochastic_depth_prob": 0.046318933638359594,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "657223e6-c2e2-4aa6-b615-bb89dae32048"
     }
 ]

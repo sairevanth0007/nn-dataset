@@ -6,7 +6,7 @@
         "duration": 15306659401,
         "lr": 0.061564172893874246,
         "momentum": 0.653961297871896,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "b3e670c6-1beb-431e-bf0f-33d6d5b1a689"
     },
     {
@@ -36,7 +36,7 @@
         "duration": 233904340475,
         "lr": 0.00014579088158222513,
         "momentum": 0.012987187817136037,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "318afa43-fd5c-457e-a7bb-509886660812"
     },
     {
@@ -46,7 +46,7 @@
         "duration": 725126519041,
         "lr": 0.0012358178274257767,
         "momentum": 0.4877966371777227,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "a468a056-61e6-44ad-8f3d-2c5f3b2b8582"
     },
     {

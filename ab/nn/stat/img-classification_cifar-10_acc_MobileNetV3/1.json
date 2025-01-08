@@ -8,7 +8,7 @@
         "momentum": 0.6902877048622055,
         "norm_eps": 0.18220134420985046,
         "norm_momentum": 0.9521013652783512,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f342c9d6-6eaf-4de1-a611-4f0affe0bdf9"
     },
     {
@@ -20,7 +20,7 @@
         "momentum": 0.1533187449771456,
         "norm_eps": 0.10868154219322412,
         "norm_momentum": 0.5469824595145246,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "6d971592-9f66-4fb1-a2d8-2d11dccbacee"
     },
     {
@@ -44,7 +44,7 @@
         "momentum": 0.1263761292782838,
         "norm_eps": 0.957135735383862,
         "norm_momentum": 0.8841376367647261,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "758944a2-c541-4fe5-8897-3bd5100ade99"
     },
     {
@@ -56,7 +56,7 @@
         "momentum": 0.2072145163359428,
         "norm_eps": 0.6581878905104798,
         "norm_momentum": 0.17358080173217938,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "dcd996f7-b550-41f2-9cda-b7d5f98639a8"
     },
     {
@@ -80,7 +80,7 @@
         "momentum": 0.6547109094795642,
         "norm_eps": 0.7006999448275693,
         "norm_momentum": 0.7893215814227845,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "073f9576-292b-4789-a226-232ec8a51ed8"
     },
     {
@@ -92,7 +92,7 @@
         "momentum": 0.9195865050326124,
         "norm_eps": 0.6942616338433087,
         "norm_momentum": 0.0333383429385381,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "cf9bbf23-25df-4807-a5c5-dddc025c8fbb"
     },
     {
@@ -104,7 +104,7 @@
         "momentum": 0.8837313182477515,
         "norm_eps": 0.588781043263178,
         "norm_momentum": 0.9397423548829789,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "d7d6a751-cffa-44c7-a7c3-e4d23d6a88ef"
     },
     {
@@ -116,7 +116,7 @@
         "momentum": 0.12288761689027516,
         "norm_eps": 0.6707036870383455,
         "norm_momentum": 0.6806630126115408,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "82a9157e-29e2-496d-83b6-60045fd98bda"
     },
     {
@@ -128,7 +128,7 @@
         "momentum": 0.010500905912071312,
         "norm_eps": 0.3862376934268027,
         "norm_momentum": 0.20041833388859942,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ec94f0b8-bca5-4af7-b16a-25f403903371"
     },
     {
@@ -140,7 +140,7 @@
         "momentum": 0.12583187940623097,
         "norm_eps": 0.5578400143832317,
         "norm_momentum": 0.5187894186310115,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "09b4560f-3246-4ce7-9899-7721f1a00924"
     },
     {
@@ -164,7 +164,7 @@
         "momentum": 0.903527411758373,
         "norm_eps": 0.5381003054766036,
         "norm_momentum": 0.5791631776035535,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "3f670557-e643-4e68-a4ac-a12b72f935ad"
     },
     {
@@ -176,7 +176,7 @@
         "momentum": 0.8094051835382151,
         "norm_eps": 0.3948409040354832,
         "norm_momentum": 0.5940365279185671,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "29333931-2727-4315-92b5-33b92e684ecf"
     },
     {
@@ -188,7 +188,7 @@
         "momentum": 0.22160129052443733,
         "norm_eps": 0.4847605826577036,
         "norm_momentum": 0.9636445866136835,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "0aa46f77-b672-470c-9a13-01c1edb4073e"
     },
     {
@@ -212,7 +212,7 @@
         "momentum": 0.9833616745436302,
         "norm_eps": 0.4769967721092565,
         "norm_momentum": 0.1058728864081917,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "84cc88ee-12b3-4df9-91a3-121a64f6546a"
     }
 ]

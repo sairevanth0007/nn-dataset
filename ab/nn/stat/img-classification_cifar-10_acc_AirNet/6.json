@@ -14,7 +14,7 @@
         "duration": 15236042689,
         "lr": 0.005129522952067677,
         "momentum": 0.24203947219518462,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "6ba45a8b-ce3d-4415-b611-8f62b1e43958"
     },
     {
@@ -23,7 +23,7 @@
         "duration": 13524927933,
         "lr": 0.06276040074308879,
         "momentum": 0.7478815086222148,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "ee36bf9b-f311-4482-a012-c8b3a25dc1d8"
     },
     {
@@ -50,7 +50,7 @@
         "duration": 96734395949,
         "lr": 1.0530564333562261e-05,
         "momentum": 0.5891811893449823,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "b1a1d57a-05ad-425f-8ead-6384a6356cc6"
     }
 ]

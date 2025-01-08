@@ -8,7 +8,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.8934817195948984,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "b49882f0-b8d6-40e1-bd93-c8dea0d88af5"
     },
     {
@@ -44,7 +44,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "6b8fc88d-6688-4993-892b-363edf050000"
     },
     {
@@ -80,7 +80,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "babcd9ac-d15c-4bb4-a8ba-74bb8740257b"
     },
     {
@@ -103,7 +103,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "1149e15e-a3b2-4305-b85c-c4600d87cd6d"
     },
     {
@@ -114,7 +114,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ababebaf-8ff2-47f4-9098-d61eb53463e0"
     },
     {
@@ -125,7 +125,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "864ef44e-4ce3-4f0a-bf9a-2a67245a067b"
     },
     {
@@ -136,7 +136,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "1ed7e36f-c1c2-4135-ac64-d93141e2bb7e"
     },
     {
@@ -147,7 +147,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "917900a1-8def-4d07-9775-f1079ba48355"
     },
     {
@@ -158,7 +158,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "e17c0f44-348e-4b42-baea-4ec74e9008fd"
     },
     {
@@ -169,7 +169,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "d1f7b5b3-709f-42d3-bb61-42afaf67020a"
     },
     {
@@ -180,7 +180,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "1caa5637-b3fd-4c5f-bec0-a0db15be8eeb"
     },
     {
@@ -191,7 +191,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "2e580e7c-f48c-44d7-a96f-ec9aab2c30af"
     },
     {
@@ -202,7 +202,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "75ef715c-aa69-4a72-b90a-5ebf837490e9"
     },
     {
@@ -213,7 +213,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "de5b8a96-80a5-46da-a687-7504e9eefa46"
     },
     {
@@ -224,7 +224,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "9a85d18d-f24d-462f-84c7-2c87f0de05d9"
     },
     {
@@ -235,7 +235,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "d9f77a58-68c2-4b58-933c-8c91c71cb20a"
     },
     {
@@ -246,7 +246,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "449840b9-8fcc-481f-b571-208a8d43a3f2"
     },
     {
@@ -257,7 +257,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "5aff4f0b-5668-4e6a-9e27-4714bee8a8d0"
     },
     {
@@ -268,7 +268,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f708fc71-e87b-4cdd-a6bc-55279b71ec49"
     },
     {
@@ -280,7 +280,7 @@
         "norm_eps": 0.8466184295821645,
         "norm_std": 0.27126849264352293,
         "stochastic_depth_prob": 0.6495010196283777,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "0ed031fc-30b2-4c70-8596-586a286f45d6"
     },
     {
@@ -291,7 +291,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "9e0c4031-38f7-46b4-8b04-7b80965769ba"
     },
     {
@@ -303,7 +303,7 @@
         "norm_eps": 0.17021207613711997,
         "norm_std": 0.15332910371924757,
         "stochastic_depth_prob": 0.6057862992465606,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "2048460e-ed44-4ede-b3fb-423c3963ce16"
     },
     {
@@ -314,7 +314,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "d35264be-9ca5-4218-9f4f-00d44f6b3056"
     },
     {
@@ -325,7 +325,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "c833429f-596d-4e34-9171-edb46de3346d"
     },
     {
@@ -336,7 +336,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ca9947f0-d47a-411d-a510-5506f319054b"
     },
     {
@@ -347,7 +347,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "c1cfb6a8-9976-49b2-bbc8-f8d4eb46d2dd"
     },
     {
@@ -359,7 +359,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "a53f70d4-8ea5-41b5-a9dc-08c80a82f146"
     },
     {
@@ -370,7 +370,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "220e1f7b-f0f5-4691-9c99-6b322b556296"
     },
     {
@@ -381,7 +381,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "35bb72fe-efb5-4432-97ca-f37a4e965587"
     },
     {
@@ -392,7 +392,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "0d3de65b-a1da-4bb9-a686-02e24d7fd959"
     },
     {
@@ -404,7 +404,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.30408538228438786,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "ea7c8569-ec4a-4c42-8a6a-5e71e9333066"
     },
     {
@@ -415,7 +415,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "e823a350-ce33-4912-9164-1ab47ae3f4df"
     },
     {
@@ -426,7 +426,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "4fc26696-0d79-4de0-bd9b-451c63b56d8a"
     },
     {
@@ -437,7 +437,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "7cd83a7d-d9ce-42b6-b326-266905ba64fb"
     },
     {
@@ -448,7 +448,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ff02cdf4-2110-483a-8cd2-b96895247513"
     },
     {
@@ -459,7 +459,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "98a1eec7-cfc9-49b0-b33a-4f639ec42ceb"
     },
     {
@@ -470,7 +470,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "674c0098-a945-42fc-9314-ea53f7c8c75d"
     },
     {
@@ -481,7 +481,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "b57d948e-7755-44fe-8170-c00fbca01c1e"
     },
     {
@@ -492,7 +492,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "e2f339db-8bc8-445c-bbb4-3809f8b0c1bd"
     },
     {
@@ -503,7 +503,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "abfa8181-161f-4947-9164-55ced5157aa5"
     },
     {
@@ -514,7 +514,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "6c752b3b-a1cb-4650-b761-627185ff3c4c"
     },
     {
@@ -525,7 +525,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "a9e0cd69-1961-4dfc-8069-76b5d65dbeb4"
     },
     {
@@ -536,7 +536,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "fd71a591-a4db-49ca-8fe7-cb3c6ac39d19"
     },
     {
@@ -547,7 +547,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "4341dcdd-aae2-4dab-9172-89d291b4ff80"
     },
     {
@@ -571,7 +571,7 @@
         "norm_eps": 0.9518859033869638,
         "norm_std": 0.41013058756689336,
         "stochastic_depth_prob": 0.05192244316875916,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "22dd6e08-89bc-4856-9633-502ad941897c"
     },
     {
@@ -583,7 +583,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "da57723b-c673-4dd0-825e-3285c67f98cc"
     },
     {
@@ -594,7 +594,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "3f8b4dd7-8a83-49f5-9c2c-986107fd4d9e"
     },
     {
@@ -605,7 +605,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "accd6f0e-3ed5-418e-96f0-96cbd929bc63"
     },
     {
@@ -617,7 +617,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "458223b1-1d3b-45d7-9c76-3daf6399fac8"
     },
     {
@@ -628,7 +628,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "05b2ccec-ea2a-4356-adf0-72079ce3a7a7"
     },
     {
@@ -640,7 +640,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "dccf7af7-c9b6-414c-a55e-ed316e58212a"
     },
     {
@@ -651,7 +651,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "1c5e226a-92d2-4b4d-9d8a-9a640d64012b"
     },
     {
@@ -662,7 +662,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ec13792c-3e73-418e-9d51-869145c962f8"
     },
     {
@@ -673,7 +673,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "5c8e8f90-33fc-4b95-970c-ec647ac4ec78"
     },
     {
@@ -684,7 +684,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "1a2ad7bd-d7cd-46dd-9f95-7cdf286bd212"
     },
     {
@@ -696,7 +696,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "1e6e29dc-f603-446a-8039-275c2b433f4b"
     },
     {
@@ -707,7 +707,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "6ec16457-fc91-4d85-b1e1-583e62db69a2"
     },
     {
@@ -718,7 +718,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "04d800ba-f19b-497a-97de-24144592765c"
     },
     {
@@ -729,7 +729,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "7f1f0646-3d19-4dfa-b957-f02f4f724dfa"
     },
     {
@@ -740,7 +740,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "46f557a2-8c07-4e1f-8ee2-f5080f7d7e5c"
     },
     {
@@ -752,7 +752,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "c0bd6879-353f-4c3f-b1c2-301d6b73ac4a"
     },
     {
@@ -763,7 +763,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "23b3224d-08d3-4eba-8a7b-552e08217fea"
     },
     {
@@ -775,7 +775,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "74d2d16a-ca2e-46f7-abeb-796c7f3037dc"
     },
     {
@@ -786,7 +786,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f1477ceb-8e5d-48db-a5fb-dcbd387a1e94"
     },
     {
@@ -797,7 +797,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "06d9ec6d-11d6-47ee-a7ad-2fc38bcc739a"
     },
     {
@@ -808,7 +808,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "0a54f79b-d6ae-49a4-8685-f1ad796a6e79"
     },
     {
@@ -819,7 +819,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "6d809285-39d6-40ea-bc6a-9269d3f2c2e8"
     },
     {
@@ -830,7 +830,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "5339fccf-6655-4665-be2a-91537818d3b1"
     },
     {
@@ -841,7 +841,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "6dc5bf6a-b335-4892-b3b6-f72415143c73"
     },
     {
@@ -852,7 +852,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "11c22680-6308-482c-a56f-d1393062cb4e"
     },
     {
@@ -863,7 +863,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f497a646-2ea8-487c-b709-4b974fdc2dc9"
     },
     {
@@ -874,7 +874,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "5138dd3d-5fb2-4a1c-a29c-98f80e3a1407"
     },
     {
@@ -885,7 +885,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "da7a4278-efde-49bb-a4fa-679ef1690b5a"
     },
     {
@@ -896,7 +896,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "15f6a62b-3192-4bb0-a163-b7da8453373a"
     },
     {
@@ -907,7 +907,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "7035b209-7f32-41fd-b84a-1cbf68ecafc4"
     },
     {
@@ -918,7 +918,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "9ebca62a-1eec-45b0-94db-b9fccf4dd3b2"
     },
     {
@@ -929,7 +929,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f917e80a-9356-4ebe-b04b-241d884d35b4"
     },
     {
@@ -940,7 +940,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "a76de753-56b9-4154-9b9e-5befd3737469"
     },
     {
@@ -951,7 +951,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "47d903f2-905d-4b39-89f7-d129f7068be8"
     },
     {
@@ -962,7 +962,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "7ef116cf-fae0-4b4a-8f54-83786fe6ec16"
     },
     {
@@ -973,7 +973,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f105cea0-e7ff-4f45-bfe8-84d362c0db18"
     },
     {
@@ -984,7 +984,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "d0204214-b094-4480-ba43-545b18010b0d"
     },
     {
@@ -995,7 +995,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f6b01eaf-81a6-4aa3-ad2e-5464a459b9a8"
     },
     {
@@ -1006,7 +1006,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "b14330a7-4bdf-45c1-bf5e-fe7b50aec127"
     },
     {
@@ -1017,7 +1017,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "c4f2bd7e-65bf-48e7-bdd3-c44a7d40008b"
     },
     {
@@ -1028,7 +1028,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "41289d6b-b44d-4a76-afa2-9f09073ced5e"
     },
     {
@@ -1039,7 +1039,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f886a724-2645-4f9c-9e88-5d168cbd237a"
     },
     {
@@ -1050,7 +1050,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "7f087856-9eff-4479-9f2d-7c140db471d0"
     },
     {
@@ -1061,7 +1061,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "1ccaef61-9d64-4e9d-b17e-23d79beab3cd"
     },
     {
@@ -1072,7 +1072,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "0702b6fc-dece-4886-86f8-05b4db27d3d1"
     },
     {
@@ -1083,7 +1083,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "003b6357-5f36-4e8c-9dca-60c48567f557"
     },
     {
@@ -1094,7 +1094,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "5d497982-6578-43dc-9a91-fad5cadd2c14"
     },
     {
@@ -1105,7 +1105,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ae79a3d4-8092-4aa6-8ee9-74134c807d73"
     },
     {
@@ -1116,7 +1116,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "fa282df2-8a43-4e7a-8f74-e4d502e09c6d"
     },
     {
@@ -1127,7 +1127,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "a6c2bf58-3e2c-4655-ae86-2fd8593dbf1e"
     },
     {
@@ -1138,7 +1138,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "df2612ec-1d53-4249-803d-826ee139172b"
     },
     {
@@ -1150,7 +1150,7 @@
         "norm_eps": 0.2294614006184308,
         "norm_std": 0.812262973020364,
         "stochastic_depth_prob": 0.3176349960700351,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ee931cb2-7f29-4600-8b6f-6a9c70032a53"
     },
     {
@@ -1162,7 +1162,7 @@
         "norm_eps": 0.6174427541234895,
         "norm_std": 0.4830275672800136,
         "stochastic_depth_prob": 0.47522892243753345,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "d51f47a1-e744-4b3a-833b-a58b2b16e54f"
     },
     {
@@ -1173,7 +1173,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "970fc528-c248-4b07-bc74-b14203e3122a"
     },
     {
@@ -1184,7 +1184,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "7caa2c20-89f5-486b-b774-731fdbe551aa"
     },
     {
@@ -1195,7 +1195,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ac588404-a6d8-4268-a414-b71acf3d017a"
     },
     {
@@ -1219,7 +1219,7 @@
         "norm_eps": 0.015571550088127828,
         "norm_std": 0.6431214714721933,
         "stochastic_depth_prob": 0.5450608458214764,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "9d792e0c-a481-4512-820b-f97c64f4f1b8"
     },
     {
@@ -1230,7 +1230,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "c6fe8b5b-fc76-447b-a619-ccace55158d6"
     },
     {
@@ -1241,7 +1241,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "02a2717b-c456-4456-8d06-9d22eac07893"
     },
     {
@@ -1252,7 +1252,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "74c936d9-2c01-46da-ac25-2a8b5615643d"
     },
     {
@@ -1263,7 +1263,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "4fa563f5-7e8e-4c05-8579-bcbc526307f2"
     },
     {
@@ -1274,7 +1274,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f865177d-ead2-4f58-bb06-320fa2a6ad34"
     },
     {
@@ -1285,7 +1285,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "0f12153e-c8f0-4c60-a2a6-05f35d258f5f"
     },
     {
@@ -1296,7 +1296,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "21aecdd2-b239-4f6d-aebb-86a0c0ffc4f6"
     },
     {
@@ -1307,7 +1307,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "11d2dc73-4e21-4ccc-ab34-2e829d355b71"
     },
     {
@@ -1318,7 +1318,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "3b8af31f-cc56-41d0-bf21-a67721bd2a7f"
     },
     {
@@ -1329,7 +1329,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "581c0fb7-5004-4652-a69a-bd32713714d7"
     },
     {
@@ -1340,7 +1340,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "d1cb723a-bd22-466d-bd85-c1d05054495b"
     },
     {
@@ -1351,7 +1351,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "781a184b-e128-4536-b02b-4839185a0e21"
     },
     {
@@ -1362,7 +1362,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "80e2ea33-97bd-4bbc-9246-17cc5a6dd300"
     },
     {
@@ -1373,7 +1373,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "87d12b73-7c25-4f87-b5f7-0e2c33329903"
     },
     {
@@ -1384,7 +1384,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "b5162a0c-17c6-4f1f-8960-da1c5b709a0b"
     },
     {
@@ -1395,7 +1395,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "a1f1d9d1-a16f-499b-adcf-dfaa3db7be31"
     },
     {
@@ -1406,7 +1406,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "4000d7aa-86fd-44ee-98a8-6e62b1a83d40"
     },
     {
@@ -1417,7 +1417,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "430aea47-bd6a-4dae-8e22-0cddc69998d1"
     },
     {
@@ -1428,7 +1428,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "8cebba6c-9d59-4543-b60a-2774b2841343"
     },
     {
@@ -1439,7 +1439,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "62e80ea5-6d50-456d-9546-09060d4fbc74"
     },
     {
@@ -1450,7 +1450,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "3dfa32d4-7ab7-4d73-a52a-67d5bd6fe439"
     },
     {
@@ -1461,7 +1461,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "25f7bcd4-1bba-4e4a-b361-66c83f6e8770"
     },
     {
@@ -1472,7 +1472,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "833e432b-5293-4679-a493-c5fa3c48144e"
     },
     {
@@ -1483,7 +1483,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "ad314345-f8bf-49a2-af2f-d5fe930d2a9c"
     },
     {
@@ -1494,7 +1494,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "adff28c3-afb0-4c0b-8427-d143a5e2a8e7"
     },
     {
@@ -1505,7 +1505,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "06fcb108-5fc6-45bf-a85f-59238e091bdf"
     },
     {
@@ -1529,7 +1529,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.805023250115408,
-        "transform": "cifar-10_norm_32",
+        "transform": "norm_32",
         "uid": "14d0891d-a3dd-4dec-b72f-32d09012cb5e"
     },
     {
@@ -1541,7 +1541,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.9277588863860952,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "529a55c9-8c9e-48ac-9b5c-fd0cdb1614cc"
     },
     {
@@ -1553,7 +1553,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.6036426817038676,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "b9572128-c8a1-466e-9bcd-740577d21c1f"
     },
     {
@@ -1589,7 +1589,7 @@
         "norm_eps": 0.7371387919594787,
         "norm_std": 0.783150436012778,
         "stochastic_depth_prob": 0.5838286368918852,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "0b8cb2bf-7248-40c0-8298-e766f4e682c6"
     },
     {
@@ -1601,7 +1601,7 @@
         "norm_eps": 0.18268722145218874,
         "norm_std": 0.1167349995623671,
         "stochastic_depth_prob": 0.046318933638359594,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "30e58c36-6ebb-4c65-8297-9ee2606ee11b"
     },
     {
@@ -1613,7 +1613,7 @@
         "norm_eps": 0.4021365529951759,
         "norm_std": 0.18528909451324205,
         "stochastic_depth_prob": 0.17034153343877279,
-        "transform": "cifar-10_norm_512",
+        "transform": "norm_512",
         "uid": "34a8c84c-993b-4f5d-a62c-0244282c7065"
     },
     {
@@ -1636,7 +1636,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_complex_32",
+        "transform": "complex_32",
         "uid": "73fba79b-5221-4c55-a9fa-7b9ed5ad64ac"
     },
     {
@@ -1647,7 +1647,7 @@
         "norm_eps": 1e-06,
         "norm_std": 0.02,
         "stochastic_depth_prob": 0.0,
-        "transform": "cifar-10_complex_32",
+        "transform": "complex_32",
         "uid": "9b85e5cd-c6e7-4d2d-8679-ae3029b97808"
     }
 ]

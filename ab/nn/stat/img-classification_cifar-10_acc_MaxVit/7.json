@@ -8,7 +8,7 @@
         "lr": 0.0061,
         "momentum": 0.7549,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "f9e7287d-7b7a-4c75-ac66-f7f9db38d946"
     },
     {
@@ -20,7 +20,7 @@
         "lr": 0.0061,
         "momentum": 0.7549,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299",
+        "transform": "norm_299",
         "uid": "92993b42-160b-48fc-8db3-b32aa38f1fec"
     },
     {
