@@ -36,7 +36,7 @@ python run.py -c img-segmentation -f echo --min_learning_rate 1e-4 -l 1e-2 --min
 ```
 To reproduce the previous result, set the minimum and maximum to the same desired values:
 ```bash
-python run.py -c img-classification_cifar-10_acc_AlexNet --min_learning_rate 0.0061 -l 0.0061 --min_momentum 0.7549 -m 0.7549 --min_batch_binary_power 2 -b 2 -f cifar-10_norm_299
+python run.py -c img-classification_cifar-10_acc_AlexNet --min_learning_rate 0.0061 -l 0.0061 --min_momentum 0.7549 -m 0.7549 --min_batch_binary_power 2 -b 2 -f norm_299
 ```
 To view supported flags:
 ```bash

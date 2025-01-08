@@ -2,7 +2,10 @@ import torch
 from torch.utils.data import Dataset
 from datasets import load_dataset
 
-def loader(dataset_name="Salesforce/wikitext", config="wikitext-2-raw-v1", seq_length=100):
+def loader(transform_fn):
+    dataset_name = "Salesforce/wikitext"
+    config = "wikitext-2-raw-v1"
+    seq_length = 100
     dataset = load_dataset(dataset_name, config)
     data = "\n".join(dataset["train"]["text"]).lower()
     txt_dataset = TextDatasetPreparation(data, seq_length)

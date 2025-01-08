@@ -35,7 +35,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
         'dropout': 0.17920158482473114,
         'lr': 0.02487720458587122,
         'momentum': 0.3867297180491852,
-        'transform': 'cifar-10_norm_299'
+        'transform': 'norm_299'
     }
     """
 
@@ -96,7 +96,7 @@ def remaining_trials(trial_file, model_name, n_optuna_trials):
 
 
 def supported_transformers():
-    return ['cifar-10_complex_32', 'cifar-10_norm_32', 'cifar-10_norm_299', 'cifar-10_norm_512', 'echo']
+    return ['complex_32', 'norm', 'norm_32', 'norm_299', 'norm_512', 'echo']
 
 
 # todo: Request from the database unique names of all configures corresponding to config-patterns

@@ -80,11 +80,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                     prm_str += f", {k}: {v}"
                                 print(f"Initialize training with {prm_str[2:]}")
                                 # Load dataset
-                                try:
-                                    out_shape, train_set, test_set = Loader.load_dataset(dataset_name, transform_name)
-                                except Exception as e:
-                                    print(f"Skipping model '{model_name}': failed to load dataset. Error: {e}")
-                                    return 0.0
+                                out_shape, train_set, test_set = Loader.load_dataset(dataset_name, transform_name)
 
                                 # Initialize model and trainer
                                 if task == 'txt-generation':
