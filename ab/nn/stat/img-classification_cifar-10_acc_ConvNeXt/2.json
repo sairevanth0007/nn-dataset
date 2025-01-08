@@ -983,6 +983,18 @@
         "uid": "cf0f6cc1-f164-40f6-b2b1-2cb0fc9b8f06"
     },
     {
+        "accuracy": 0.164,
+        "batch": 4,
+        "duration": 2407814343300,
+        "lr": 0.0007240665768138793,
+        "momentum": 0.23724752482740186,
+        "norm_eps": 0.015571550088127828,
+        "norm_std": 0.6431214714721933,
+        "stochastic_depth_prob": 0.5450608458214764,
+        "transform": "cifar-10_norm_512",
+        "uid": "da929b25-bda6-46fa-acb0-f8278dae3689"
+    },
+    {
         "accuracy": 0.1616,
         "batch": 64,
         "lr": 0.46170636497058337,

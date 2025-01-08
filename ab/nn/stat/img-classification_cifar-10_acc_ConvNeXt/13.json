@@ -1,5 +1,17 @@
 [
     {
+        "accuracy": 0.3284,
+        "batch": 4,
+        "duration": 15672292340579,
+        "lr": 0.0007240665768138793,
+        "momentum": 0.23724752482740186,
+        "norm_eps": 0.015571550088127828,
+        "norm_std": 0.6431214714721933,
+        "stochastic_depth_prob": 0.5450608458214764,
+        "transform": "cifar-10_norm_512",
+        "uid": "44d9893e-483d-47d2-b6eb-6b5c9f17e681"
+    },
+    {
         "accuracy": 0.1,
         "batch": 64,
         "duration": 4860610297061,

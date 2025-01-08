@@ -27,6 +27,24 @@
         "uid": "7af7b052-006a-4944-aa6c-ff4458312296"
     },
     {
+        "accuracy": 0.4852,
+        "batch": 256,
+        "duration": 1909352292,
+        "lr": 0.033538242669642476,
+        "momentum": 0.7423372733678091,
+        "transform": "cifar-10_complex_32",
+        "uid": "f59492ed-05e7-40cf-adf1-dbd0d8b03d6b"
+    },
+    {
+        "accuracy": 0.4807,
+        "batch": 64,
+        "duration": 4782600455,
+        "lr": 0.01837591076380729,
+        "momentum": 0.7299280796919108,
+        "transform": "cifar-10_complex_32",
+        "uid": "4dca1e6b-12b5-4558-bf8e-5005d5256e86"
+    },
+    {
         "accuracy": 0.4615,
         "batch": 16,
         "duration": 17285672572,

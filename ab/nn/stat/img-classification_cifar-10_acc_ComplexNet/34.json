@@ -1,5 +1,14 @@
 [
     {
+        "accuracy": 0.7265,
+        "batch": 256,
+        "duration": 57689493950,
+        "lr": 0.033538242669642476,
+        "momentum": 0.7423372733678091,
+        "transform": "cifar-10_complex_32",
+        "uid": "7a7b1397-4504-48dc-8d90-b5578bb588cd"
+    },
+    {
         "accuracy": 0.7034,
         "batch": 16,
         "duration": 587218061692,

@@ -12,6 +12,18 @@
         "uid": "5db09f84-51b1-4830-89e2-e78db121a3d1"
     },
     {
+        "accuracy": 0.1855,
+        "batch": 4,
+        "duration": 4818157745261,
+        "lr": 0.0007240665768138793,
+        "momentum": 0.23724752482740186,
+        "norm_eps": 0.015571550088127828,
+        "norm_std": 0.6431214714721933,
+        "stochastic_depth_prob": 0.5450608458214764,
+        "transform": "cifar-10_norm_512",
+        "uid": "ee6f8d21-45ba-4b5e-9192-a28d0e0d798b"
+    },
+    {
         "accuracy": 0.1336,
         "batch": 4,
         "duration": 1779770560206,
