@@ -16,6 +16,8 @@ default_nn_fail_attempts = 30
 default_random_config_order = False
 default_transform = None
 
+minimum_accuracy_multiplayer =  1.2
+
 
 def nn_path(dr):
     """

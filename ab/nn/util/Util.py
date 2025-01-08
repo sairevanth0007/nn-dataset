@@ -1,8 +1,9 @@
 import argparse
 import math
-from os.path import exists, join
+from os.path import exists
 
 from ab.nn.util.Const import *
+
 
 def nn_mod(*nms):
     return ".".join(to_nn + nms)
@@ -40,6 +41,12 @@ class CudaOutOfMemory(Exception):
 class ModelException(Exception):
     def __init__(self):
         pass
+
+
+class AccuracyException(Exception):
+    def __init__(self, accuracy, message):
+        self.accuracy = accuracy
+        self.message = message
 
 def args():
     parser = argparse.ArgumentParser()

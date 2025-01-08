@@ -8,30 +8,33 @@ import torch
 from tqdm import tqdm
 
 import ab.nn.util.db.Write as DB_Write
-from ab.nn.util.Util import nn_mod, merge_prm, get_attr
+from ab.nn.util.Const import minimum_accuracy_multiplayer
+from ab.nn.util.Util import nn_mod, merge_prm, get_attr, AccuracyException
 from ab.nn.util.db.Calc import save_results
 
 
 class Train:
-    def __init__(self, config, out_shape: tuple, batch: int, model_name, model_stat_dir, task,
+    def __init__(self, config, out_shape: tuple, minimum_accuracy: float, batch: int, model_name, model_stat_dir, task,
                  train_dataset, test_dataset, metric, prm: dict):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: Config (Task, Dataset, Metric, and Model name).
+        :param out_shape: The shape of output tensor of the model (e.g., number of classes for classification tasks).
+        :param batch: Batch size used for both training and evaluation.
+        :param minimum_accuracy: Value for minimum accuracy provided by the untrained NN model due to random output generation. Essential for estimating improvements in NN model accuracy.
         :param model_name: Neural network model name (e.g., 'ResNet').
         :param model_stat_dir: Path to the model's statistics as a string (e.g., 'ab/nn/stat/img-classification_cifar-10_acc_AlexNet').
         :param task: e.g., 'img-segmentation' to specify the task type.
         :param train_dataset: The dataset used for training the model (e.g., torch.utils.data.Dataset).
         :param test_dataset: The dataset used for evaluating/testing the model (e.g., torch.utils.data.Dataset).
         :param metric: The name of the evaluation metric (e.g., 'acc', 'iou').
-        :param out_shape: The shape of output tensor of the model (e.g., number of classes for classification tasks).
-        :param batch: Batch size used for both training and evaluation.
         :param prm: dictionary of hyperparameters and their values (e.g., {'lr': 0.11, 'momentum': 0.2})
         """
         self.config = config
         self.model_stat_dir = model_stat_dir
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
+        self.minimum_accuracy = minimum_accuracy
 
         self.out_shape = out_shape
         self.batch = batch
@@ -89,6 +92,11 @@ class Train:
             self.model.learn(tqdm(self.train_loader))
             accuracy = self.eval(self.test_loader)
             accuracy = 0.0 if math.isnan(accuracy) or math.isinf(accuracy) else accuracy
+
+            minimum_accepted_accuracy = self.minimum_accuracy * minimum_accuracy_multiplayer
+            if accuracy < minimum_accepted_accuracy:
+                raise AccuracyException(accuracy, f"Too small accuracy: {accuracy}. Minimum accepted accuracy for current dataset is {minimum_accepted_accuracy}")
+
             prm = merge_prm(self.prm, {'duration': time.time_ns() - start_time,
                                        'accuracy': accuracy,
                                        'uid': DB_Write.uuid4()})

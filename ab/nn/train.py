@@ -4,7 +4,7 @@ from torch.cuda import OutOfMemoryError
 from ab.nn.util.Const import *
 from ab.nn.util.Loader import Loader
 from ab.nn.util.Train import Train
-from ab.nn.util.Util import merge_prm, get_attr, conf_to_names, max_batch, CudaOutOfMemory, ModelException, args
+from ab.nn.util.Util import args, merge_prm, get_attr, conf_to_names, max_batch, CudaOutOfMemory, ModelException, AccuracyException
 from ab.nn.util.db.Calc import patterns_to_configs
 from ab.nn.util.db.Read import supported_transformers, remaining_trials
 
@@ -80,7 +80,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                     prm_str += f", {k}: {v}"
                                 print(f"Initialize training with {prm_str[2:]}")
                                 # Load dataset
-                                out_shape, train_set, test_set = Loader.load_dataset(dataset_name, transform_name)
+                                out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(dataset_name, transform_name)
 
                                 # Initialize model and trainer
                                 if task == 'txt-generation':
@@ -93,7 +93,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                         model = LSTMNet(1, 256, len(train_set.chars), batch, num_layers=2)
                                     else:
                                         raise ValueError(f"Unsupported text generation model: {model_name}")
-                                return Train(sub_config, out_shape, batch, model_name, model_stat_dir,
+                                return Train(sub_config, out_shape, minimum_accuracy, batch, model_name, model_stat_dir,
                                                 task, train_set, test_set, metric, prms).train_n_eval(n_epochs)
                             except Exception as e:
                                 if isinstance(e, OutOfMemoryError):
@@ -101,6 +101,8 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                         return 0.0
                                     else:
                                         raise CudaOutOfMemory(batch)
+                                if isinstance(e, AccuracyException):
+                                    return e.accuracy
                                 else:
                                     print(f"error '{model_name}': failed to train. Error: {e}")
                                     if fail_iterations < 0:
