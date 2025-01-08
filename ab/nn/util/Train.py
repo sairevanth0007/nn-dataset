@@ -21,7 +21,7 @@ class Train:
         :param config: Config (Task, Dataset, Metric, and Model name).
         :param out_shape: The shape of output tensor of the model (e.g., number of classes for classification tasks).
         :param batch: Batch size used for both training and evaluation.
-        :param minimum_accuracy: Value for minimum accuracy provided by the untrained NN model due to random output generation. Essential for estimating improvements in NN model accuracy.
+        :param minimum_accuracy: Expected average value for accuracy provided by the untrained NN model due to random output generation. This value is essential for excluding NN models without accuracy gains.
         :param model_name: Neural network model name (e.g., 'ResNet').
         :param model_stat_dir: Path to the model's statistics as a string (e.g., 'ab/nn/stat/img-classification_cifar-10_acc_AlexNet').
         :param task: e.g., 'img-segmentation' to specify the task type.
