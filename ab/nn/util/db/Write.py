@@ -23,13 +23,13 @@ def code_to_db(code_file, table_name, cursor):
     existing_entry = cursor.fetchone()
     if existing_entry:
         # If model exists, update the code if it has changed
-        existing_code = existing_entry
+        existing_code = existing_entry[0]
         if existing_code != model_code:
             print(f"Updating code for model: {nm}")
             cursor.execute("UPDATE nn SET code = ? WHERE name = ?", (model_code, nm))
     else:
         # If model does not exist, insert it with a new UUID
-        nm = nm if nm is not None else uuid4()
+        nm = nm if nm else uuid4()
         cursor.execute(f"INSERT INTO {table_name} (name, code) VALUES (?, ?)", (nm, model_code))
 
 
@@ -38,10 +38,10 @@ def populate_code_table(table_name, cursor, name=None):
     Populate the code table with models from the appropriate directory.
     """
     code_dir = nn_path(table_name)
-    code_files = [code_dir / f"{name}.py"] if name is not None else [Path(f) for f in code_dir.iterdir() if f.is_file() and f.suffix == '.py' and f.name != '__init__.py']
+    code_files = [code_dir / f"{name}.py"] if name else [Path(f) for f in code_dir.iterdir() if f.is_file() and f.suffix == '.py' and f.name != '__init__.py']
     for code_file in code_files:
         code_to_db(code_file, table_name, cursor)
-    print(f"{table_name} added/updated in the `{table_name}` table: {[f.stem for f in code_files]}")
+    # print(f"{table_name} added/updated in the `{table_name}` table: {[f.stem for f in code_files]}")
 
 
 def populate_prm_table(table_name, cursor, prm, uid):

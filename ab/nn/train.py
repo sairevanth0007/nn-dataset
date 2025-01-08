@@ -73,7 +73,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                         prms[prm] = trial.suggest_float(prm, 0.0, 1.0, log=False)
                                 batch = trial.suggest_categorical('batch', [max_batch(x) for x in range(min_batch_binary_power, max_batch_binary_power_local + 1)])
                                 transform_name = trial.suggest_categorical('transform',
-                                                                           transform if transform is not None else supported_transformers())
+                                                                           transform if transform else supported_transformers())
                                 prms = merge_prm(prms, {'batch': batch, 'transform': transform_name})
                                 prm_str = ''
                                 for k, v in prms.items():
@@ -102,6 +102,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                     else:
                                         raise CudaOutOfMemory(batch)
                                 if isinstance(e, AccuracyException):
+                                    print(e.message)
                                     return e.accuracy
                                 else:
                                     print(f"error '{model_name}': failed to train. Error: {e}")
