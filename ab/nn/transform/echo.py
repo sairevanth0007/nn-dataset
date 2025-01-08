@@ -1,5 +1,5 @@
 import torchvision.transforms as transforms
 
-def transform():
+def transform(_):
     return transforms.Compose([
         transforms.ToTensor()])

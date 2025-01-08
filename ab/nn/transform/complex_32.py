@@ -30,7 +30,7 @@ class ToComplex64:
         x = x.type(torch.complex64)  # to torch.complex64
         return x
     
-def transform():
+def transform(norm):
     """
     Define the transformation to be applied to the CIFAR-10 dataset.
     :return: A transformation pipeline using torchvision.transforms.
