@@ -18,7 +18,9 @@ coco_ann_url = "http://images.cocodataset.org/annotations/annotations_trainval20
 coco_img_url = "http://images.cocodataset.org/zips/{}2017.zip"
 
 # Reduce COCOS classes:
-MIN_CLASS_LIST = [0, 1, 2, 16, 9, 44, 6, 3, 17, 62, 21, 67, 18, 19, 4, 5, 64, 20, 63, 7, 72]
+# MIN_CLASS_LIST = [0, 1, 2, 16, 9, 44, 6, 3, 17, 62, 21, 67, 18, 19, 4, 5, 64, 20, 63, 7, 72]
+# MIN_CLASS_LIST = [0, 1, 16, 9, 44, 6, 18, 5, 64, 20, 63, 7]
+MIN_CLASS_LIST = [0, 1, 2, 3, 4, 5]
 MIN_CLASS_N = len(MIN_CLASS_LIST)
 
 def class_n ():
