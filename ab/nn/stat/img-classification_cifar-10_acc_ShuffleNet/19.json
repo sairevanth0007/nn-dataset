@@ -7,5 +7,14 @@
         "momentum": 0.7549,
         "transform": "norm_299",
         "uid": "8ff0139e-c782-4e0d-a8eb-b6b12076ae0d"
+    },
+    {
+        "accuracy": 0.6557,
+        "batch": 16,
+        "duration": 430283262801,
+        "lr": 0.017548327544242508,
+        "momentum": 0.22949573926049716,
+        "transform": "echo",
+        "uid": "fd59ad11-4f3f-45b2-a570-cd4ce5b0ba8f"
     }
 ]
