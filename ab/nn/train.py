@@ -37,7 +37,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
 
     # Determine configurations based on the provided config
     sub_configs = patterns_to_configs(config, random_config_order)
-    transform = (transform,) if isinstance(transform, tuple) else transform
+    transform = transform if isinstance(transform, tuple) else (transform,)
     print(f"Training configurations ({n_epochs} epochs):")
     for idx, sub_config in enumerate(sub_configs, start=1):
         print(f"{idx}. {sub_config}")
@@ -69,7 +69,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                         prms[prm] = trial.suggest_float('lr', min_learning_rate, max_learning_rate, log=True)
                                     elif 'momentum' == prm:
                                         prms[prm] = trial.suggest_float('momentum', min_momentum, max_momentum, log=False)
-                                    elif 'dropout'==prm: ## Dropoout of high value will prevent the model from learning
+                                    elif 'dropout'== prm: ## Dropoout of high value will prevent the model from learning
                                         prms[prm] = trial.suggest_float(prm, 0.0, 0.5, log=False)
                                     else:
                                         prms[prm] = trial.suggest_float(prm, 0.0, 1.0, log=False)
