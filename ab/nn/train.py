@@ -37,7 +37,8 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
 
     # Determine configurations based on the provided config
     sub_configs = patterns_to_configs(config, random_config_order)
-    transform = transform if isinstance(transform, tuple) else (transform,)
+    if transform:
+        transform = transform if isinstance(transform, tuple) else (transform,)
     print(f"Training configurations ({n_epochs} epochs):")
     for idx, sub_config in enumerate(sub_configs, start=1):
         print(f"{idx}. {sub_config}")
