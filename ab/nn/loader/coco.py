@@ -29,16 +29,21 @@ def class_n ():
 def get_class_list():
     return MIN_CLASS_LIST
 
-def loader(resize=(128,128), **kwargs):
+__norm_mean = (57.375, 57.120, 58.395) # todo: Required correct mean value for color normalization in the transformer
+__norm_dev = (1.0, 1.0, 1.0)
+__minimum_accuracy = 0.03 # todo: Required correct value for minimum accuracy provided by the untrained NN model due to random output generation
+
+def loader(transform_fn, resize=(128,128)):
     path = join(data_dir, 'coco')
-    train_set = COCOSegDataset(root=path,spilt="train",resize=resize,preprocess=True,**kwargs)
-    val_set = COCOSegDataset(root=path,spilt="val",resize=resize,preprocess=True,**kwargs)
-    return (class_n(),), train_set, val_set
+    transform = transform_fn((__norm_mean, __norm_dev))
+    train_set = COCOSegDataset(transform=transform, root=path,spilt="train",resize=resize,preprocess=True)
+    val_set = COCOSegDataset(transform=transform, root=path,spilt="val",resize=resize,preprocess=True)
+    return (class_n(),), __minimum_accuracy, train_set, val_set
 
 
 class COCOSegDataset(torch.utils.data.Dataset):
-    def __init__(self, root:os.path, spilt="val", transform=transforms.Compose([transforms.ToTensor()]), class_limit = None, num_limit = None, resize = (128,128)
-        , preprocess=True, least_pix=1000, **kwargs):
+    def __init__(self, transform, root:os.path, spilt="val", class_limit = None, num_limit = None, resize = (128,128)
+        , preprocess=True, least_pix=1000):
         """Read datas from COCOS and generate 2D masks.
 
         Parameters

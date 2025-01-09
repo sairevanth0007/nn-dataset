@@ -2,9 +2,10 @@
     {
         "accuracy": 0.8216,
         "batch": 4,
+        "duration": 2047800601859,
         "lr": 0.0061,
         "momentum": 0.7549,
-        "duration": 2047800601859,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "8ff0139e-c782-4e0d-a8eb-b6b12076ae0d"
     }
 ]

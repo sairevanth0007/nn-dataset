@@ -1,10 +1,20 @@
 [
     {
+        "accuracy": 0.6787,
+        "batch": 256,
+        "duration": 25511166654,
+        "lr": 0.033538242669642476,
+        "momentum": 0.7423372733678091,
+        "transform": "complex_32",
+        "uid": "61d1460d-7907-488c-a282-910461c44e5e"
+    },
+    {
         "accuracy": 0.6766,
         "batch": 16,
         "duration": 259183566653,
         "lr": 0.00045389180019338415,
         "momentum": 0.8929252318727656,
-        "transform": "cifar-10_complex_32"
+        "transform": "complex_32",
+        "uid": "45e03f65-2038-4dc2-8d74-9a25b8cc81f9"
     }
 ]

@@ -1,5 +1,9 @@
 MIT License
 
+The python code of neural network models with file names beginning or identical to AirNet, AirNext, BagNet, IcNet, DPN68, DPN107, DPN131, DarkNet:<br/>
+Copyright (c) 2018-2024 Oleg Sémery<br/>
+All rights reserved.
+
 The python code of the DeepSeek large language models:<br/>
 Copyright (c) 2023 DeepSeek<br/>
 All rights reserved.
