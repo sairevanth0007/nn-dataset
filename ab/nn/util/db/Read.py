@@ -96,7 +96,7 @@ def remaining_trials(trial_file, model_name, n_optuna_trials):
 
 
 def supported_transformers():
-    return ['complex_32', 'norm', 'norm_32', 'norm_299', 'norm_512', 'echo']
+    return ['complex_32', 'norm', 'norm_32', 'norm_299', 'norm_512', 'echo', 'echo_128']
 
 
 # todo: Request from the database unique names of all configures corresponding to config-patterns
