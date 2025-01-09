@@ -1,41 +1,45 @@
 import importlib
 import math
-import time as time_f
-import numpy as np
+import time as time
 from os.path import join
 
+import numpy as np
 import torch
 from tqdm import tqdm
 
-from ab.nn.util.stat.DB import save_results
-from ab.nn.util.Util import nn_mod, merge_prm, get_attr
+import ab.nn.util.db.Write as DB_Write
+from ab.nn.util.Const import minimum_accuracy_multiplayer
+from ab.nn.util.Util import nn_mod, merge_prm, get_attr, AccuracyException
+from ab.nn.util.db.Calc import save_results
 
 
 class Train:
-    def __init__(self, config, out_shape: tuple, batch: int, model_name, model_stat_dir, task,
-                 train_dataset, test_dataset, metric, prms: dict):
+    def __init__(self, config, out_shape: tuple, minimum_accuracy: float, batch: int, model_name, model_stat_dir, task,
+                 train_dataset, test_dataset, metric, prm: dict):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: Config (Task, Dataset, Metric, and Model name).
+        :param out_shape: The shape of output tensor of the model (e.g., number of classes for classification tasks).
+        :param batch: Batch size used for both training and evaluation.
+        :param minimum_accuracy: Expected average value for accuracy provided by the untrained NN model due to random output generation. This value is essential for excluding NN models without accuracy gains.
         :param model_name: Neural network model name (e.g., 'ResNet').
         :param model_stat_dir: Path to the model's statistics as a string (e.g., 'ab/nn/stat/img-classification_cifar-10_acc_AlexNet').
         :param task: e.g., 'img-segmentation' to specify the task type.
         :param train_dataset: The dataset used for training the model (e.g., torch.utils.data.Dataset).
         :param test_dataset: The dataset used for evaluating/testing the model (e.g., torch.utils.data.Dataset).
         :param metric: The name of the evaluation metric (e.g., 'acc', 'iou').
-        :param out_shape: The shape of output tensor of the model (e.g., number of classes for classification tasks).
-        :param batch: Batch size used for both training and evaluation.
-        :param prms: dictionary of hyperparameters and their values (e.g., {'lr': 0.11, 'momentum': 0.2})
+        :param prm: dictionary of hyperparameters and their values (e.g., {'lr': 0.11, 'momentum': 0.2})
         """
         self.config = config
         self.model_stat_dir = model_stat_dir
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
+        self.minimum_accuracy = minimum_accuracy
 
         self.out_shape = out_shape
         self.batch = batch
         self.task = task
-        self.prms = prms
+        self.prm = prm
 
         self.metric_name = metric
         self.metric_function = self.load_metric_function(metric)
@@ -48,7 +52,7 @@ class Train:
             break
 
         # Load model
-        self.model = get_attr(f"dataset.{model_name}", "Net")(self.in_shape, out_shape, prms)
+        self.model = get_attr(f"nn.{model_name}", "Net")(self.in_shape, out_shape, prm)
 
         if torch.cuda.is_available():
             device = torch.device("cuda")
@@ -79,8 +83,8 @@ class Train:
     def train_n_eval(self, num_epochs):
         """ Training and evaluation """
 
-        duration = time_f.time_ns()
-        self.model.train_setup(self.device, self.prms)
+        start_time = time.time_ns()
+        self.model.train_setup(self.device, self.prm)
         accuracy = None
         for epoch in range(1, num_epochs + 1):
             print(f"epoch {epoch}", flush=True)
@@ -88,9 +92,15 @@ class Train:
             self.model.learn(tqdm(self.train_loader))
             accuracy = self.eval(self.test_loader)
             accuracy = 0.0 if math.isnan(accuracy) or math.isinf(accuracy) else accuracy
-            prms = merge_prm(self.prms, {'duration': time_f.time_ns() - duration,
-                        'accuracy': accuracy})
-            save_results(self.config, join(self.model_stat_dir, f"{epoch}.json"), prms)
+
+            minimum_accepted_accuracy = self.minimum_accuracy * minimum_accuracy_multiplayer
+            if accuracy < minimum_accepted_accuracy:
+                raise AccuracyException(accuracy, f"Too small accuracy: {accuracy}. Minimum accepted accuracy for current dataset is {minimum_accepted_accuracy}")
+
+            prm = merge_prm(self.prm, {'duration': time.time_ns() - start_time,
+                                       'accuracy': accuracy,
+                                       'uid': DB_Write.uuid4()})
+            save_results(self.config, epoch, join(self.model_stat_dir, f"{epoch}.json"), prm)
 
         return accuracy
 
@@ -117,3 +127,9 @@ class Train:
         else:
             result = total_correct / total_samples
         return result
+
+
+def train_new(nn_code, task, dataset, metric, prm):
+    # todo: train and if result is appropriate save the code of the new NN model into database
+    DB_Write.save_nn(nn_code, task, dataset, metric)
+    return None

@@ -16,8 +16,10 @@ default_nn_fail_attempts = 30
 default_random_config_order = False
 default_transform = None
 
+minimum_accuracy_multiplayer =  1.2
 
-def __nn_path(dr):
+
+def nn_path(dr):
     """
     Defines path to ab/nn directory.
     """
@@ -25,10 +27,10 @@ def __nn_path(dr):
     return Path(init_file.__file__).parent.absolute() / dr
 
 
-metric_dir = __nn_path('metric')
-dataset_dir = __nn_path('dataset')
-stat_dir = __nn_path('stat')
-transform_dir = __nn_path('transform')
+metric_dir = nn_path('metric')
+nn_dir = nn_path('nn')
+transform_dir = nn_path('transform')
+stat_dir = nn_path('stat')
 
 
 def __to_root_paths():
@@ -36,10 +38,19 @@ def __to_root_paths():
     Defines path to the project root directory.
     """
     project_root = '.'
-    if __nn_path('') == Path().absolute():
+    if nn_path('') == Path().absolute():
         project_root = ['..'] * len(to_nn)
     return project_root
 
 __project_root_path_list = __to_root_paths()
 data_dir = join(*__project_root_path_list, 'data')
-db_dir = join(*__project_root_path_list, join('db', 'ab.nn.db'))
+db_dir = join(*__project_root_path_list, 'db')
+db_file = join(db_dir, 'ab.nn.db')
+
+main_tables = ('stat',)
+code_tables = ('nn', 'transform', 'metric')
+param_tables = ('prm',)
+dependent_columns = code_tables + param_tables
+all_tables = code_tables + main_tables + param_tables
+index_colum = ('task', 'dataset') + dependent_columns
+extra_main_columns = ('duration', 'accuracy')

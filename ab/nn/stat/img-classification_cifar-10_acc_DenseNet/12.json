@@ -3,10 +3,11 @@
         "accuracy": 0.6998,
         "batch": 4,
         "dropout": 0.5,
+        "duration": 2372194658438,
         "lr": 0.0061,
         "momentum": 0.7549,
-        "duration": 2372194658438,
-        "transform": "echo"
+        "transform": "echo",
+        "uid": "536564c7-f7c5-48ae-bd8a-38a4cd4b1095"
     },
     {
         "accuracy": 0.6914,
@@ -15,6 +16,7 @@
         "duration": 734381570809,
         "lr": 0.0005491397462551408,
         "momentum": 0.9528167666147869,
-        "transform": "cifar-10_norm_32"
+        "transform": "norm_32",
+        "uid": "416dd41e-d153-49ce-9d2f-c6c1b7db1504"
     }
 ]

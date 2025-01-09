@@ -2,11 +2,17 @@ import torch
 from torch.utils.data import Dataset
 from datasets import load_dataset
 
-def loader(dataset_name="Salesforce/wikitext", config="wikitext-2-raw-v1", seq_length=100):
+
+__minimum_accuracy = 0.01 # todo: Required correct value for minimum accuracy provided by the untrained classifier due to random output generation.
+
+def loader(transform_fn):
+    dataset_name = "Salesforce/wikitext"
+    config = "wikitext-2-raw-v1"
+    seq_length = 100
     dataset = load_dataset(dataset_name, config)
     data = "\n".join(dataset["train"]["text"]).lower()
     txt_dataset = TextDatasetPreparation(data, seq_length)
-    return None, txt_dataset, txt_dataset
+    return None, __minimum_accuracy, txt_dataset, txt_dataset
 
 class TextDatasetPreparation(Dataset):
     """

@@ -5,6 +5,16 @@
         "duration": 95954211245,
         "lr": 0.0018022835944323382,
         "momentum": 0.9411274726396857,
-        "transform": "cifar-10_norm_32"
+        "transform": "norm_32",
+        "uid": "efc85123-43a2-49ae-bbe1-e44f9c54f886"
+    },
+    {
+        "accuracy": 0.3074,
+        "batch": 8,
+        "duration": 879303210609,
+        "lr": 2.309998102320844e-05,
+        "momentum": 0.11907158662261574,
+        "transform": "norm_32",
+        "uid": "cf75338a-a04a-4ced-9499-278299f8c5c7"
     }
 ]

@@ -4,11 +4,12 @@
         "attention_dropout": 0.0,
         "batch": 4,
         "dropout": 0.0,
+        "duration": 793316182934,
         "lr": 0.0061,
         "momentum": 0.7549,
         "stochastic_depth_prob": 0.2,
-        "duration": 793316182934,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "e73def42-f828-4ea8-a6d1-98a4e8d39e78"
     },
     {
         "accuracy": 0.5096,
@@ -18,7 +19,8 @@
         "lr": 0.010554566076770466,
         "momentum": 0.23451555795815784,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "4c11a99d-48ce-46d7-874f-5eae9f316594"
     },
     {
         "accuracy": 0.5007,
@@ -28,18 +30,20 @@
         "lr": 0.009762717998928055,
         "momentum": 0.2530855356024237,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "a2955352-88d9-48b1-a757-da94a6a1b69d"
     },
     {
         "accuracy": 0.4837,
         "attention_dropout": 0.0,
         "batch": 4,
         "dropout": 0.0,
+        "duration": 792635456736,
         "lr": 0.0061,
         "momentum": 0.7549,
         "stochastic_depth_prob": 0.2,
-        "duration": 792635456736,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "2acfd5d6-76c6-48b7-8e6f-43e56759f810"
     },
     {
         "accuracy": 0.4833,
@@ -49,18 +53,20 @@
         "lr": 0.000952398718588543,
         "momentum": 0.49101913043281525,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "ba10c51a-e03e-438f-b090-fb2fda15aed5"
     },
     {
         "accuracy": 0.4806,
         "attention_dropout": 0.0,
         "batch": 4,
         "dropout": 0.0,
+        "duration": 1104982043573,
         "lr": 0.0061,
         "momentum": 0.7549,
         "stochastic_depth_prob": 0.2,
-        "duration": 1104982043573,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "8729a427-e1f4-4f4e-8f54-7efe1104dd5d"
     },
     {
         "accuracy": 0.4737,
@@ -70,7 +76,8 @@
         "lr": 0.0004035462309898494,
         "momentum": 0.46642831180735295,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "db2dc9aa-42fd-45bf-bbb3-5ef53c0f8169"
     },
     {
         "accuracy": 0.3319,
@@ -80,7 +87,8 @@
         "lr": 0.06018366974025935,
         "momentum": 0.40664058662986,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "4f86409a-5df7-4b77-9919-d5a315e9c775"
     },
     {
         "accuracy": 0.3263,
@@ -90,7 +98,8 @@
         "lr": 0.0321938027271378,
         "momentum": 0.43347471277019534,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "59cb75ac-9cd5-4536-8551-24fd6473d697"
     },
     {
         "accuracy": 0.3025,
@@ -100,7 +109,8 @@
         "lr": 0.5129821145970751,
         "momentum": 0.02143804501106279,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "0a6babf8-2e56-47a7-bc2d-c9f507cd7352"
     },
     {
         "accuracy": 0.3016,
@@ -110,7 +120,8 @@
         "lr": 0.0365655628519098,
         "momentum": 0.17343034226432186,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "87a47fe0-f5cc-4734-aab0-c1c4a0102242"
     },
     {
         "accuracy": 0.2931,
@@ -120,7 +131,8 @@
         "lr": 0.02985562572662637,
         "momentum": 0.38719264533783,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "1eaf7e1d-3893-4aeb-85f4-f08b59ad0454"
     },
     {
         "accuracy": 0.2242,
@@ -130,7 +142,20 @@
         "lr": 0.48046749433244873,
         "momentum": 0.01644532240232712,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
+        "transform": "norm_299",
+        "uid": "fbaf1dde-a262-4bf3-8f27-4d499cf86f62"
+    },
+    {
+        "accuracy": 0.1922,
+        "attention_dropout": 0.5570800108324728,
+        "batch": 2,
+        "dropout": 0.39939526390598457,
+        "duration": 1362609428610,
+        "lr": 0.0004935958553570921,
+        "momentum": 0.7061701346354543,
+        "stochastic_depth_prob": 0.4239057709728352,
+        "transform": "echo",
+        "uid": "711eace9-d4fc-44a1-bc99-61699422fa1a"
     },
     {
         "accuracy": 0.1506,
@@ -140,266 +165,7 @@
         "lr": 0.13741558709938664,
         "momentum": 0.5871501516231358,
         "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 16,
-        "dropout": 0.0,
-        "lr": 0.9705540078617224,
-        "momentum": 0.07648114353528654,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 4,
-        "dropout": 0.0,
-        "lr": 0.7440355921060301,
-        "momentum": 0.021050936915362244,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 4,
-        "dropout": 0.0,
-        "lr": 0.2236808375601975,
-        "momentum": 0.07864506409309889,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 16,
-        "dropout": 0.0,
-        "lr": 0.2291893773189233,
-        "momentum": 0.025580096726733472,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 5,
-        "dropout": 0.0,
-        "lr": 0.9550811922547119,
-        "momentum": 0.29631844709842403,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 4,
-        "dropout": 0.0,
-        "lr": 0.7742413498449768,
-        "momentum": 0.028877718059800307,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 16,
-        "dropout": 0.0,
-        "lr": 0.3095371247489937,
-        "momentum": 0.011910351944633121,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 8,
-        "dropout": 0.0,
-        "lr": 0.485220646075825,
-        "momentum": 0.059172411669004055,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 8,
-        "dropout": 0.0,
-        "lr": 0.9775119759431283,
-        "momentum": 0.13607786180817974,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 8,
-        "dropout": 0.0,
-        "lr": 0.21105084114533879,
-        "momentum": 0.0380863868951407,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 16,
-        "dropout": 0.0,
-        "lr": 0.037121470997853956,
-        "momentum": 0.8675582870408679,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 16,
-        "dropout": 0.0,
-        "lr": 0.6585887830892055,
-        "momentum": 0.21826941424733473,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 16,
-        "dropout": 0.0,
-        "lr": 0.4889504197614521,
-        "momentum": 0.7764841261009263,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 5,
-        "dropout": 0.0,
-        "lr": 0.11787455393935387,
-        "momentum": 0.15800483476774962,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 5,
-        "dropout": 0.0,
-        "lr": 0.3621640969344243,
-        "momentum": 0.5027365866945953,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 5,
-        "dropout": 0.0,
-        "lr": 0.3782924057216506,
-        "momentum": 0.2437162942551232,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 5,
-        "dropout": 0.0,
-        "lr": 0.10956791028829654,
-        "momentum": 0.9606790398327454,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 5,
-        "dropout": 0.0,
-        "lr": 0.14401783165931895,
-        "momentum": 0.33967503315426295,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 5,
-        "dropout": 0.0,
-        "lr": 0.290965512991193,
-        "momentum": 0.5846494726306664,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 8,
-        "dropout": 0.0,
-        "lr": 0.099350459608966,
-        "momentum": 0.6220168925493224,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 4,
-        "dropout": 0.0,
-        "lr": 0.18420662673328875,
-        "momentum": 0.1150994507422029,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 32,
-        "dropout": 0.0,
-        "lr": 0.7361786529409413,
-        "momentum": 0.6937317601925705,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.1,
-        "attention_dropout": 0.0,
-        "batch": 1,
-        "dropout": 0.0,
-        "lr": 0.42592028839865553,
-        "momentum": 0.04310974942132179,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.0742,
-        "attention_dropout": 0.0,
-        "batch": 32,
-        "dropout": 0.0,
-        "lr": 0.919695444509111,
-        "momentum": 0.014049862001917079,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.0,
-        "attention_dropout": 0.0,
-        "batch": 1024,
-        "dropout": 0.0,
-        "lr": 0.04768052229107723,
-        "momentum": 0.7951118480717929,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_norm_299"
-    },
-    {
-        "accuracy": 0.0,
-        "attention_dropout": 0.0,
-        "batch": 64,
-        "dropout": 0.0,
-        "lr": 0.0009388016855241094,
-        "momentum": 0.6163718344096475,
-        "stochastic_depth_prob": 0.2,
-        "transform": "cifar-10_complex_32"
+        "transform": "norm_299",
+        "uid": "de411447-d2a2-417a-82f5-8f4a8c348db5"
     }
 ]
