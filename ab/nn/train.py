@@ -69,6 +69,8 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                         prms[prm] = trial.suggest_float('lr', min_learning_rate, max_learning_rate, log=True)
                                     elif 'momentum' == prm:
                                         prms[prm] = trial.suggest_float('momentum', min_momentum, max_momentum, log=False)
+                                    elif 'dropout'==prm: ## Dropoout of high value will prevent the model from learning
+                                        prms[prm] = trial.suggest_float(prm, 0.0, 0.5, log=False)
                                     else:
                                         prms[prm] = trial.suggest_float(prm, 0.0, 1.0, log=False)
                                 batch = trial.suggest_categorical('batch', [max_batch(x) for x in range(min_batch_binary_power, max_batch_binary_power_local + 1)])

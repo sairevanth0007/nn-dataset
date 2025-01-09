@@ -1,6 +1,7 @@
 import os
 from os import makedirs, mkdir
 from os.path import join, exists
+from typing import Sequence
 
 import numpy as np
 import requests
@@ -17,7 +18,9 @@ coco_ann_url = "http://images.cocodataset.org/annotations/annotations_trainval20
 coco_img_url = "http://images.cocodataset.org/zips/{}2017.zip"
 
 # Reduce COCOS classes:
-MIN_CLASS_LIST = [0, 1, 2, 16, 9, 44, 6, 3, 17, 62, 21, 67, 18, 19, 4, 5, 64, 20, 63, 7, 72]
+# MIN_CLASS_LIST = [0, 1, 2, 16, 9, 44, 6, 3, 17, 62, 21, 67, 18, 19, 4, 5, 64, 20, 63, 7, 72]
+# MIN_CLASS_LIST = [0, 1, 16, 9, 44, 6, 18, 5, 64, 20, 63, 7]
+MIN_CLASS_LIST = [0, 1, 2, 3, 4, 5]
 MIN_CLASS_N = len(MIN_CLASS_LIST)
 
 def class_n ():
@@ -47,12 +50,12 @@ class COCOSegDataset(torch.utils.data.Dataset):
         ----------
         path : Path towards coco root directory. It should be structured as default.
         spilt : str `"train"` or `"val"`.
-        transform : transform towards the image. For resizing, please use `resize` parameter,
-          for torch transforms might have issues transforming masks.
+        transform : transform towards the image. If transform.Resize is specified, 
+          it will overwrite `resize` parameter, BUT ONLY accepts Sequence (w,h)
         class_limit : Limit class index from 0 to the value. Set to `None` for no limit.
         num_limit : Limit maximum number of images to use. Only works with `preprocess`.
-        resize : tuple (h,w) to resize the image and its mask. Uses Image from PIL to avoid
-          artifacts on the mask
+        resize : tuple (w,h) to resize the image and its mask. Uses Image from PIL to avoid
+          artifacts on the mask. Will be ignored if transforms.Resize is defined in transform.
         preprocess : Set true to allow preprocess that filter out all images with mask that
           have lesser than `least_pix` pixels.
         least_pix : filter out thersold of preprocess.
@@ -76,15 +79,31 @@ class COCOSegDataset(torch.utils.data.Dataset):
             raise Exception(f"Invalid spilt: {spilt}")
         if not exists(self.root):
             mkdir(self.root)
-        self.transform = transform
+        
         self.num_classes = len(self.coco.getCatIds())
         self.masks = []
         self.resize = resize
+        ## Resizing the mask should be handled seperately, or there might be significant artifacts.
+        lst_tsf = []
+        for i in transform.transforms:
+            if i.__class__==transforms.Resize:
+                if isinstance(i.size, Sequence):
+                    h,w = i.size
+                    self.resize=(w,h)
+                else:
+                    raise TypeError(f"Size in transform should be only sequence. Got {type(i.size)}")
+            else:
+                lst_tsf.append(i)
+        self.transform = transforms.Compose(lst_tsf)
         self.limit_classes = class_limit
         self.num_limit = num_limit
         self.class_list = class_list
         self.no_missing_img = False
-        self.mask_transform = transforms.Compose([transforms.ToTensor()])
+        lst = []
+        for i in transform.transforms:
+            if i.__class__!=transforms.Resize and i.__class__!=transforms.Normalize:
+                lst.append(i)
+        self.mask_transform = transforms.Compose(lst)
         if preprocess:
             self.ids = []
             self.__preprocess__(list(self.coco.imgs.keys()),least_pix=least_pix,spilt=spilt)
@@ -135,6 +154,7 @@ class COCOSegDataset(torch.utils.data.Dataset):
             else:
                 mask[:, :] += (mask == 0) * (((np.sum(m, axis=2)) > 0) * c).astype(np.uint8)
         image = image.resize(size=self.resize, resample=Image.BILINEAR)
+        ## Bilinear will cause problem when resizing the Mask, but is commonly used when resizing image
         mask = Image.fromarray(mask).resize(size=self.resize, resample=Image.NEAREST)
         image = self.transform(image)
         mask = self.mask_transform(mask).long()
