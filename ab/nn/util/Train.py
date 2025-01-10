@@ -51,9 +51,6 @@ class Train:
             self.in_shape = np.array(input_tensor).shape # Model input tensor shape (e.g., (8, 3, 32, 32) for a batch size 8, RGB image 32x32 px).
             break
 
-        # Load model
-        self.model = get_attr(f"nn.{model_name}", "Net")(self.in_shape, out_shape, prm)
-
         if torch.cuda.is_available():
             device = torch.device("cuda")
         elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
@@ -61,6 +58,11 @@ class Train:
         else:
             device = torch.device("cpu")
         self.device = device
+
+        # Load model
+        model_net = get_attr(f"nn.{model_name}", "Net")
+        model_net.device = self.device
+        self.model = model_net(self.in_shape, out_shape, prm)
         self.model.to(self.device)
 
     def load_metric_function(self, metric_name):

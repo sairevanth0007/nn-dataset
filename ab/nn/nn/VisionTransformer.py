@@ -167,7 +167,7 @@ class Net(nn.Module):
     def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict):
         super().__init__()
         image_size: int = in_shape[2]
-        patch_size: int = get_closest_split(image_size ,int(image_size * prm['patch_size']))
+        patch_size: int = get_closest_split(image_size, int(image_size * prm['patch_size']))
         num_layers: int = 12
         num_heads: int = 12
         hidden_dim: int = 768
