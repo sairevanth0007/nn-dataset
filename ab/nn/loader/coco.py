@@ -29,21 +29,27 @@ def class_n ():
 def get_class_list():
     return MIN_CLASS_LIST
 
-__norm_mean = (57.375, 57.120, 58.395) # todo: Required correct mean value for color normalization in the transformer
-__norm_dev = (1.0, 1.0, 1.0)
-__minimum_accuracy = 0.03 # todo: Required correct value for minimum accuracy provided by the untrained NN model due to random output generation
+__norm_mean = (104.01362025, 114.03422265, 119.9165958)
+__norm_dev = (73.6027665 , 69.89082075, 70.9150767)
+__minimum_accuracy = 0.11 # todo: Required correct value for minimum accuracy provided by the untrained NN model due to random output generation
 
-def loader(transform_fn, resize=(128,128)):
+def loader(transform_fn):
     path = join(data_dir, 'coco')
     transform = transform_fn((__norm_mean, __norm_dev))
-    train_set = COCOSegDataset(transform=transform, root=path,spilt="train",resize=resize,preprocess=True)
-    val_set = COCOSegDataset(transform=transform, root=path,spilt="val",resize=resize,preprocess=True)
+    resize = None
+    for i in transform.transforms:
+        if i.__class__ == transforms.Resize:
+            if isinstance(i.size, Sequence):
+                h, w = i.size
+                resize = (w, h)
+    if not resize: raise Exception("The transformer must include a resize function for the image segmentation task.")
+    train_set = COCOSegDataset(transform=transform, root=path, spilt="train", resize=resize, preprocess=True)
+    val_set = COCOSegDataset(transform=transform, root=path, spilt="val", resize=resize, preprocess=True)
     return (class_n(),), __minimum_accuracy, train_set, val_set
 
 
 class COCOSegDataset(torch.utils.data.Dataset):
-    def __init__(self, transform, root:os.path, spilt="val", class_limit = None, num_limit = None, resize = (128,128)
-        , preprocess=True, least_pix=1000):
+    def __init__(self, transform, resize, root:os.path, spilt="val", class_limit = None, num_limit = None, preprocess=True, least_pix=1000):
         """Read datas from COCOS and generate 2D masks.
 
         Parameters
