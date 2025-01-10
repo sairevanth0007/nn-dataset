@@ -1,5 +1,86 @@
 [
     {
+        "accuracy": 0.3716576397418976,
+        "batch": 4,
+        "duration": 1251915416136,
+        "lr": 0.2342874415848782,
+        "momentum": 0.11879363620512928,
+        "transform": "echo_128",
+        "uid": "fbc6595e-a024-4f53-9c30-a8fffc4c51eb"
+    },
+    {
+        "accuracy": 0.3221280872821808,
+        "batch": 4,
+        "duration": 1248267480691,
+        "lr": 0.1837843720287404,
+        "momentum": 0.6482963180251823,
+        "transform": "echo_128",
+        "uid": "b5121a34-ff1a-448e-b559-ed0b0059e380"
+    },
+    {
+        "accuracy": 0.2948908805847168,
+        "batch": 16,
+        "duration": 1214579584559,
+        "lr": 0.06340224286980739,
+        "momentum": 0.6012493293666745,
+        "transform": "echo_128",
+        "uid": "4ca38afc-f96b-4f6d-bfa5-954562b68265"
+    },
+    {
+        "accuracy": 0.2700636386871338,
+        "batch": 128,
+        "duration": 1170879503583,
+        "lr": 0.08894883220496234,
+        "momentum": 0.9622945770716705,
+        "transform": "echo_128",
+        "uid": "bc5e5673-553e-4fff-b113-3c9fdef61ef1"
+    },
+    {
+        "accuracy": 0.261345237493515,
+        "batch": 32,
+        "duration": 1201188887028,
+        "lr": 0.006941949312783114,
+        "momentum": 0.9938024459345352,
+        "transform": "echo_128",
+        "uid": "87efdaa7-3a63-4b6d-a09b-3d722536906b"
+    },
+    {
+        "accuracy": 0.19801735877990723,
+        "batch": 32,
+        "duration": 1221158540214,
+        "lr": 0.16775621310423977,
+        "momentum": 0.018408214489386676,
+        "transform": "echo_128",
+        "uid": "d60d0b9b-1ccc-47a7-a699-a46c34b6a5d5"
+    },
+    {
+        "accuracy": 0.18010592460632324,
+        "batch": 32,
+        "duration": 1169377260931,
+        "lr": 0.00032187791311444,
+        "momentum": 0.9625041812904801,
+        "transform": "echo_128",
+        "uid": "1ab5c377-883f-4d92-a72f-f1ba9689eda8"
+    },
+    {
+        "accuracy": 0.15280671417713165,
+        "batch": 32,
+        "duration": 1164527554948,
+        "lr": 0.0003849091667265036,
+        "momentum": 0.29065090560098794,
+        "transform": "echo_128",
+        "uid": "45b2ee27-710a-4cec-a5c7-dda2b8ca9ace"
+    },
+    {
+        "accuracy": 0.1493907868862152,
+        "batch": 16,
+        "duration": 1213631948072,
+        "lr": 8.386649699707839e-05,
+        "momentum": 0.12195273184313704,
+        "transform": "echo_128",
+        "uid": "d2bbdefe-8302-4a87-8c12-cea0ebd96b52"
+    },
+    {
         "accuracy": 0.13747775554656982,
         "batch": 4,
         "duration": 1269887088289,
@@ -7,5 +88,14 @@
         "momentum": 0.6974014367783481,
         "transform": "norm",
         "uid": "56cb41ef-e5e3-4ccc-b6e6-014d66295d59"
+    },
+    {
+        "accuracy": 0.13540737330913544,
+        "batch": 4,
+        "duration": 1252958415912,
+        "lr": 0.008573589157165067,
+        "momentum": 0.9782944769591018,
+        "transform": "echo_128",
+        "uid": "e385a43b-6ae5-4b35-9b92-74f2dfc8e9f2"
     }
 ]
