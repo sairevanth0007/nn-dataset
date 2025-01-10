@@ -1,6 +1,5 @@
 ## Dataset Loaders and Data Preparation
 
+This module provides all dataset loaders supported in the NN-Dataset project. Each loader includes dataset-specific preparation procedures, default normalization parameters, and expected output shape.
 
-Dataset Loaders supported in NN-Dataset.
-
-Data transformation and normalization algorithms are provided in the separate folder: ../transform
+Data transformation and normalization algorithms adaptable to both dataset and neural network model are available in a separate module <a href='../transform'>ab.nn.transform</a>.
