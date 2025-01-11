@@ -1,3 +1,3 @@
-## Data Transformation and Normalization Algorithms
+## Data Transformation Algorithms
 
-Data transformations supported in NN-Dataset.
+This model incorporates all data transformation algorithms supported by NN-Dataset, including normalization, resizing, cropping, and a range of more advanced techniques.
