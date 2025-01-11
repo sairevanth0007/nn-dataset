@@ -4,7 +4,7 @@ from torch.cuda import OutOfMemoryError
 from ab.nn.util.Const import *
 from ab.nn.util.Loader import Loader
 from ab.nn.util.Train import Train
-from ab.nn.util.Util import args, merge_prm, get_attr, conf_to_names, max_batch, CudaOutOfMemory, ModelException, AccuracyException
+from ab.nn.util.Util import args, validate_prm, merge_prm, get_attr, conf_to_names, max_batch, CudaOutOfMemory, ModelException, AccuracyException
 from ab.nn.util.db.Calc import patterns_to_configs
 from ab.nn.util.db.Read import supported_transformers, remaining_trials
 
@@ -31,14 +31,12 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
     :param random_config_order: If random shuffling of the config list is required.
     """
 
-    if min_batch_binary_power > max_batch_binary_power: raise Exception(f"min_batch_binary_power {min_batch_binary_power} > max_batch_binary_power {max_batch_binary_power}")
-    if min_learning_rate > max_learning_rate: raise Exception(f"min_learning_rate {min_learning_rate} > max_learning_rate {max_learning_rate}")
-    if min_momentum > max_momentum: raise Exception(f"min_momentum {min_momentum} > max_momentum {max_momentum}")
+    validate_prm(min_batch_binary_power, max_batch_binary_power, min_learning_rate, max_learning_rate, min_momentum, max_momentum)
 
     # Determine configurations based on the provided config
     sub_configs = patterns_to_configs(config, random_config_order)
     if transform:
-        transform = transform if isinstance(transform, tuple) else (transform,)
+        transform = transform if isinstance(transform, (tuple, list)) else (transform,)
     print(f"Training configurations ({n_epochs} epochs):")
     for idx, sub_config in enumerate(sub_configs, start=1):
         print(f"{idx}. {sub_config}")
