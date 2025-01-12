@@ -7,7 +7,7 @@ The primary goal of NN-Dataset project is to provide flexibility for dynamically
 ## Installation of the Latest Version of the NN-Dataset
 
 ```bash
-pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force
+pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
 ## Environment for NN-Dataset Contributors
