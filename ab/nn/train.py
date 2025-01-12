@@ -54,7 +54,8 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                 fail_iterations = nn_fail_attempts
                 continue_study = True
                 max_batch_binary_power_local = max_batch_binary_power
-                while continue_study and max_batch_binary_power_local >= min_batch_binary_power and fail_iterations > -1:
+                while (continue_study and max_batch_binary_power_local >= min_batch_binary_power and fail_iterations > -1
+                       and n_optuna_trials_left > 0):
                     try:
                         # Configure Optuna for the current model
                         def objective(trial):
@@ -120,6 +121,8 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                     except CudaOutOfMemory as e:
                         max_batch_binary_power_local = e.batch_size_power() - 1
                         print(f"Max batch is decreased to {max_batch(max_batch_binary_power_local)} due to a CUDA Out of Memory Exception for model '{model_name}'")
+                    finally:
+                        n_optuna_trials_left = remaining_trials(trials_file, model_name, n_optuna_trials)
 
 
 if __name__ == "__main__":
