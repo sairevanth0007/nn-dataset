@@ -14,7 +14,7 @@ pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force
 ### Pip package manager
 Create a virtual environment, activate it, and run the following command to install all the project dependencies:
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
 ### Docker
