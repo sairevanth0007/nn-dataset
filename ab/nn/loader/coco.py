@@ -49,7 +49,7 @@ def loader(transform_fn):
 
 
 class COCOSegDataset(torch.utils.data.Dataset):
-    def __init__(self, transform, resize, root:os.path, spilt="val", class_list==[], class_limit = None, num_limit = None, preprocess=True, least_pix=1000):
+    def __init__(self, transform, resize, root:os.path, spilt="val", class_list = [], class_limit = None, num_limit = None, preprocess=True, least_pix=1000):
         """Read datas from COCOS and generate 2D masks.
 
         Parameters
