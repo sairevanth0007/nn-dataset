@@ -49,7 +49,7 @@ def loader(transform_fn):
 
 
 class COCOSegDataset(torch.utils.data.Dataset):
-    def __init__(self, transform, resize, root:os.path, spilt="val", class_limit = None, num_limit = None, preprocess=True, least_pix=1000):
+    def __init__(self, transform, resize, root:os.path, spilt="val", class_list = [], class_limit = None, num_limit = None, preprocess=True, least_pix=1000):
         """Read datas from COCOS and generate 2D masks.
 
         Parameters
@@ -58,6 +58,9 @@ class COCOSegDataset(torch.utils.data.Dataset):
         spilt : str `"train"` or `"val"`.
         transform : transform towards the image. If transform.Resize is specified, 
           it will overwrite `resize` parameter, BUT ONLY accepts Sequence (w,h)
+        class_list : Limit class index within the list. Set to `None` for no limit,
+          or set with a empty list to use the default list.
+          It will ignore the `class_limit` parameter.
         class_limit : Limit class index from 0 to the value. Set to `None` for no limit.
         num_limit : Limit maximum number of images to use. Only works with `preprocess`.
         resize : tuple (w,h) to resize the image and its mask. Uses Image from PIL to avoid
@@ -67,8 +70,7 @@ class COCOSegDataset(torch.utils.data.Dataset):
         least_pix : filter out thersold of preprocess.
         """
 
-        class_list = get_class_list() # Limit class index within the list. Set to `None` for no limit,
-          # It will ignore the `class_limit` parameter.
+        class_list = get_class_list() if not (class_list == None) and len(class_list)==0 else class_list
         valid_split = ["train","val"]
         self.root = root
         if spilt in valid_split:
