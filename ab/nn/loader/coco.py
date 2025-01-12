@@ -200,7 +200,7 @@ class COCOSegDataset(torch.utils.data.Dataset):
                         classes = para[2].split(",")
                         if para[2]=="" and self.class_list==None: # The case `class_list` set with None
                             pass
-                        elif len(classes)==len(self.class_list): # Verify if all classes matches
+                        elif not self.class_list==None and len(classes)==len(self.class_list): # Verify if all classes matches
                             for it in classes:
                                 if not (int(it) in self.class_list):
                                     no_mismatch = False
