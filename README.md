@@ -20,7 +20,7 @@ pip install -r requirements.txt
 ### Docker
 All versions of this project are compatible with <a href='https://hub.docker.com/r/abrainone/ai-linux' target='_blank'>AI Linux</a> and can be run inside a Docker image:
 ```bash
-docker run -v /a/mm:<nn-dataset path> abrainone/ai-linux bash -c "PYTHONPATH=/a/mm python -m ab.nn.train"
+docker run -v /a/mm:. abrainone/ai-linux bash -c "PYTHONPATH=/a/mm python -m ab.nn.train"
 ```
 
 ## Usage
