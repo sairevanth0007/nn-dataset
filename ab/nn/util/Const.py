@@ -1,4 +1,3 @@
-from os.path import join
 from pathlib import Path
 
 base_module = 'ab'
@@ -34,7 +33,7 @@ transform_dir = nn_path('transform')
 stat_dir = nn_path('stat')
 
 
-def __to_root_paths():
+def __project_root_path():
     """
     Defines path to the project root directory.
     """
@@ -42,12 +41,13 @@ def __to_root_paths():
     parent_dr = Path().absolute().parent
     if parent_dr.name == base_module and (parent_dr.parent / 'README.md').exists():
         project_root = ['..'] * len(to_nn)
-    return project_root
+    return Path(*project_root)
 
-__project_root_path_list = __to_root_paths()
-data_dir = join(*__project_root_path_list, 'data')
-db_dir = join(*__project_root_path_list, 'db')
-db_file = join(db_dir, 'ab.nn.db')
+
+ab_root_path = __project_root_path()
+data_dir = ab_root_path / 'data'
+db_dir = ab_root_path / 'db'
+db_file = db_dir / 'ab.nn.db'
 
 main_tables = ('stat',)
 code_tables = ('nn', 'transform', 'metric')
