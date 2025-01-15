@@ -113,12 +113,11 @@ def unique_configs(patterns: tuple[str, ...]) -> list[str]:
     all_configs = []
     for pattern in patterns:
         # Collect configurations matching the pattern
-        matching_configs = [
-            config for config in os.listdir(stat_dir) if config.startswith(pattern)
-        ]
+        matching_configs = [config for config in os.listdir(stat_dir) if config.startswith(pattern)]
         # If no match, create a directory if the pattern is a full configuration
         if not matching_configs and is_full_config(pattern):
-            os.makedirs(os.path.join(stat_dir, pattern), exist_ok=True)
+            makedirs(stat_dir / pattern)
+            matching_configs = unique_configs((pattern,))
         all_configs.extend(matching_configs)
     return list(set(all_configs))
 
