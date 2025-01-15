@@ -1,7 +1,8 @@
 from os.path import join
 from pathlib import Path
 
-to_nn = ('ab', 'nn')
+base_module = 'ab'
+to_nn = (base_module, 'nn')
 
 default_config = ''
 default_epochs = 1
@@ -38,7 +39,8 @@ def __to_root_paths():
     Defines path to the project root directory.
     """
     project_root = '.'
-    if nn_path('') == Path().absolute():
+    parent_dr = Path().absolute().parent
+    if parent_dr.name == base_module and (parent_dr.parent / 'README.md').exists():
         project_root = ['..'] * len(to_nn)
     return project_root
 
@@ -50,7 +52,7 @@ db_file = join(db_dir, 'ab.nn.db')
 main_tables = ('stat',)
 code_tables = ('nn', 'transform', 'metric')
 param_tables = ('prm',)
-dependent_columns = code_tables + param_tables
-all_tables = code_tables + main_tables + param_tables
-index_colum = ('task', 'dataset') + dependent_columns
+dependent_tables = code_tables + param_tables
+all_tables = main_tables + dependent_tables
+index_colum = ('task', 'dataset') + dependent_tables
 extra_main_columns = ('duration', 'accuracy')

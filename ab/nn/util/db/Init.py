@@ -2,7 +2,7 @@ import sqlite3
 from os import makedirs
 from pathlib import Path
 
-from ab.nn.util.Const import param_tables, db_file, db_dir, main_tables, code_tables, dependent_columns, all_tables, index_colum
+from ab.nn.util.Const import param_tables, db_file, db_dir, main_tables, code_tables, dependent_tables, all_tables, index_colum
 
 
 def create_code_table(name, cursor):
@@ -55,7 +55,7 @@ def init_db():
             epoch INTEGER,
             duration INTEGER,
             {', '.join(index_colum)},         
-        """ + ',\n'.join([f"FOREIGN KEY ({nm}) REFERENCES {nm} (name) ON DELETE CASCADE" for nm in dependent_columns]) + ')')
+        """ + ',\n'.join([f"FOREIGN KEY ({nm}) REFERENCES {nm} (name) ON DELETE CASCADE" for nm in dependent_tables]) + ')')
 
     # Add indexes for optimized reads
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_accuracy_desc ON stat (accuracy DESC);")
