@@ -3,7 +3,7 @@ import torchvision
 from ab.nn.util.Const import data_dir
 
 __norm_mean = (0.4914, 0.4822, 0.4465)
-__norm_dev = (0.2023, 0.1994, 0.2010)
+__norm_dev = (0.2470, 0.2435, 0.2616)
 
 __class_quantity = 10
 __minimum_accuracy = 1.0 / __class_quantity
