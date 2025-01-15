@@ -1,4 +1,5 @@
 import optuna
+import torch
 from torch.cuda import OutOfMemoryError
 
 from ab.nn.util.Const import *
@@ -122,6 +123,8 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                         max_batch_binary_power_local = e.batch_size_power() - 1
                         print(f"Max batch is decreased to {max_batch(max_batch_binary_power_local)} due to a CUDA Out of Memory Exception for model '{model_name}'")
                     finally:
+                        if torch.cuda.is_available():
+                            torch.cuda.empty_cache()
                         n_optuna_trials_left = remaining_trials(trials_file, model_name, n_optuna_trials)
 
 
