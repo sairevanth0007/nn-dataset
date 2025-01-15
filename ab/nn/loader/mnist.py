@@ -4,8 +4,8 @@ import torchvision.transforms as transforms
 from ab.nn.util.Const import data_dir
 
 # MNIST-specific normalization values
-__norm_mean = (0.5,)
-__norm_dev = (0.5,)
+__norm_mean = (0.1307,)
+__norm_dev = (0.3081,)
 
 # MNIST class-related constants
 __class_quantity = 10
