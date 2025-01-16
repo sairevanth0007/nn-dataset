@@ -1,5 +1,23 @@
 [
     {
+        "accuracy": 0.5495,
+        "batch": 2,
+        "duration": 293295543278,
+        "lr": 0.027190692082292415,
+        "momentum": 0.5591158261323015,
+        "transform": "norm",
+        "uid": "0e516d02-9acc-4555-91a0-bfe240ce03bf"
+    },
+    {
+        "accuracy": 0.4505,
+        "batch": 1,
+        "duration": 316115762986,
+        "lr": 0.009667347232592846,
+        "momentum": 0.6377262696746814,
+        "transform": "echo_299",
+        "uid": "44c95ce4-d4b7-4330-aa73-d0b6c0b4173f"
+    },
+    {
         "accuracy": 0.4065,
         "batch": 16,
         "duration": 90550155914,
@@ -25,5 +43,50 @@
         "momentum": 0.7907764166332059,
         "transform": "norm_299",
         "uid": "60ee9802-ca71-41b0-bf60-127b43e39111"
+    },
+    {
+        "accuracy": 0.3569,
+        "batch": 8,
+        "duration": 93545447126,
+        "lr": 0.0038931066782295033,
+        "momentum": 0.7740960744086159,
+        "transform": "echo_32",
+        "uid": "6e216f0a-b7df-47f9-a65d-3a110559da85"
+    },
+    {
+        "accuracy": 0.3437,
+        "batch": 32,
+        "duration": 24941803468,
+        "lr": 0.021766438004708503,
+        "momentum": 0.6341662684587619,
+        "transform": "echo",
+        "uid": "55726ec8-797d-4aad-8f3f-fdf37eb629b6"
+    },
+    {
+        "accuracy": 0.3328,
+        "batch": 16,
+        "duration": 25824828871,
+        "lr": 0.00655959820623933,
+        "momentum": 0.8307804363545851,
+        "transform": "echo_128",
+        "uid": "2719d8e9-444c-4e75-8e39-540f1437f556"
+    },
+    {
+        "accuracy": 0.3058,
+        "batch": 8,
+        "duration": 91624798636,
+        "lr": 0.027004904655618125,
+        "momentum": 0.924524325439299,
+        "transform": "norm_32",
+        "uid": "45c56c8a-cc9d-45ec-afd7-03e245f4b0dc"
+    },
+    {
+        "accuracy": 0.1755,
+        "batch": 2048,
+        "duration": 28596511553,
+        "lr": 0.5396714448354897,
+        "momentum": 0.531096106568495,
+        "transform": "norm_128",
+        "uid": "ef122ca9-5bc6-4455-a6ac-d7c1fc7a843b"
     }
 ]
