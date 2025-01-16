@@ -28,6 +28,8 @@ def merge_prm(prm: dict, d: dict):
 def max_batch (binary_power):
     return 2 ** binary_power
 
+def model_stat_dir(config):
+     return stat_dir / config_splitter.join(config)
 
 class CudaOutOfMemory(Exception):
     def __init__(self, batch):
@@ -47,6 +49,11 @@ class AccuracyException(Exception):
         self.accuracy = accuracy
         self.message = message
 
+def accuracy_to_time_metric (accuracy, min_accuracy, training_duration):
+    """
+    Naive accuracy-to-time metric for fixed number of training epochs.
+    """
+    return (accuracy - min_accuracy) / training_duration
 
 def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max):
     if batch_min > batch_max: raise Exception(f"min_batch_binary_power {batch_min} > max_batch_binary_power {batch_max}")

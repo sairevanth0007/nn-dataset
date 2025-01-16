@@ -92,7 +92,7 @@ def remaining_trials(trial_file, model_name, n_optuna_trials):
     n_remaining_trials = abs(n_optuna_trials) if n_optuna_trials < 0 else max(0, n_optuna_trials - n_passed_trials)
     if n_passed_trials > 0:
         print(f"The {model_name} passed {n_passed_trials} trials, {n_remaining_trials} left.")
-    return n_remaining_trials
+    return n_remaining_trials, n_passed_trials
 
 
 def supported_transformers():
