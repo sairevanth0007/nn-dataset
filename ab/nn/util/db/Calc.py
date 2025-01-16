@@ -2,15 +2,10 @@ import json
 import random
 from os.path import exists
 
-import ab.nn.util.db.Write as DB_Write
 import ab.nn.util.db.Read as DB_Read
+import ab.nn.util.db.Write as DB_Write
+from ab.nn.util.Const import config_splitter
 
-
-import os
-import random
-
-import os
-import random
 
 def patterns_to_configs(config_pattern: str | tuple, random_config_order: bool) -> tuple[str, ...]:
     """
@@ -29,9 +24,7 @@ def patterns_to_configs(config_pattern: str | tuple, random_config_order: bool) 
     return tuple(all_configs)
 
 
-
-
-def save_results(config: str, epoch: int, model_stat_file: str, prm: dict):
+def save_results(config: tuple[str, str, str, str], epoch: int, model_stat_file: str, prm: dict):
     trials_dict_all = [prm]
 
     if exists(model_stat_file):
@@ -44,5 +37,5 @@ def save_results(config: str, epoch: int, model_stat_file: str, prm: dict):
     with open(model_stat_file, 'w') as f:
         json.dump(trials_dict_all, f, indent=4)
 
-    print(f"Trial (accuracy {prm['accuracy']}) for {config} saved at {model_stat_file}")
-    DB_Write.save_results(config, epoch, model_stat_file, prm)
+    print(f"Trial (accuracy {prm['accuracy']}) for {config_splitter.join(config)} saved at {model_stat_file}")
+    DB_Write.save_results(config, epoch, prm)

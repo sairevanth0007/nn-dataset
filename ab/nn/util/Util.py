@@ -1,6 +1,5 @@
 import argparse
 import math
-from os.path import exists
 
 from ab.nn.util.Const import *
 
@@ -12,8 +11,8 @@ def get_attr (mod, f):
     return getattr(__import__(nn_mod(mod), fromlist=[f]), f)
 
 
-def conf_to_names(c: str) -> list[str]:
-    return c.split('_')
+def conf_to_names(c: str) -> tuple[str, ...]:
+    return tuple(c.split(config_splitter))
 
 
 def is_full_config(s: str):

@@ -39,11 +39,11 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
     if transform:
         transform = transform if isinstance(transform, (tuple, list)) else (transform,)
     print(f"Training configurations ({n_epochs} epochs):")
-    for idx, sub_config in enumerate(sub_configs, start=1):
-        print(f"{idx}. {sub_config}")
-    for sub_config in sub_configs:
-            task, dataset_name, metric, model_name = conf_to_names(sub_config)
-            model_stat_dir = stat_dir / sub_config
+    for idx, sub_config_str in enumerate(sub_configs, start=1):
+        print(f"{idx}. {sub_config_str}")
+    for sub_config_str in sub_configs:
+            task, dataset_name, metric, model_name = sub_config = conf_to_names(sub_config_str)
+            model_stat_dir = stat_dir / sub_config_str
             trials_file = model_stat_dir / f'{n_epochs}.json'
             n_optuna_trials_left = remaining_trials(trials_file, model_name, n_optuna_trials)
             if n_optuna_trials_left == 0:

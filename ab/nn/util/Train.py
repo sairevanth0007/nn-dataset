@@ -14,11 +14,11 @@ from ab.nn.util.db.Calc import save_results
 
 
 class Train:
-    def __init__(self, config, out_shape: tuple, minimum_accuracy: float, batch: int, model_name, model_stat_dir, task,
+    def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, model_name, model_stat_dir, task,
                  train_dataset, test_dataset, metric, prm: dict):
         """
         Universal class for training CV, Text Generation and other models.
-        :param config: Config (Task, Dataset, Metric, and Model name).
+        :param config: The tuple of names (Task, Dataset, Metric, Model).
         :param out_shape: The shape of output tensor of the model (e.g., number of classes for classification tasks).
         :param batch: Batch size used for both training and evaluation.
         :param minimum_accuracy: Expected average value for accuracy provided by the untrained NN model due to random output generation. This value is essential for excluding NN models without accuracy gains.
@@ -97,7 +97,7 @@ class Train:
 
             minimum_accepted_accuracy = self.minimum_accuracy * minimum_accuracy_multiplayer
             if accuracy < minimum_accepted_accuracy:
-                raise AccuracyException(accuracy, f"Too small accuracy: {accuracy}. Minimum accepted accuracy for current dataset is {minimum_accepted_accuracy}")
+                raise AccuracyException(accuracy, f"Accuracy is too low: {accuracy}. The minimum accepted accuracy for the '{self.config[1]}' dataset is {minimum_accepted_accuracy}.")
 
             prm = merge_prm(self.prm, {'duration': time.time_ns() - start_time,
                                        'accuracy': accuracy,

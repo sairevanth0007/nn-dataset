@@ -85,7 +85,7 @@ def remaining_trials(trial_file, model_name, n_optuna_trials):
     :return: Number of remaining trials.
     """
     n_passed_trials = 0
-    if exists(trial_file):
+    if trial_file.exists():
         with open(trial_file, 'r') as f:
             trials = json.load(f)
             n_passed_trials = len(trials)
