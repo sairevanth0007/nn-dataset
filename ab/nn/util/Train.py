@@ -1,18 +1,17 @@
 import importlib
-import math
 import time as time
 from os.path import join
 
 import numpy as np
 import torch
 from torch.cuda import OutOfMemoryError
-from tqdm import tqdm
 
 import ab.nn.util.db.Write as DB_Write
+from ab.nn.util.Classes import DataRoll
 from ab.nn.util.Const import minimum_accuracy_multiplayer
+from ab.nn.util.Exception import *
 from ab.nn.util.Loader import Loader
-from ab.nn.util.Util import model_stat_dir, max_batch, CudaOutOfMemory, ModelException, accuracy_to_time_metric
-from ab.nn.util.Util import nn_mod, merge_prm, get_attr, AccuracyException
+from ab.nn.util.Util import model_stat_dir, max_batch, accuracy_to_time_metric, nn_mod, merge_prm, get_attr, format_time
 from ab.nn.util.db.Calc import save_results
 from ab.nn.util.db.Read import supported_transformers
 
@@ -35,8 +34,7 @@ def optuna_objective(trial, config, min_lr, max_lr, min_momentum, max_momentum,
             else:
                 prms[prm] = trial.suggest_float(prm, 0.0, 1.0, log=False)
         batch = trial.suggest_categorical('batch', [max_batch(x) for x in range(min_batch_binary_power, max_batch_binary_power_local + 1)])
-        transform_name = trial.suggest_categorical('transform',
-                                                   transform if transform else supported_transformers())
+        transform_name = trial.suggest_categorical('transform', transform if transform else supported_transformers())
         prms = merge_prm(prms, {'batch': batch, 'transform': transform_name})
         prm_str = ''
         for k, v in prms.items():
@@ -64,9 +62,12 @@ def optuna_objective(trial, config, min_lr, max_lr, min_momentum, max_momentum,
                 return 0.0
             else:
                 raise CudaOutOfMemory(batch)
-        if isinstance(e, AccuracyException):
+        elif isinstance(e, AccuracyException):
             print(e.message)
             return e.accuracy
+        elif isinstance(e, LearnTimeException):
+            print(f"Predicted training time: {format_time(e.estimated_training_time)}, but limit {format_time(e.max_learn_seconds)}.")
+            return (1 - (e.estimated_training_time / e.max_learn_seconds)) / 10
         else:
             print(f"error '{nn}': failed to train. Error: {e}")
             if fail_iterations < 0:
@@ -151,7 +152,8 @@ class Train:
         for epoch in range(1, num_epochs + 1):
             print(f"epoch {epoch}", flush=True)
             self.model.train()
-            self.model.learn(tqdm(self.train_loader))
+            self.model.learn(DataRoll(self.train_loader))
+
             accuracy = self.eval(self.test_loader)
             accuracy = 0.0 if math.isnan(accuracy) or math.isinf(accuracy) else accuracy
             minimum_accepted_accuracy = self.minimum_accuracy * minimum_accuracy_multiplayer
