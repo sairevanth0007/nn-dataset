@@ -18,6 +18,7 @@ default_transform = None
 
 minimum_accuracy_multiplayer =  1.2
 
+config_splitter = '_'
 
 def nn_path(dr):
     """

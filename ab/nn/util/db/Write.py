@@ -6,7 +6,7 @@ from ab.nn.util.db.Init import init_db, sql_conn, close_conn
 
 
 def init_population():
-    if not exists(db_file):
+    if not db_file.exists():
         init_db()
         json_n_code_to_db()
 
@@ -53,8 +53,9 @@ def populate_prm_table(table_name, cursor, prm, uid):
                        (uid, nm, str(value), type(value).__name__))
 
 
-def save_stat(task, dataset, nn, metric, epoch, prm, cursor):
+def save_stat(config: tuple[str, str, str, str], epoch, prm, cursor):
     # Insert each trial into the database with epoch
+    task, dataset, nn, metric = config
     transform = prm.pop('transform')
     uid = prm.pop('uid')
     extra_main_column_values = [prm.pop(nm, None) for nm in extra_main_columns]
@@ -74,8 +75,8 @@ def json_n_code_to_db():
     stat_base_path = Path(stat_dir)
     sub_configs = [d.name for d in stat_base_path.iterdir() if d.is_dir()]
 
-    for sub_config in sub_configs:
-        model_stat_dir = stat_base_path / sub_config
+    for sub_config_str in sub_configs:
+        model_stat_dir = stat_base_path / sub_config_str
 
         for epoch_file in Path(model_stat_dir).iterdir():
             model_stat_file = model_stat_dir / epoch_file
@@ -85,27 +86,24 @@ def json_n_code_to_db():
                 trials = json.load(f)
 
             for trial in trials:
-                task, dataset, metric, nn = conf_to_names(sub_config)
+                task, dataset, metric, nn = sub_config = conf_to_names(sub_config_str)
                 populate_code_table('nn', cursor, name=nn)
                 populate_code_table('metric', cursor, name=metric)
                 populate_code_table('transform', cursor, name=trial['transform'])
-                save_stat(task, dataset, nn, metric, epoch, trial, cursor)
+                save_stat(sub_config, epoch, trial, cursor)
     close_conn(conn)
     print("All statistics reloaded successfully.")
 
 
-def save_results(config: str, epoch: int, model_stat_file: str, prm: dict):
+def save_results(config: tuple[str, str, str, str], epoch: int, prm: dict):
     """
-    Save Optuna study results for a given model in JSON-format.
-    :param config: Config (Task, Dataset, Metric, and Model name).
+    Save Optuna study results for a given model to SQLite DB
+    :param config: The tuple of names (Task, Dataset, Metric, Model).
     :param epoch: Number of epochs.
-    :param model_stat_file: File for the model statistics.
     :param prm: Dictionary of all saved parameters.
     """
-    task, dataset, metric, nn = conf_to_names(config)
-    # Save results to SQLite DB
     conn, cursor = sql_conn()
-    save_stat(task, dataset, nn, metric, epoch, prm, cursor)
+    save_stat(config, epoch, prm, cursor)
     close_conn(conn)
 
 
