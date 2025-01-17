@@ -2,15 +2,15 @@
 The original version of this dataset was created by <strong>Arash Torabi Goodarzi, Roman Kochnev</strong> and <strong>Zofia Antonina Bentyn</strong> at the Computer Vision Laboratory, University of Würzburg, Germany.
 
 <h3>Overview 📖</h3>
-The primary goal of NN-Dataset project is to provide flexibility for dynamically combining various datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gen"> NN-Gen</a> project.
+The primary goal of NN Dataset project is to provide flexibility for dynamically combining various datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gen"> NN-Gen</a> project.
 
-## Installation of the Latest Version of the NN-Dataset
+## Installation of the Latest Version of the NN Dataset
 
 ```bash
 pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
-## Environment for NN-Dataset Contributors
+## Environment for NN Dataset Contributors
 ### Pip package manager
 Create a virtual environment, activate it, and run the following command to install all the project dependencies:
 ```bash
@@ -46,7 +46,7 @@ python run.py -h
 
 ## Contribution
 
-To contribute a new neural network (NN) model to the NN-Dataset, please ensure the following criteria are met:
+To contribute a new neural network (NN) model to the NN Dataset, please ensure the following criteria are met:
 
 1. The code for each model is provided in a respective ".py" file within the <strong>/ab/nn/nn</strong> directory, and the file is named after the name of the model's structure.
 2. The main class for each model is named <strong>Net</strong>.
