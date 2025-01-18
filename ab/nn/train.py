@@ -44,11 +44,15 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
             n_optuna_trials_left, n_passed_trials = remaining_trials(trials_file, model_name, n_optuna_trials)
             n_expected_trials = n_optuna_trials_left + n_passed_trials
             if n_optuna_trials_left == 0:
-                print(f"The model {model_name} has already passed all trials for task: {task}, dataset: {dataset_name},"
-                      f" metric: {metric}, epochs: {n_epochs}")
+                print(
+                    f"The model {model_name} has already passed all trials for task: {task}, dataset: {dataset_name},"
+                    f" metric: {metric}, epochs: {n_epochs}"
+                )
             else:
-                print(f"\nStarting training for the model: {model_name}, task: {task}, dataset: {dataset_name},"
-                      f" metric: {metric}, epochs: {n_epochs}")
+                print(
+                    f"\nStarting training for the model: {model_name}, task: {task}, dataset: {dataset_name},"
+                    f" metric: {metric}, epochs: {n_epochs}"
+                )
                 fail_iterations = nn_fail_attempts
                 continue_study = True
                 max_batch_binary_power_local = max_batch_binary_power
