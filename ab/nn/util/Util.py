@@ -1,5 +1,6 @@
 import argparse
 import datetime
+import gc
 
 import torch
 
@@ -46,7 +47,8 @@ def format_time(sec):
     return datetime.timedelta(seconds=int(sec))
 
 
-def empty_cuda():
+def release_memory():
+    gc.collect()
     if torch.cuda.is_available(): torch.cuda.empty_cache()
 
 def args():
