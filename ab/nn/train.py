@@ -1,13 +1,10 @@
 import optuna
-import torch
-from torch.cuda import OutOfMemoryError
 
-from ab.nn.util.Const import *
-from ab.nn.util.Loader import Loader
-from ab.nn.util.Train import Train
-from ab.nn.util.Util import args, validate_prm, merge_prm, get_attr, conf_to_names, max_batch, CudaOutOfMemory, ModelException, AccuracyException
+from ab.nn.util.Exception import *
+from ab.nn.util.Train import optuna_objective
+from ab.nn.util.Util import *
 from ab.nn.util.db.Calc import patterns_to_configs
-from ab.nn.util.db.Read import supported_transformers, remaining_trials
+from ab.nn.util.db.Read import remaining_trials
 
 
 def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
@@ -39,97 +36,63 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
     if transform:
         transform = transform if isinstance(transform, (tuple, list)) else (transform,)
     print(f"Training configurations ({n_epochs} epochs):")
-    for idx, sub_config in enumerate(sub_configs, start=1):
-        print(f"{idx}. {sub_config}")
-    for sub_config in sub_configs:
-            task, dataset_name, metric, model_name = conf_to_names(sub_config)
-            model_stat_dir = stat_dir / sub_config
-            trials_file = model_stat_dir / f'{n_epochs}.json'
-            n_optuna_trials_left = remaining_trials(trials_file, model_name, n_optuna_trials)
+    for idx, sub_config_str in enumerate(sub_configs, start=1):
+        print(f"{idx}. {sub_config_str}")
+    for sub_config_str in sub_configs:
+            task, dataset_name, metric, model_name = sub_config = conf_to_names(sub_config_str)
+            trials_file = model_stat_dir(sub_config) / f'{n_epochs}.json'
+            n_optuna_trials_left, n_passed_trials = remaining_trials(trials_file, model_name, n_optuna_trials)
+            n_expected_trials = n_optuna_trials_left + n_passed_trials
             if n_optuna_trials_left == 0:
-                print(f"The model {model_name} has already passed all trials for task: {task}, dataset: {dataset_name},"
-                      f" metric: {metric}, epochs: {n_epochs}")
+                print(
+                    f"The model {model_name} has already passed all trials for task: {task}, dataset: {dataset_name},"
+                    f" metric: {metric}, epochs: {n_epochs}"
+                )
             else:
-                print(f"\nStarting training for the model: {model_name}, task: {task}, dataset: {dataset_name},"
-                      f" metric: {metric}, epochs: {n_epochs}")
+                print(
+                    f"\nStarting training for the model: {model_name}, task: {task}, dataset: {dataset_name},"
+                    f" metric: {metric}, epochs: {n_epochs}"
+                )
                 fail_iterations = nn_fail_attempts
                 continue_study = True
                 max_batch_binary_power_local = max_batch_binary_power
                 while (continue_study and max_batch_binary_power_local >= min_batch_binary_power and fail_iterations > -1
-                       and n_optuna_trials_left > 0):
+                       and remaining_trials(trials_file, model_name, n_expected_trials)[0] > 0):
+                    continue_study = False
                     try:
-                        # Configure Optuna for the current model
-                        def objective(trial):
-                            try:
-                                # Load model
-                                s_prm: set = get_attr(f"nn.{model_name}", "supported_hyperparameters")()
-                                # Suggest hyperparameters
-                                prms = {}
-                                for prm in s_prm:
-                                    if 'lr' == prm:
-                                        prms[prm] = trial.suggest_float('lr', min_learning_rate, max_learning_rate, log=True)
-                                    elif 'momentum' == prm:
-                                        prms[prm] = trial.suggest_float('momentum', min_momentum, max_momentum, log=False)
-                                    elif 'dropout'== prm: ## Dropoout of high value will prevent the model from learning
-                                        prms[prm] = trial.suggest_float(prm, 0.0, 0.5, log=False)
-                                    else:
-                                        prms[prm] = trial.suggest_float(prm, 0.0, 1.0, log=False)
-                                batch = trial.suggest_categorical('batch', [max_batch(x) for x in range(min_batch_binary_power, max_batch_binary_power_local + 1)])
-                                transform_name = trial.suggest_categorical('transform',
-                                                                           transform if transform else supported_transformers())
-                                prms = merge_prm(prms, {'batch': batch, 'transform': transform_name})
-                                prm_str = ''
-                                for k, v in prms.items():
-                                    prm_str += f", {k}: {v}"
-                                print(f"Initialize training with {prm_str[2:]}")
-                                # Load dataset
-                                out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(dataset_name, transform_name)
-
-                                # Initialize model and trainer
-                                if task == 'txt-generation':
-                                    # Dynamically import RNN or LSTM model
-                                    if model_name.lower() == 'rnn':
-                                        from ab.nn.nn.RNN import Net as RNNNet
-                                        model = RNNNet(1, 256, len(train_set.chars), batch)
-                                    elif model_name.lower() == 'lstm':
-                                        from ab.nn.nn.LSTM import Net as LSTMNet
-                                        model = LSTMNet(1, 256, len(train_set.chars), batch, num_layers=2)
-                                    else:
-                                        raise ValueError(f"Unsupported text generation model: {model_name}")
-                                return Train(sub_config, out_shape, minimum_accuracy, batch, model_name, model_stat_dir,
-                                                task, train_set, test_set, metric, prms).train_n_eval(n_epochs)
-                            except Exception as e:
-                                if isinstance(e, OutOfMemoryError):
-                                    if max_batch_binary_power_local <= min_batch_binary_power:
-                                        return 0.0
-                                    else:
-                                        raise CudaOutOfMemory(batch)
-                                if isinstance(e, AccuracyException):
-                                    print(e.message)
-                                    return e.accuracy
-                                else:
-                                    print(f"error '{model_name}': failed to train. Error: {e}")
-                                    if fail_iterations < 0:
-                                        return 0.0
-                                    else:
-                                        raise ModelException()
                         # Launch Optuna for the current NN model
                         study = optuna.create_study(study_name=model_name, direction='maximize')
+
+                        # Configure Optuna for the current model
+                        def objective(trial):
+                            nonlocal continue_study, fail_iterations, max_batch_binary_power_local
+                            try:
+                                accuracy = optuna_objective(trial, sub_config, min_learning_rate, max_learning_rate, min_momentum, max_momentum,
+                                                        min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs)
+                                fail_iterations = nn_fail_attempts
+                                return accuracy
+                            except Exception as e:
+                                print(f"Optuna: exception in objective function: {e}")
+                                continue_study = True
+                                if isinstance(e, CudaOutOfMemory):
+                                    raise e
+                                if isinstance(e, ModelException):
+                                    fail_iterations -= 1
+                                return 0.0
+
                         study.optimize(objective, n_trials=n_optuna_trials_left)
-                        continue_study = False
-                    except ModelException:
-                        fail_iterations -= 1
                     except CudaOutOfMemory as e:
                         max_batch_binary_power_local = e.batch_size_power() - 1
                         print(f"Max batch is decreased to {max_batch(max_batch_binary_power_local)} due to a CUDA Out of Memory Exception for model '{model_name}'")
                     finally:
-                        if torch.cuda.is_available():
-                            torch.cuda.empty_cache()
-                        n_optuna_trials_left = remaining_trials(trials_file, model_name, n_optuna_trials)
+                        del study
+                        release_memory()
 
 
 if __name__ == "__main__":
     a = args()
-    main(a.config, a.epochs, a.trials, a.min_batch_binary_power, a.max_batch_binary_power,
-         a.min_learning_rate, a.max_learning_rate, a.min_momentum, a.max_momentum, a.transform,
-         a.nn_fail_attempts, a.random_config_order)
+    main(
+        a.config, a.epochs, a.trials, a.min_batch_binary_power, a.max_batch_binary_power,
+        a.min_learning_rate, a.max_learning_rate, a.min_momentum, a.max_momentum, a.transform,
+        a.nn_fail_attempts, a.random_config_order
+    )

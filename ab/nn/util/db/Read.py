@@ -85,20 +85,23 @@ def remaining_trials(trial_file, model_name, n_optuna_trials):
     :return: Number of remaining trials.
     """
     n_passed_trials = 0
-    if exists(trial_file):
+    if trial_file.exists():
         with open(trial_file, 'r') as f:
             trials = json.load(f)
             n_passed_trials = len(trials)
     n_remaining_trials = abs(n_optuna_trials) if n_optuna_trials < 0 else max(0, n_optuna_trials - n_passed_trials)
     if n_passed_trials > 0:
         print(f"The {model_name} passed {n_passed_trials} trials, {n_remaining_trials} left.")
-    return n_remaining_trials
+    return n_remaining_trials, n_passed_trials
 
 
 def supported_transformers():
     return ['complex','complex_32','complex_64','complex_128','complex_256','complex_299', 'complex_512',
             'norm', 'norm_32', 'norm_64', 'norm_128', 'norm_256', 'norm_299', 'norm_512',
-            'echo', 'echo_32', 'echo_64', 'echo_128', 'echo_256', 'echo_299', 'echo_512']
+            'echo', 'echo_32', 'echo_64', 'echo_128', 'echo_256', 'echo_299', 'echo_512'
+            'complex_flip', 'complex_32_flip', 'complex_64_flip', 'complex_128_flip', 'complex_256_flip', 'complex_299_flip', 'complex_512_flip',
+            'norm_flip', 'norm_32_flip', 'norm_64_flip', 'norm_128_flip', 'norm_256_flip', 'norm_299_flip', 'norm_512_flip',
+            'echo_flip', 'echo_32_flip', 'echo_64_flip', 'echo_128_flip', 'echo_256_flip', 'echo_299_flip', 'echo_512_flip']
 
 
 # todo: Request from the database unique names of all configures corresponding to config-patterns

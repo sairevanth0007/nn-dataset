@@ -849,6 +849,18 @@
         "uid": "06d9ec6d-11d6-47ee-a7ad-2fc38bcc739a"
     },
     {
+        "accuracy": 0.2418,
+        "batch": 128,
+        "duration": 18710519792,
+        "lr": 1.6428909760805097e-05,
+        "momentum": 0.6387181079210834,
+        "norm_eps": 0.9840080105469609,
+        "norm_std": 0.47879923128089874,
+        "stochastic_depth_prob": 0.8135686799788033,
+        "transform": "norm_64",
+        "uid": "dec2c0de-1f3e-4930-b1f5-6da896d166ca"
+    },
+    {
         "accuracy": 0.2404,
         "batch": 512,
         "lr": 0.7916589542210046,

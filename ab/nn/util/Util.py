@@ -1,6 +1,8 @@
 import argparse
-import math
-from os.path import exists
+import datetime
+import gc
+
+import torch
 
 from ab.nn.util.Const import *
 
@@ -11,15 +13,12 @@ def nn_mod(*nms):
 def get_attr (mod, f):
     return getattr(__import__(nn_mod(mod), fromlist=[f]), f)
 
-
-def conf_to_names(c: str) -> list[str]:
-    return c.split('_')
-
+def conf_to_names(c: str) -> tuple[str, ...]:
+    return tuple(c.split(config_splitter))
 
 def is_full_config(s: str):
     l = conf_to_names(s)
     return 4 == len(l) and (nn_dir / (l[-1] + '.py')).exists()
-
 
 def merge_prm(prm: dict, d: dict):
     prm.update(d)
@@ -29,30 +28,28 @@ def merge_prm(prm: dict, d: dict):
 def max_batch (binary_power):
     return 2 ** binary_power
 
+def model_stat_dir(config):
+     return stat_dir / config_splitter.join(config)
 
-class CudaOutOfMemory(Exception):
-    def __init__(self, batch):
-        self.batch_power = int(math.log2(batch))
-
-    def batch_size_power(self):
-        return self.batch_power
-
-
-class ModelException(Exception):
-    def __init__(self):
-        pass
-
-
-class AccuracyException(Exception):
-    def __init__(self, accuracy, message):
-        self.accuracy = accuracy
-        self.message = message
-
+def accuracy_to_time_metric (accuracy, min_accuracy, training_duration):
+    """
+    Naive accuracy-to-time metric for fixed number of training epochs.
+    """
+    return (accuracy - min_accuracy) / (training_duration / 1e11)
 
 def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max):
     if batch_min > batch_max: raise Exception(f"min_batch_binary_power {batch_min} > max_batch_binary_power {batch_max}")
     if lr_min > lr_max: raise Exception(f"min_learning_rate {lr_min} > max_learning_rate {lr_max}")
     if momentum_min > momentum_max: raise Exception(f"min_momentum {momentum_min} > max_momentum {momentum_max}")
+
+
+def format_time(sec):
+    return datetime.timedelta(seconds=int(sec))
+
+
+def release_memory():
+    gc.collect()
+    if torch.cuda.is_available(): torch.cuda.empty_cache()
 
 def args():
     parser = argparse.ArgumentParser()
