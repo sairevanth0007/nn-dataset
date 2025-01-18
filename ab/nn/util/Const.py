@@ -1,8 +1,5 @@
 from pathlib import Path
 
-base_module = 'ab'
-to_nn = (base_module, 'nn')
-
 default_config = ''
 default_epochs = 1
 default_trials = -1 # one more trial
@@ -17,6 +14,11 @@ default_random_config_order = False
 default_transform = None
 
 minimum_accuracy_multiplayer =  1.2
+
+max_epoch_seconds = 20 * 60
+
+base_module = 'ab'
+to_nn = (base_module, 'nn')
 
 config_splitter = '_'
 
