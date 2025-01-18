@@ -1,5 +1,6 @@
 import optuna
 import torch
+import gc
 
 from ab.nn.util.Exception import *
 from ab.nn.util.Train import optuna_objective
@@ -57,7 +58,6 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                        and remaining_trials(trials_file, model_name, n_expected_trials)[0] > 0):
                     continue_study = False
                     try:
-                        empty_cuda()
                         # Launch Optuna for the current NN model
                         study = optuna.create_study(study_name=model_name, direction='maximize')
 
@@ -72,7 +72,6 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                             except Exception as e:
                                 print(f"Optuna: exception in objective function: {e}")
                                 continue_study = True
-                                empty_cuda()
                                 if isinstance(e, CudaOutOfMemory):
                                     raise e
                                 if isinstance(e, ModelException):
@@ -83,6 +82,10 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                     except CudaOutOfMemory as e:
                         max_batch_binary_power_local = e.batch_size_power() - 1
                         print(f"Max batch is decreased to {max_batch(max_batch_binary_power_local)} due to a CUDA Out of Memory Exception for model '{model_name}'")
+                    finally:
+                        del study
+                        empty_cuda()
+                        gc.collect()
 
 if __name__ == "__main__":
     a = args()
