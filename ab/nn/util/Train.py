@@ -160,8 +160,12 @@ class Train:
             duration = time.time_ns() - start_time
             accuracy_to_time = accuracy_to_time_metric(accuracy, self.minimum_accuracy, duration)
             if accuracy < minimum_accepted_accuracy:
-                raise AccuracyException(accuracy_to_time, f"Accuracy is too low: {accuracy
-                }. The minimum accepted accuracy for the '{self.config[1]}' dataset is {minimum_accepted_accuracy}.")
+                raise AccuracyException(
+                    accuracy_to_time,
+                    f"Accuracy is too low: {accuracy}."
+                          f" The minimum accepted accuracy for the '{self.config[1]}"
+                          f"' dataset is {minimum_accepted_accuracy}."
+                    )
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
             save_results(self.config, epoch, join(model_stat_dir(self.config), f"{epoch}.json"), prm)
         return accuracy_to_time
