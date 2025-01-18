@@ -87,6 +87,8 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
 
 if __name__ == "__main__":
     a = args()
-    main(a.config, a.epochs, a.trials, a.min_batch_binary_power, a.max_batch_binary_power,
-         a.min_learning_rate, a.max_learning_rate, a.min_momentum, a.max_momentum, a.transform,
-         a.nn_fail_attempts, a.random_config_order)
+    main(
+        a.config, a.epochs, a.trials, a.min_batch_binary_power, a.max_batch_binary_power,
+        a.min_learning_rate, a.max_learning_rate, a.min_momentum, a.max_momentum, a.transform,
+        a.nn_fail_attempts, a.random_config_order
+    )
