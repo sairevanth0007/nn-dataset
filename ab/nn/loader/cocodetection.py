@@ -1,3 +1,8 @@
+import os
+from os import makedirs, mkdir
+from os.path import join, exists
+from typing import Sequence
+
 import torch
 from torch.utils.data import Dataset
 from PIL import Image
@@ -8,6 +13,8 @@ from torchvision.datasets.utils import download_and_extract_archive
 from torch.nn.utils.rnn import pad_sequence
 import torch
 from typing import List, Dict, Tuple, Any
+
+from ab.nn.util.Const import data_dir
 coco_ann_url = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
 coco_img_url = 'http://images.cocodataset.org/zips/{}2017.zip'
 MIN_CLASS_LIST = list(range(91))
@@ -168,7 +175,11 @@ class COCODetectionDataset(Dataset):
     def __collate__(self, batch):
         return self.collate_fn(batch)
     
-def loader(path='./ab/nn/data/coco', transform=None, class_list=None, **kwargs):
+    
+__norm_mean = (104.01362025, 114.03422265, 119.9165958)
+__norm_dev = (73.6027665 , 69.89082075, 70.9150767)
+__minimum_accuracy = 0.11 # todo: Required correct value for minimum accuracy provided by the untrained NN model due to random output generation
+def loader(transform_fn):
     """
     Main entry point following repository pattern.
     Returns train and validation datasets for COCO object detection.
@@ -188,7 +199,10 @@ def loader(path='./ab/nn/data/coco', transform=None, class_list=None, **kwargs):
     --------
     tuple: (train_dataset, val_dataset)
     """
-    train_dataset = COCODetectionDataset(root=path, split='train', transform=transform, class_list=class_list)
-    val_dataset = COCODetectionDataset(root=path, split='val', transform=transform, class_list=class_list)
+    path = join(data_dir, 'cocodetection')
+    transform = transform_fn((__norm_mean, __norm_dev))
+    resize = None
+    train_dataset = COCODetectionDataset(transform=transform, root=path, spilt="train", resize=resize, preprocess=True)
+    val_dataset = COCODetectionDataset(transform=transform, root=path, spilt="val", resize=resize, preprocess=True)
     
     return (class_n(),), train_dataset, val_dataset
