@@ -37,7 +37,7 @@ class PadToSize:
             image = F.pad(image, (0, pad_w, 0, pad_h))  # (left, right, top, bottom)
         return image
 
-def transform( **kwargs):
+def transform(_):
     max_size=(800, 800)
     """
     Returns a transform pipeline for object detection.

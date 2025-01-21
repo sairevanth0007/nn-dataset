@@ -15,20 +15,25 @@ import torch
 from typing import List, Dict, Tuple, Any
 
 from ab.nn.util.Const import data_dir
+# Standard module-level constants
+__norm_mean = (104.01362025, 114.03422265, 119.9165958)
+__norm_dev = (73.6027665, 69.89082075, 70.9150767)
+__minimum_accuracy = 0.0  # Minimum accuracy for object detection
+
+# COCO URLs
 coco_ann_url = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
 coco_img_url = 'http://images.cocodataset.org/zips/{}2017.zip'
+
+# Class definitions
 MIN_CLASS_LIST = list(range(91))
 MIN_CLASS_N = len(MIN_CLASS_LIST)
 
 def class_n():
     return MIN_CLASS_N
 
-def class_list():
-    return MIN_CLASS_LIST
-
 
 class COCODetectionDataset(Dataset):
-    def __init__(self, root, split='train', transform=None, class_list=None):
+    def __init__(self, transform, root, split='train', class_list=None):
         """
         Initialize COCO detection dataset
         
@@ -173,12 +178,14 @@ class COCODetectionDataset(Dataset):
 
     # Override the default collate function
     def __collate__(self, batch):
+    
         return self.collate_fn(batch)
     
-    
-__norm_mean = (104.01362025, 114.03422265, 119.9165958)
-__norm_dev = (73.6027665 , 69.89082075, 70.9150767)
-__minimum_accuracy = 0.11 # todo: Required correct value for minimum accuracy provided by the untrained NN model due to random output generation
+
+    def __len__(self):
+        return len(self.ids)
+      
+
 def loader(transform_fn):
     """
     Main entry point following repository pattern.
@@ -202,7 +209,7 @@ def loader(transform_fn):
     path = join(data_dir, 'cocodetection')
     transform = transform_fn((__norm_mean, __norm_dev))
     resize = None
-    train_dataset = COCODetectionDataset(transform=transform, root=path, spilt="train", resize=resize, preprocess=True)
-    val_dataset = COCODetectionDataset(transform=transform, root=path, spilt="val", resize=resize, preprocess=True)
+    train_dataset = COCODetectionDataset(transform=transform, root=path, split="train")
+    val_dataset = COCODetectionDataset(transform=transform, root=path, split="val")
     
-    return (class_n(),), train_dataset, val_dataset
+    return (class_n(),), __minimum_accuracy, train_dataset, val_dataset

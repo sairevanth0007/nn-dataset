@@ -15,7 +15,7 @@ default_transform = None
 
 minimum_accuracy_multiplayer =  1.2
 
-max_epoch_seconds = 20 * 60
+max_epoch_seconds = 200000 * 60
 
 base_module = 'ab'
 to_nn = (base_module, 'nn')

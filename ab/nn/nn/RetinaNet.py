@@ -398,7 +398,10 @@ class Net(nn.Module):
     def learn(self, train_data):
         self.train()
         for inputs, labels in train_data:
+
+        
             inputs = inputs.to(self.device)
+            
             #labels = [{k: v.to(self.device) for k, v in t.items()} for t in labels]
             labels = labels.to(self.device)
             self.optimizer.zero_grad()  # Changed from optimizer to self.optimizer
