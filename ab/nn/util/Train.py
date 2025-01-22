@@ -104,10 +104,18 @@ class Train:
 
         self.metric_name = metric
         self.metric_function = self.load_metric_function(metric)
+        
 
-        self.train_loader = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.batch, shuffle=True, num_workers=2)
-        self.test_loader = torch.utils.data.DataLoader(self.test_dataset, batch_size=self.batch, shuffle=False, num_workers=2)
-
+        
+        self.train_loader = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.batch, shuffle=True, num_workers=0)
+        self.test_loader = torch.utils.data.DataLoader(self.test_dataset, batch_size=self.batch, shuffle=False, num_workers=0)
+        
+        if hasattr(self.train_dataset, 'collate_fn'):
+            self.train_loader.collate_fn = self.train_dataset.collate_fn
+        if hasattr(self.test_dataset, 'collate_fn'):
+            self.test_loader.collate_fn = self.test_dataset.collate_fn
+            
+        
         for input_tensor, _ in self.train_loader:
             self.in_shape = np.array(input_tensor).shape # Model input tensor shape (e.g., (8, 3, 32, 32) for a batch size 8, RGB image 32x32 px).
             break
@@ -136,6 +144,8 @@ class Train:
             module = importlib.import_module(nn_mod('metric', metric_name))
             if metric_name == "iou":
                 return module.MIoU(self.out_shape)
+            elif metric_name == "map":
+                return module.MAPMetric()
             else:
                 return getattr(module, "compute")
         except (ModuleNotFoundError, AttributeError) as e:
