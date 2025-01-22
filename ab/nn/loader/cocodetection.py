@@ -237,7 +237,7 @@ def loader(transform_fn):
     --------
     tuple: (train_dataset, val_dataset)
     """
-    print('ssssssssssssssssssssssssssssssssssssssssssssssssss', transform_fn)
+
     path = join(data_dir, 'cocodetection')
     transform = transform_fn((__norm_mean, __norm_dev))
     resize = None
