@@ -50,9 +50,9 @@ class MAPMetric:
             all_aps[class_id] = ap
 
         # Print per-class AP scores
-        print("Per-class AP scores:")
-        for class_id, ap in all_aps.items():
-            print(f"Class {class_id}: {ap:.4f}")
+        #print("Per-class AP scores:")
+        #for class_id, ap in all_aps.items():
+        #    print(f"Class {class_id}: {ap:.4f}")
 
         # Compute mean AP
         if len(all_aps) == 0:
