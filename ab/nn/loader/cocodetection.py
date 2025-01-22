@@ -2,7 +2,7 @@ import os
 from os import makedirs, mkdir
 from os.path import join, exists
 from typing import Sequence
-
+from tqdm import tqdm
 import torch
 from torch.utils.data import Dataset
 from PIL import Image
@@ -25,7 +25,8 @@ coco_ann_url = 'http://images.cocodataset.org/annotations/annotations_trainval20
 coco_img_url = 'http://images.cocodataset.org/zips/{}2017.zip'
 
 # Class definitions
-MIN_CLASS_LIST = list(range(91))
+#MIN_CLASS_LIST = list(range(91))
+MIN_CLASS_LIST = [0, 1, 2, 3, 4, 5]
 MIN_CLASS_N = len(MIN_CLASS_LIST)
 
 def class_n():
@@ -33,7 +34,7 @@ def class_n():
 
 
 class COCODetectionDataset(Dataset):
-    def __init__(self, transform, root, split='train', class_list=None):
+    def __init__(self, transform, root, split='train', class_list=None, preprocess=True):
         """
         Initialize COCO detection dataset
         
@@ -53,7 +54,10 @@ class COCODetectionDataset(Dataset):
             raise ValueError(f'Invalid split: {split}')
         self.root = root
         self.transform = transform
+        self.split = split  
         self.class_list = class_list or MIN_CLASS_LIST
+       
+        
         ann_file = os.path.join(root, 'annotations', f'instances_{split}2017.json')
         if not os.path.exists(os.path.join(root, 'annotations')):
             print('Annotation file doesn\'t exist! Downloading')
@@ -63,6 +67,10 @@ class COCODetectionDataset(Dataset):
         self.coco = COCO(ann_file)
         self.ids = list(sorted(self.coco.imgs.keys()))
         self.img_dir = os.path.join(root, f'{split}2017')
+        
+        self.preprocess = preprocess
+        if self.preprocess:
+            self.__preprocess__() 
         first_image_info = self.coco.loadImgs(self.ids[0])[0]
         first_file_path = os.path.join(self.img_dir, first_image_info['file_name'])
         if not os.path.exists(first_file_path):
@@ -70,7 +78,30 @@ class COCODetectionDataset(Dataset):
             download_and_extract_archive(coco_img_url.format(split), root, filename=f'{split}2017.zip')
             print('Image dataset preparation complete')
 
-
+    def __preprocess__(self):
+        list_file = os.path.join(self.root, 'preprocessed', f"{self.split}2017_filtered_class{'-'.join(map(str, self.class_list))}.list")
+        os.makedirs(os.path.join(self.root, 'preprocessed'), exist_ok=True)
+        if os.path.exists(list_file):
+            with open(list_file, 'r') as f:
+                lines = f.readlines()
+                filtered_ids = [int(line.strip()) for line in lines]
+            self.ids = filtered_ids
+            print(f"Loaded {len(self.ids)} filtered image IDs from {list_file}")
+        else:
+            print(f"Preprocessing to filter image IDs for class list {self.class_list}")
+            filtered_ids = []
+            for img_id in tqdm(self.ids, desc="Preprocessing"):
+                ann_ids = self.coco.getAnnIds(imgIds=img_id)
+                anns = self.coco.loadAnns(ann_ids)
+                has_class = any(ann['category_id'] in self.class_list for ann in anns)
+                if has_class:
+                    filtered_ids.append(img_id)
+            self.ids = filtered_ids
+            # Save the list to file
+            with open(list_file, 'w') as f:
+                for img_id in self.ids:
+                    f.write(f"{img_id}\n")
+            print(f"Saved {len(self.ids)} filtered image IDs to {list_file}")
     def __getitem__(self, idx):
         img_id = self.ids[idx]
         img_info = self.coco.loadImgs(img_id)[0]
@@ -206,10 +237,11 @@ def loader(transform_fn):
     --------
     tuple: (train_dataset, val_dataset)
     """
+    print('ssssssssssssssssssssssssssssssssssssssssssssssssss', transform_fn)
     path = join(data_dir, 'cocodetection')
     transform = transform_fn((__norm_mean, __norm_dev))
     resize = None
-    train_dataset = COCODetectionDataset(transform=transform, root=path, split="train")
-    val_dataset = COCODetectionDataset(transform=transform, root=path, split="val")
+    train_dataset = COCODetectionDataset(transform=transform, root=path, split="train", class_list=MIN_CLASS_LIST, preprocess=True)
+    val_dataset = COCODetectionDataset(transform=transform, root=path, split="val", class_list=MIN_CLASS_LIST, preprocess=True)
     
     return (class_n(),), __minimum_accuracy, train_dataset, val_dataset
