@@ -17,7 +17,7 @@ def get_gender(attr):
     return attr[20]
 
 
-def loader(transform_fn):
+def loader(transform_fn, task):
     transform = transform_fn((__norm_mean, __norm_dev))
     train_set = torchvision.datasets.CelebA(root=data_dir, split='train', transform=transform,
                                             target_type='attr', target_transform=get_gender, download=True)

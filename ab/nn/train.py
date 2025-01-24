@@ -12,7 +12,8 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
          min_batch_binary_power: int = default_min_batch_power, max_batch_binary_power: int = default_max_batch_power,
          min_learning_rate: float = default_min_lr, max_learning_rate: float = default_max_lr,
          min_momentum: float = default_min_momentum, max_momentum: float = default_max_momentum,
-         transform: str | tuple = None, nn_fail_attempts: int = default_nn_fail_attempts, random_config_order:bool = default_random_config_order):
+         transform: str | tuple = None, nn_fail_attempts: int = default_nn_fail_attempts, random_config_order:bool = default_random_config_order,
+         num_workers:int = default_num_workers):
     """
     Main function for training models using Optuna optimization.
     :param config: Configuration specifying the model training pipelines. The default value for all configurations.
@@ -27,6 +28,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
     :param transform: The transformation algorithm name. If None (default), all available algorithms are used by Optuna.
     :param nn_fail_attempts: Number of attempts if the neural network model throws exceptions.
     :param random_config_order: If random shuffling of the config list is required.
+    :param num_workers: Number of data loader workers.
     """
 
     validate_prm(min_batch_binary_power, max_batch_binary_power, min_learning_rate, max_learning_rate, min_momentum, max_momentum)
@@ -67,7 +69,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                         def objective(trial):
                             nonlocal continue_study, fail_iterations, max_batch_binary_power_local
                             try:
-                                accuracy = optuna_objective(trial, sub_config, min_learning_rate, max_learning_rate, min_momentum, max_momentum,
+                                accuracy = optuna_objective(trial, sub_config, num_workers, min_learning_rate, max_learning_rate, min_momentum, max_momentum,
                                                         min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs)
                                 fail_iterations = nn_fail_attempts
                                 return accuracy
@@ -94,5 +96,4 @@ if __name__ == "__main__":
     main(
         a.config, a.epochs, a.trials, a.min_batch_binary_power, a.max_batch_binary_power,
         a.min_learning_rate, a.max_learning_rate, a.min_momentum, a.max_momentum, a.transform,
-        a.nn_fail_attempts, a.random_config_order
-    )
+        a.nn_fail_attempts, a.random_config_order, a.workers)

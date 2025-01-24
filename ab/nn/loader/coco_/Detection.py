@@ -18,7 +18,7 @@ from ab.nn.util.Const import data_dir
 # Standard module-level constants
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665, 69.89082075, 70.9150767)
-__minimum_accuracy = 0.0  # Minimum accuracy for object detection
+__minimum_accuracy = 0.0001  # Minimum accuracy for object detection
 
 # COCO URLs
 coco_ann_url = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
@@ -34,6 +34,8 @@ def class_n():
 
 
 class COCODetectionDataset(Dataset):
+    num_workers = 0
+
     def __init__(self, transform, root, split='train', class_list=None, preprocess=True):
         """
         Initialize COCO detection dataset
@@ -217,7 +219,7 @@ class COCODetectionDataset(Dataset):
         return len(self.ids)
       
 
-def loader(transform_fn):
+def loader(transform_fn, task):
     """
     Main entry point following repository pattern.
     Returns train and validation datasets for COCO object detection.
@@ -238,7 +240,7 @@ def loader(transform_fn):
     tuple: (train_dataset, val_dataset)
     """
 
-    path = join(data_dir, 'cocodetection')
+    path = join(data_dir, 'coco')
     transform = transform_fn((__norm_mean, __norm_dev))
     resize = None
     train_dataset = COCODetectionDataset(transform=transform, root=path, split="train", class_list=MIN_CLASS_LIST, preprocess=True)

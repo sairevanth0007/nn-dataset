@@ -8,7 +8,7 @@ __norm_dev = (0.229, 0.224, 0.225)
 __class_quantity = 365
 __minimum_accuracy = 1.0 / __class_quantity
 
-def loader(transform_fn):
+def loader(transform_fn, task):
     transform = transform_fn((__norm_mean, __norm_dev))
     download =  not (data_dir / 'data_256_standard').exists()
     train_set = torchvision.datasets.Places365(root=data_dir, small=True, split='train-standard', transform=transform, download=download)

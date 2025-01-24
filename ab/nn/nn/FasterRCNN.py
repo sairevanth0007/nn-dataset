@@ -15,10 +15,9 @@ from torchvision.models.detection.backbone_utils import _resnet_fpn_extractor
 from torchvision.models.detection.transform import GeneralizedRCNNTransform
 from torchvision.models.detection.image_list import ImageList
 
-args = [91]
-
 def supported_hyperparameters():
-    return {'lr', 'momentum'}
+    return {'lr', 'momentum', 'fg_iou_thresh', 'bg_iou_thresh',
+            'batch_size_per_image', 'positive_fraction', 'nms_thresh', 'score_thresh'}
 
 def _default_anchorgen():
     anchor_sizes = ((32,), (64,), (128,), (256,), (512,))
@@ -500,6 +499,7 @@ class RoIHeads(nn.Module):
 
         return result, losses
 
+
 class Net(nn.Module):
     def __init__(self, in_shape, out_shape, prm):
         super().__init__()
@@ -520,14 +520,14 @@ class Net(nn.Module):
 
         self.rpn = RegionProposalNetwork(
             rpn_anchor_generator, rpn_head,
-            fg_iou_thresh=0.7,
-            bg_iou_thresh=0.3,
-            batch_size_per_image=256,
-            positive_fraction=0.5,
+            fg_iou_thresh=prm['fg_iou_thresh'],
+            bg_iou_thresh=prm['bg_iou_thresh'],
+            batch_size_per_image=int(512 * prm['batch_size_per_image']) + 1,
+            positive_fraction=prm['positive_fraction'],
+            nms_thresh=prm['nms_thresh'],
+            score_thresh=prm['score_thresh'],
             pre_nms_top_n=rpn_pre_nms_top_n,
             post_nms_top_n=rpn_post_nms_top_n,
-            nms_thresh=0.7,
-            score_thresh=0.0,
         )
 
         box_roi_pool = MultiScaleRoIAlign(

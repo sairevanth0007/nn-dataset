@@ -14,16 +14,19 @@ from torchvision.ops import boxes as box_ops
 from torchvision.models.detection.transform import GeneralizedRCNNTransform
 
 
-@staticmethod
 def supported_hyperparameters():
     return {
         'lr',
         'momentum',
-        
+        'score_thresh',
+        'nms_thresh',
+        'iou_thresh',
+        'detections_per_img',
+        'topk_candidates',
+        'neg_to_pos_ratio',
+        'norm_eps',
+        'norm_momentum'
     }
-
-
-args = [91]
 
 def _normal_init(conv: nn.Module):
 
@@ -139,23 +142,22 @@ class SSDLiteRegressionHead(SSDScoringHead):
 class Net(nn.Module):
     def __init__(self, in_shape, out_shape, prms):
         """Initialize SSDLite model with repository parameter convention."""
-        super().__init__()
-        
-
+        super().__init__()        
         size = (in_shape[2], in_shape[3])
-        
-
-        num_classes = out_shape[0]  # COCO default
+        num_classes = out_shape[0]
+        score_thresh = prms.get('score_thresh')
+        nms_thresh = prms.get('nms_thresh')
+        iou_thresh = prms.get('iou_thresh')
+        norm_eps = prms.get('norm_eps')
+        norm_momentum = prms.get('norm_momentum')
+        detections_per_img = int(600 * prms.get('detections_per_img')) + 1
+        topk_candidates = int(600 * prms.get('topk_candidates')) + 1
+        neg_to_pos_ratio = int(6 * prms.get('neg_to_pos_ratio')) + 1
+ 
         image_mean = prms.get('image_mean', [0.5, 0.5, 0.5])
         image_std = prms.get('image_std', [0.5, 0.5, 0.5])
-        score_thresh = prms.get('score_thresh', 0.001)
-        nms_thresh = prms.get('nms_thresh', 0.55)
-        detections_per_img = prms.get('detections_per_img', 300)
-        topk_candidates = prms.get('topk_candidates', 300)
-        iou_thresh = prms.get('iou_thresh', 0.5)
-        neg_to_pos_ratio = prms.get('neg_to_pos_ratio', 3)
-        
-        norm_layer = partial(nn.BatchNorm2d, eps=0.001, momentum=0.03)
+
+        norm_layer = partial(nn.BatchNorm2d, eps=norm_eps, momentum=norm_momentum)
 
         backbone = mobilenet_v3_large(weights=MobileNet_V3_Large_Weights.IMAGENET1K_V1).features
         

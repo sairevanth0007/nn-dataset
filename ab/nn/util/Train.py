@@ -3,20 +3,18 @@ import time as time
 from os.path import join
 
 import numpy as np
-import torch
 from torch.cuda import OutOfMemoryError
 
 import ab.nn.util.db.Write as DB_Write
 from ab.nn.util.Classes import DataRoll
-from ab.nn.util.Const import minimum_accuracy_multiplayer
 from ab.nn.util.Exception import *
 from ab.nn.util.Loader import Loader
-from ab.nn.util.Util import model_stat_dir, max_batch, accuracy_to_time_metric, nn_mod, merge_prm, get_attr, format_time
+from ab.nn.util.Util import *
 from ab.nn.util.db.Calc import save_results
 from ab.nn.util.db.Read import supported_transformers
 
 
-def optuna_objective(trial, config, min_lr, max_lr, min_momentum, max_momentum,
+def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, max_momentum,
                      min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs):
     task, dataset_name, metric, nn = config
     try:
@@ -41,7 +39,7 @@ def optuna_objective(trial, config, min_lr, max_lr, min_momentum, max_momentum,
             prm_str += f", {k}: {v}"
         print(f"Initialize training with {prm_str[2:]}")
         # Load dataset
-        out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(dataset_name, transform_name)
+        out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(task, dataset_name, transform_name)
 
         # Initialize model and trainer
         if task == 'txt-generation':
@@ -55,7 +53,7 @@ def optuna_objective(trial, config, min_lr, max_lr, min_momentum, max_momentum,
             else:
                 raise ValueError(f"Unsupported text generation model: {nn}")
         return Train(config, out_shape, minimum_accuracy, batch, nn, task, train_set, test_set, metric,
-                     prms).train_n_eval(n_epochs)
+                     num_workers, prms).train_n_eval(n_epochs)
     except Exception as e:
         if isinstance(e, OutOfMemoryError):
             if max_batch_binary_power_local <= min_batch_binary_power:
@@ -78,7 +76,7 @@ def optuna_objective(trial, config, min_lr, max_lr, min_momentum, max_momentum,
 
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, model_name, task,
-                 train_dataset, test_dataset, metric, prm: dict):
+                 train_dataset, test_dataset, metric, num_workers, prm: dict):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: The tuple of names (Task, Dataset, Metric, Model).
@@ -104,18 +102,14 @@ class Train:
 
         self.metric_name = metric
         self.metric_function = self.load_metric_function(metric)
-        
 
-        
-        self.train_loader = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.batch, shuffle=True, num_workers=0)
-        self.test_loader = torch.utils.data.DataLoader(self.test_dataset, batch_size=self.batch, shuffle=False, num_workers=0)
-        
-        if hasattr(self.train_dataset, 'collate_fn'):
-            self.train_loader.collate_fn = self.train_dataset.collate_fn
-        if hasattr(self.test_dataset, 'collate_fn'):
-            self.test_loader.collate_fn = self.test_dataset.collate_fn
-            
-        
+        self.train_loader = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.batch, shuffle=True,
+                                                        num_workers=get_obj_attr(self.train_dataset, 'num_workers', default=num_workers),
+                                                        collate_fn=get_obj_attr(self.train_dataset, 'collate_fn'))
+        self.test_loader = torch.utils.data.DataLoader(self.test_dataset, batch_size=self.batch, shuffle=False,
+                                                       num_workers=get_obj_attr(self.train_dataset, 'num_workers', default=num_workers),
+                                                       collate_fn=get_obj_attr(self.test_dataset, 'collate_fn'))
+
         for input_tensor, _ in self.train_loader:
             self.in_shape = np.array(input_tensor).shape # Model input tensor shape (e.g., (8, 3, 32, 32) for a batch size 8, RGB image 32x32 px).
             break

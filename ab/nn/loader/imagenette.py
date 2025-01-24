@@ -8,7 +8,7 @@ __norm_dev = (0.229, 0.224, 0.225)
 __class_quantity = 10
 __minimum_accuracy = 1.0 / __class_quantity
 
-def loader(transform_fn):
+def loader(transform_fn, task):
     transform = transform_fn((__norm_mean, __norm_dev))
     download =  not (data_dir / 'imagenette2').exists()
     train_set = torchvision.datasets.Imagenette(root=data_dir, split='train', transform=transform, download=download)

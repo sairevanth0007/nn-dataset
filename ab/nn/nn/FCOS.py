@@ -18,7 +18,8 @@ from torch.nn import functional as F
 from torchvision.models.detection import _utils as det_utils
 
 def supported_hyperparameters():
-    return {'lr', 'momentum'}
+    return {'lr', 'momentum', 'center_sampling_radius', 'score_thresh',
+            'nms_thresh', 'detections_per_img', 'topk_candidates'}
 
 class FCOSHead(nn.Module):
     def __init__(self, in_channels, num_anchors, num_classes, num_convs=4):
@@ -188,7 +189,12 @@ class Net(nn.Module):
         super().__init__()
 
         num_classes = out_shape[0]
-        
+        self.center_sampling_radius = 3 * prm['center_sampling_radius']
+        self.score_thresh = prm['score_thresh']
+        self.nms_thresh = prm['nms_thresh']
+        self.detections_per_img = int(200 * prm['detections_per_img']) + 1
+        self.topk_candidates = int(2000 * prm['topk_candidates']) + 1
+
         backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
         backbone = _resnet_fpn_extractor(
             backbone, trainable_layers=3, returned_layers=[2, 3, 4], extra_blocks=LastLevelP6P7(256, 256)
@@ -210,20 +216,7 @@ class Net(nn.Module):
         self.transform = GeneralizedRCNNTransform(
             min_size=800, max_size=1333, image_mean=[0.485, 0.456, 0.406], image_std=[0.229, 0.224, 0.225]
         )
-
-        self.score_thresh = 0.2
-        self.nms_thresh = 0.6
-        self.detections_per_img = 100
-        self.topk_candidates = 1000
         self.num_classes = num_classes
-        self.center_sampling_radius = 1.5
-
-        # Hyperparameters from prm
-        self.score_thresh = prm.get("score_thresh", 0.2)
-        self.nms_thresh = prm.get("nms_thresh", 0.6)
-        self.detections_per_img = prm.get("detections_per_img", 100)
-        self.topk_candidates = prm.get("topk_candidates", 1000)
-        self.center_sampling_radius = prm.get("center_sampling_radius", 1.5)
 
     def compute_loss(
         self,

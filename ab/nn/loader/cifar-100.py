@@ -8,7 +8,7 @@ __norm_dev = (0.2675, 0.2565, 0.2761)
 __class_quantity = 100
 __minimum_accuracy = 1.0 / __class_quantity
 
-def loader(transform_fn):
+def loader(transform_fn, task):
     transform = transform_fn((__norm_mean, __norm_dev))
     train_set = torchvision.datasets.CIFAR100(root=data_dir, train=True, transform=transform, download=True)
     test_set = torchvision.datasets.CIFAR100(root=data_dir, train=False, transform=transform, download=True)

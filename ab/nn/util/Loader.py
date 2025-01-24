@@ -2,12 +2,12 @@ from ab.nn.util.Util import get_attr
 
 class Loader:
     @staticmethod
-    def load_dataset(dataset_name, transform_name):
+    def load_dataset(task, dataset_name, transform_name):
         """
         Dynamically load dataset and transformation based on the provided paths.
+        :param task: Task name
         :param dataset_name: Dataset name
         :param transform_name: Transform name
-        :param norm: Normalization parameters (mean, deviation) for transformation.
         :return: Train and test datasets.
         """
         # Dynamically load the transform function if provided
@@ -18,4 +18,4 @@ class Loader:
         l_nm = 'loader'
         loader = get_attr(f"{l_nm}.{dataset_name}", l_nm)
         # Call the loader function with the dynamically loaded transform
-        return loader(transform_fn)
+        return loader(transform_fn, task)

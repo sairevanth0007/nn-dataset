@@ -16,10 +16,10 @@ from torchvision.models.detection.anchor_utils import AnchorGenerator
 from torchvision.ops.feature_pyramid_network import LastLevelP6P7
 from torchvision.models.detection import _utils as det_utils
 
-
 def supported_hyperparameters():
-    return {'lr', 'momentum'}
-args = [91]
+    return {'lr', 'momentum', 'fg_iou_thresh', 'bg_iou_thresh', 'score_thresh',
+            'nms_thresh', 'detections_per_img', 'topk_candidates'}
+
 
 def _sum(x: List[Tensor]) -> Tensor:
     res = x[0]
@@ -240,12 +240,18 @@ class RetinaNetRegressionHead(nn.Module):
 
         return pred_boxes
 
+
 class Net(nn.Module):
     def __init__(self, in_shape, out_shape, prms):
         super().__init__()
         num_classes = out_shape[0]
-        fg_iou_thresh = 0.5
-        bg_iou_thresh = 0.4
+        fg_iou_thresh = prms['fg_iou_thresh']
+        bg_iou_thresh = prms['bg_iou_thresh']
+
+        self.score_thresh = prms['score_thresh']
+        self.nms_thresh = prms['nms_thresh']
+        self.detections_per_img = int(600 * prms['detections_per_img']) + 1
+        self.topk_candidates = int(2000 * prms['topk_candidates']) + 1
 
         backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
         backbone = _resnet_fpn_extractor(
@@ -273,11 +279,6 @@ class Net(nn.Module):
             image_mean=[0.485, 0.456, 0.406],
             image_std=[0.229, 0.224, 0.225]
         )
-        
-        self.score_thresh = 0.05
-        self.nms_thresh = 0.5
-        self.detections_per_img = 300
-        self.topk_candidates = 1000
         self.num_classes = num_classes
         
         self.box_coder = det_utils.BoxCoder(weights=(1.0, 1.0, 1.0, 1.0))

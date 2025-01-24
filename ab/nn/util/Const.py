@@ -10,12 +10,13 @@ default_max_lr = 1.0
 default_min_momentum = 0.0
 default_max_momentum = 1.0
 default_nn_fail_attempts = 30
+default_num_workers = 2
 default_random_config_order = False
 default_transform = None
 
 minimum_accuracy_multiplayer =  1.2
 
-max_epoch_seconds = 200000 * 60
+max_epoch_seconds = 30 * 60
 
 base_module = 'ab'
 to_nn = (base_module, 'nn')

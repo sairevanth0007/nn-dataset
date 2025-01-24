@@ -5,7 +5,7 @@ from datasets import load_dataset
 
 __minimum_accuracy = 0.01 # todo: Required correct value for minimum accuracy provided by the untrained classifier due to random output generation.
 
-def loader(transform_fn):
+def loader(transform_fn, task):
     dataset_name = "Salesforce/wikitext"
     config = "wikitext-2-raw-v1"
     seq_length = 100

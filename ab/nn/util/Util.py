@@ -10,8 +10,11 @@ from ab.nn.util.Const import *
 def nn_mod(*nms):
     return ".".join(to_nn + nms)
 
+def get_obj_attr (obj, f_name, default=None):
+    return getattr(obj, f_name) if hasattr(obj, f_name) else default
+
 def get_attr (mod, f):
-    return getattr(__import__(nn_mod(mod), fromlist=[f]), f)
+    return get_obj_attr(__import__(nn_mod(mod), fromlist=[f]), f)
 
 def conf_to_names(c: str) -> tuple[str, ...]:
     return tuple(c.split(config_splitter))
@@ -77,6 +80,8 @@ def args():
                         help="Number of attempts if the neural network model throws exceptions.")
     parser.add_argument('-r', '--random_config_order', type=bool, default=default_random_config_order,
                         help="If random shuffling of the config list is required.")
+    parser.add_argument('-w', '--workers', type=int, default=default_num_workers,
+                        help="Number of data loader workers.")
     return parser.parse_args()
 
 

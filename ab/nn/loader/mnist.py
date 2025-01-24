@@ -11,7 +11,7 @@ __norm_dev = (0.3081,)
 __class_quantity = 10
 __minimum_accuracy = 1.0 / __class_quantity
 
-def loader(transform_fn):
+def loader(transform_fn, task):
     """
     Loader function for the MNIST dataset.
     :param transform_fn: Function to apply transformations.

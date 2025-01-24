@@ -1,15 +1,19 @@
+from collections import OrderedDict
+from typing import List, Dict, Optional, Tuple
+
 import torch
 import torch.nn.functional as F
 from torch import nn, Tensor
-from typing import List, Dict, Optional, Tuple, Union
-from collections import OrderedDict
-from torchvision.ops import boxes as box_ops
+from torchvision.models import vgg16, VGG16_Weights
 from torchvision.models.detection import _utils as det_utils
 from torchvision.models.detection.anchor_utils import DefaultBoxGenerator
 from torchvision.models.detection.transform import GeneralizedRCNNTransform
-from torchvision.models import vgg16, VGG16_Weights
+from torchvision.ops import boxes as box_ops
 
-args = [91]
+
+def supported_hyperparameters():
+    return {'lr', 'momentum', 'score_thresh', 'nms_thresh', 'detections_per_img', 'iou_thresh', 'topk_candidates', 'positive_fraction'}
+
 
 def create_backbone(trainable_layers=4):
 
@@ -32,9 +36,8 @@ def create_backbone(trainable_layers=4):
     for b in backbone[:freeze_before]:
         for parameter in b.parameters():
             parameter.requires_grad_(False)
-            
 
-    return SSDFeatureExtractorVGG(backbone, highres=False) 
+    return SSDFeatureExtractorVGG(backbone)
 
 
 def create_anchor_generator():
@@ -43,10 +46,6 @@ def create_anchor_generator():
         scales=[0.07, 0.15, 0.33, 0.51, 0.69, 0.87, 1.05],
         steps=[8, 16, 32, 64, 100, 300],
     )
-
-
-def supported_hyperparameters():
-    return {'lr', 'momentum'}
 
 def _xavier_init(conv: nn.Module):
     for layer in conv.modules():
@@ -172,6 +171,7 @@ class SSDFeatureExtractorVGG(nn.Module):
 
         return OrderedDict([(str(i), v) for i, v in enumerate(output)])
 
+
 class Net(nn.Module):
     __annotations__ = {
         "box_coder": det_utils.BoxCoder,
@@ -186,18 +186,18 @@ class Net(nn.Module):
         
         backbone = create_backbone()
         anchor_generator = create_anchor_generator()
-        
-        num_classes = prms.get('num_classes', 91)  # COCO default
+
+        num_classes = out_shape[0]
+        head = prms.get('head', None)
+        score_thresh = prms.get('score_thresh')
+        nms_thresh = prms.get('nms_thresh')
+        detections_per_img = int(400 * prms.get('detections_per_img')) + 1
+        iou_thresh = prms.get('iou_thresh')
+        topk_candidates = int(800 * prms.get('topk_candidates')) + 1
+        positive_fraction = prms.get('positive_fraction')
+
         image_mean = prms.get('image_mean', [0.485, 0.456, 0.406])
         image_std = prms.get('image_std', [0.229, 0.224, 0.225])
-        head = prms.get('head', None)
-        score_thresh = prms.get('score_thresh', 0.01)
-        nms_thresh = prms.get('nms_thresh', 0.45)
-        detections_per_img = prms.get('detections_per_img', 200)
-        iou_thresh = prms.get('iou_thresh', 0.5)
-        topk_candidates = prms.get('topk_candidates', 400)
-        positive_fraction = prms.get('positive_fraction', 0.25)
-
 
         self.backbone = backbone
         self.anchor_generator = anchor_generator
