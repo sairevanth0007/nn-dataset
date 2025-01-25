@@ -30,6 +30,21 @@
         "uid": "cb56e6e7-f7d2-4ae1-af1f-5519720c3a32"
     },
     {
+        "accuracy": 0.0073160952888429165,
+        "batch": 4,
+        "bg_iou_thresh": 0.44611613679283024,
+        "detections_per_img": 0.8573634149636966,
+        "duration": 661964904360,
+        "fg_iou_thresh": 0.9447513117920455,
+        "lr": 6.551991932862747e-05,
+        "momentum": 0.8251417258216293,
+        "nms_thresh": 0.4297971574625761,
+        "score_thresh": 0.27866165298700285,
+        "topk_candidates": 0.857634582019066,
+        "transform": "soft_pad",
+        "uid": "27ffd4d1-eca2-40c4-87fe-8a522a0fdc3c"
+    },
+    {
         "accuracy": 0.004876305814832449,
         "batch": 16,
         "bg_iou_thresh": 0.13360391873745436,
@@ -90,6 +105,21 @@
         "uid": "dfa2b996-0ef7-412f-ba46-0d8aeecfbef6"
     },
     {
+        "accuracy": 0.0037777977995574474,
+        "batch": 16,
+        "bg_iou_thresh": 0.49754954624492875,
+        "detections_per_img": 0.38921358535792505,
+        "duration": 476545919872,
+        "fg_iou_thresh": 0.5480588856183083,
+        "lr": 0.0032537389415337762,
+        "momentum": 0.3236627234668745,
+        "nms_thresh": 0.2895002045279855,
+        "score_thresh": 0.3348632470160603,
+        "topk_candidates": 0.024032797065980605,
+        "transform": "soft_pad",
+        "uid": "b7ac9e25-dc42-4d56-9709-f49564c67c16"
+    },
+    {
         "accuracy": 0.003630854655057192,
         "batch": 16,
         "bg_iou_thresh": 0.25494523903282285,
@@ -105,6 +135,21 @@
         "uid": "c7f6fb17-cd96-4476-8039-e131df64cb92"
     },
     {
+        "accuracy": 0.0036023587454110384,
+        "batch": 128,
+        "bg_iou_thresh": 0.27142239890456377,
+        "detections_per_img": 0.8710937821588003,
+        "duration": 474748928244,
+        "fg_iou_thresh": 0.7557252075163607,
+        "lr": 0.0037322299330861345,
+        "momentum": 0.9252327916178833,
+        "nms_thresh": 0.23310059781697245,
+        "score_thresh": 0.5653911895749415,
+        "topk_candidates": 0.7389822538787032,
+        "transform": "soft_pad",
+        "uid": "435d6457-bc43-49e4-9a0a-ea5bd75280fd"
+    },
+    {
         "accuracy": 0.0030897208489477634,
         "batch": 2,
         "bg_iou_thresh": 0.5184311612836976,
@@ -118,6 +163,21 @@
         "topk_candidates": 0.9639464839986867,
         "transform": "soft_pad",
         "uid": "9a2af430-ecc1-4e09-adb4-1670597ea7d5"
+    },
+    {
+        "accuracy": 0.002272727433592081,
+        "batch": 2,
+        "bg_iou_thresh": 0.01114220306120961,
+        "detections_per_img": 0.20888914221202048,
+        "duration": 936357907830,
+        "fg_iou_thresh": 0.0491922219974823,
+        "lr": 0.17320602916428485,
+        "momentum": 0.37088839498384285,
+        "nms_thresh": 0.26866260127173625,
+        "score_thresh": 0.20009718493568984,
+        "topk_candidates": 0.9557576921977377,
+        "transform": "soft_pad",
+        "uid": "925b4fac-c941-462b-a8d4-f6bf4129afd1"
     },
     {
         "accuracy": 0.0008715925505384803,
