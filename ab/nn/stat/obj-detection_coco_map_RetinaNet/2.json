@@ -60,6 +60,21 @@
         "uid": "6eba1961-1783-4ef3-b4e3-643e60ced13b"
     },
     {
+        "accuracy": 0.0034033830743283033,
+        "batch": 32,
+        "bg_iou_thresh": 0.34166475262878226,
+        "detections_per_img": 0.7063056207152519,
+        "duration": 934822581912,
+        "fg_iou_thresh": 0.6149918038861696,
+        "lr": 0.0030927628534730255,
+        "momentum": 0.12103308566989224,
+        "nms_thresh": 0.48299101769019537,
+        "score_thresh": 0.7480295050969705,
+        "topk_candidates": 0.046442785221624705,
+        "transform": "soft_pad",
+        "uid": "86afe8e1-7a78-42c7-a1e7-5e8cc5e3f57f"
+    },
+    {
         "accuracy": 0.0007302357698790729,
         "batch": 4,
         "bg_iou_thresh": 0.7052671009215432,
