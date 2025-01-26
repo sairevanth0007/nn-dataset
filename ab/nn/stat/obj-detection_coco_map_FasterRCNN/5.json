@@ -1,5 +1,35 @@
 [
     {
+        "accuracy": 0.36839842796325684,
+        "batch": 8,
+        "batch_size_per_image": 0.22743265479024832,
+        "bg_iou_thresh": 0.6027327380117421,
+        "duration": 8248046244459,
+        "fg_iou_thresh": 0.955495385014267,
+        "lr": 0.0016848580981941865,
+        "momentum": 0.25258410194721603,
+        "nms_thresh": 0.3003699092171819,
+        "positive_fraction": 0.37167041702919723,
+        "score_thresh": 0.7811553013529728,
+        "transform": "soft_pad",
+        "uid": "940320a7-82b4-4660-ba9a-89ea0d6d8561"
+    },
+    {
+        "accuracy": 0.3486136794090271,
+        "batch": 16,
+        "batch_size_per_image": 0.43121759827548933,
+        "bg_iou_thresh": 0.4073651644863574,
+        "duration": 8173815133095,
+        "fg_iou_thresh": 0.9541247347938245,
+        "lr": 0.0038465059678717464,
+        "momentum": 0.4020927331976414,
+        "nms_thresh": 0.06232514102773301,
+        "positive_fraction": 0.6993142209461598,
+        "score_thresh": 0.6850274613550162,
+        "transform": "soft_pad",
+        "uid": "56d9eda4-408b-4abe-a19f-8cba19a6bbc0"
+    },
+    {
         "accuracy": 0.31664976477622986,
         "batch": 8,
         "batch_size_per_image": 0.863930813665633,
@@ -28,5 +58,35 @@
         "score_thresh": 0.9334455132047479,
         "transform": "soft_pad",
         "uid": "9a37fac8-38c2-45d2-b8b1-2f28b1b0813e"
+    },
+    {
+        "accuracy": 0.21914608776569366,
+        "batch": 16,
+        "batch_size_per_image": 0.7375390511267841,
+        "bg_iou_thresh": 0.10098715646096756,
+        "duration": 8349434065909,
+        "fg_iou_thresh": 0.25997624463950064,
+        "lr": 0.00020907651452859783,
+        "momentum": 0.6141882406946054,
+        "nms_thresh": 0.2927637397153571,
+        "positive_fraction": 0.49110839452687705,
+        "score_thresh": 0.7797864177649235,
+        "transform": "soft_pad",
+        "uid": "0b319f37-95ad-4138-b759-c44a81ec433f"
+    },
+    {
+        "accuracy": 0.08343889564275742,
+        "batch": 8,
+        "batch_size_per_image": 0.7295747010383804,
+        "bg_iou_thresh": 0.4431134152941444,
+        "duration": 8216019509100,
+        "fg_iou_thresh": 0.6191059744687678,
+        "lr": 3.939171529094531e-05,
+        "momentum": 0.8018650060361467,
+        "nms_thresh": 0.2627712543248226,
+        "positive_fraction": 0.29766931821829523,
+        "score_thresh": 0.7161637601563714,
+        "transform": "soft_pad",
+        "uid": "b272996b-2483-4b39-8ab2-7514385e3e5c"
     }
 ]
