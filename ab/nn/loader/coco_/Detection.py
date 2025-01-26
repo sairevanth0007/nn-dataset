@@ -18,7 +18,7 @@ from ab.nn.util.Const import data_dir
 # Standard module-level constants
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665, 69.89082075, 70.9150767)
-__minimum_accuracy = 0.0001  # Minimum accuracy for object detection
+__minimum_accuracy = 0.005  # Minimum accuracy for object detection
 
 # COCO URLs
 coco_ann_url = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
