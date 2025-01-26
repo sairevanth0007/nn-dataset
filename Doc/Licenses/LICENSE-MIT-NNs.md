@@ -8,7 +8,7 @@ The python code of the DeepSeek large language models:<br/>
 Copyright (c) 2023 DeepSeek<br/>
 All rights reserved.
 
-The python code of neural network models with file names beginning with MOE:<br/>
+The python code of neural network models with file names beginning with MoE:<br/>
 Copyright (c) 2020 Phil Wang<br/>
 All rights reserved.
 
