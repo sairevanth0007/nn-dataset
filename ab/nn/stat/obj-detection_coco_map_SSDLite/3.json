@@ -168,22 +168,5 @@
         "topk_candidates": 0.1341656623759283,
         "transform": "soft_pad",
         "uid": "a0d4e4db-cda1-4b75-b1a3-ef2423ebded7"
-    },
-    {
-        "accuracy": 0.0024723061360418797,
-        "batch": 16,
-        "detections_per_img": 0.580315709787264,
-        "duration": 1790535484848,
-        "iou_thresh": 0.6141574623591807,
-        "lr": 5.2892135197715485e-05,
-        "momentum": 0.036567369350386736,
-        "neg_to_pos_ratio": 0.1739015799679724,
-        "nms_thresh": 0.7699779994949929,
-        "norm_eps": 0.5785390719591036,
-        "norm_momentum": 0.5212149467800917,
-        "score_thresh": 0.022581832084119347,
-        "topk_candidates": 0.2318078202307593,
-        "transform": "soft_pad",
-        "uid": "8831a03c-6e0d-4efd-98e0-bd5df786d1fb"
     }
 ]

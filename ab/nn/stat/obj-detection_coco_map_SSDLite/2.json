@@ -151,39 +151,5 @@
         "topk_candidates": 0.11545038221386128,
         "transform": "soft_pad",
         "uid": "d202cd7f-f37a-436c-a226-7ad220240927"
-    },
-    {
-        "accuracy": 0.0018460294231772423,
-        "batch": 8,
-        "detections_per_img": 0.18029612554467034,
-        "duration": 1126779127092,
-        "iou_thresh": 0.07029917790800722,
-        "lr": 2.5090081448013507e-05,
-        "momentum": 0.4315969931612025,
-        "neg_to_pos_ratio": 0.715012339406737,
-        "nms_thresh": 0.35741316355086405,
-        "norm_eps": 0.8056972787952037,
-        "norm_momentum": 0.4487825294649951,
-        "score_thresh": 0.38098185889751945,
-        "topk_candidates": 0.1341656623759283,
-        "transform": "soft_pad",
-        "uid": "3a3209e3-de1a-4772-913a-ac6e500afc3a"
-    },
-    {
-        "accuracy": 0.0013673390494659543,
-        "batch": 16,
-        "detections_per_img": 0.580315709787264,
-        "duration": 1197529312888,
-        "iou_thresh": 0.6141574623591807,
-        "lr": 5.2892135197715485e-05,
-        "momentum": 0.036567369350386736,
-        "neg_to_pos_ratio": 0.1739015799679724,
-        "nms_thresh": 0.7699779994949929,
-        "norm_eps": 0.5785390719591036,
-        "norm_momentum": 0.5212149467800917,
-        "score_thresh": 0.022581832084119347,
-        "topk_candidates": 0.2318078202307593,
-        "transform": "soft_pad",
-        "uid": "e627ca47-3b54-48fc-be8d-e800377e0d90"
     }
 ]
