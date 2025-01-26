@@ -2,6 +2,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+def supported_hyperparameters():
+    return {'lr', 'momentum'}
+
 class Expert(nn.Module):
     def __init__(self, input_dim, out_dim):
         super(Expert, self).__init__()
@@ -31,11 +34,10 @@ class Gate(nn.Module):
         return x
 
 class Net(nn.Module):
-    def trian_setup(self, device, prm):
+    def train_setup(self, device, prm):
         self.device = device
         self.criteria = (nn.CrossEntropyLoss().to(device),)
-        self.optimizer = torc
-        h.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
         for inputs, labels in train_data:
@@ -47,7 +49,7 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict=None):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict):
         super(Net, self).__init__()
         n_experts = 3
         self.experts = [Expert(in_shape[0], out_shape[0]) for _ in range(n_experts)]

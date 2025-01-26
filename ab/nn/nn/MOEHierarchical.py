@@ -1,10 +1,16 @@
-import torch
-from torch import nn
-import torch.nn.functional as F
 import math
 from inspect import isfunction
 
+import torch
+import torch.nn.functional as F
+from torch import nn
+
 MIN_EXPERT_CAPACITY = 4
+
+
+def supported_hyperparameters():
+    return {'lr', 'adam_betas_1','adam_betas_2', 'adam_eps', 'adam_weight_decay', 'eps',
+            'second_threshold_train', 'second_threshold_eval', 'capacity_factor_train', 'capacity_factor_eval'}
 
 def default(val, default_val):
     default_val = default_val() if isfunction(default_val) else default_val
@@ -41,8 +47,6 @@ class GELU_(nn.Module):
 
 GELU = nn.GELU if hasattr(nn, 'GELU') else GELU_
 
-
-
 class Experts(nn.Module):
     def __init__(self, dim, num_experts=16, hidden_dim=None, activation=GELU):
         super().__init__()
@@ -63,15 +67,15 @@ class Experts(nn.Module):
 class Top2Gating(nn.Module):
     def __init__(self, dim, num_gates, prm):
         super().__init__()
-        self.eps = prm.get('eps', 1e-9)
+        self.eps = prm['eps']
         self.num_gates = num_gates
         self.w_gating = nn.Parameter(torch.randn(dim, num_gates))
-        self.second_policy_train = prm.get('second_policy_train', 'random')
-        self.second_policy_eval = prm.get('second_policy_eval', 'random')
-        self.second_threshold_train = prm.get('second_threshold_train', 0.2)
-        self.second_threshold_eval = prm.get('second_threshold_eval', 0.2)
-        self.capacity_factor_train = prm.get('capacity_factor_train', 1.25)
-        self.capacity_factor_eval = prm.get('capacity_factor_eval', 2.0)
+        self.second_policy_train = 'random'
+        self.second_policy_eval = 'random'
+        self.second_threshold_train = prm['second_threshold_train']
+        self.second_threshold_eval = prm['second_threshold_eval']
+        self.capacity_factor_train = 2 * prm['capacity_factor_train']
+        self.capacity_factor_eval = 4 * prm['capacity_factor_eval']
 
     def forward(self, x, importance=None):
         *_, b, group_size, dim = x.shape
@@ -146,24 +150,54 @@ class Top2Gating(nn.Module):
 class Net(nn.Module):
     def __init__(self, in_shape, out_shape, prm):
         super().__init__()
-        dim, num_experts = in_shape[-1], prm['num_experts']
-        self.num_experts = num_experts
-        self.gate = Top2Gating(dim, num_gates=num_experts, prm=prm)
-        self.experts = Experts(dim, num_experts=num_experts, hidden_dim=prm.get('hidden_dim'), activation=prm.get('activation', GELU))
-        self.loss_coef = prm.get('loss_coef', 1e-2)
+        dim = in_shape[-1]
+        num_experts = prm.get("num_experts", (4, 4))
+        hidden_dim = prm.get("hidden_dim", dim * 4)
+        activation = prm.get("activation", nn.ReLU)
+
+        self.num_experts_outer, self.num_experts_inner = num_experts
+        self.loss_coef = prm.get("loss_coef", 1e-2)
+
+        # Gating networks
+        self.gate_outer = Top2Gating(dim, self.num_experts_outer, prm)
+        self.gate_inner = Top2Gating(dim, self.num_experts_inner, prm)
+
+        # Experts
+        self.experts = Experts(dim, num_experts=num_experts, hidden_dim=hidden_dim, activation=activation)
 
     def forward(self, x):
-        dispatch_tensor, combine_tensor, loss = self.gate(x)
-        b, n, d, e = *x.shape, self.num_experts
-        expert_inputs = torch.einsum('bnd,bnec->ebcd', x, dispatch_tensor)
+        b, n, d = x.shape
+        eo, ei = self.num_experts_outer, self.num_experts_inner
+
+        dispatch_tensor_outer, combine_tensor_outer, loss_outer = self.gate_outer(x)
+        expert_inputs_outer = torch.einsum('bnd,bnec->ebcd', x, dispatch_tensor_outer)
+
+        importance = combine_tensor_outer.permute(2, 0, 3, 1).sum(dim=-1)
+        importance = 0.5 * ((importance > 0.5).float() + (importance > 0.).float())
+
+
+        dispatch_tensor_inner, combine_tensor_inner, loss_inner = self.gate_inner(expert_inputs_outer, importance)
+        expert_inputs = torch.einsum('ebnd,ebnfc->efbcd', expert_inputs_outer, dispatch_tensor_inner)
+
+
         orig_shape = expert_inputs.shape
-        expert_inputs = expert_inputs.reshape(e, -1, d)
+        expert_inputs = expert_inputs.reshape(eo, ei, -1, d)
         expert_outputs = self.experts(expert_inputs)
         expert_outputs = expert_outputs.reshape(*orig_shape)
-        output = torch.einsum('ebcd,bnec->bnd', expert_outputs, combine_tensor)
-        return output, loss * self.loss_coef
+
+
+        expert_outputs_outer = torch.einsum('efbcd,ebnfc->ebnd', expert_outputs, combine_tensor_inner)
+        output = torch.einsum('ebcd,bnec->bnd', expert_outputs_outer, combine_tensor_outer)
+
+
+        total_loss = (loss_outer + loss_inner) * self.loss_coef
+        return output, total_loss
 
     def train_setup(self, device, prm):
         self.to(device)
-        optimizer = torch.optim.Adam(self.parameters(), lr=prm.get('learning_rate', 1e-3))
-        return optimizer
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=prm.get("lr", 1e-3))
+        self.criterion = nn.MSELoss()
+
+
+    def learn(self, train_data):
+        pass  # todo implementation
