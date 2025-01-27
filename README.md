@@ -1,4 +1,5 @@
-# Neural Network Dataset
+# LEMUR: Neural Network Dataset
+LEMUR - Learning, Evaluation, and Modeling for Unified Research
 The original version of this dataset was created by <strong>Arash Torabi Goodarzi, Roman Kochnev</strong> and <strong>Zofia Antonina Bentyn</strong> at the Computer Vision Laboratory, University of Würzburg, Germany.
 
 <h3>Overview 📖</h3>
