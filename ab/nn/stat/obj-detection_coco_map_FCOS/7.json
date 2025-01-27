@@ -1,0 +1,30 @@
+[
+    {
+        "accuracy": 0.5187584757804871,
+        "batch": 16,
+        "center_sampling_radius": 0.4908194294288062,
+        "detections_per_img": 0.7023892848937239,
+        "duration": 11526435619251,
+        "lr": 5.7924213160453484e-05,
+        "momentum": 0.14805294862797924,
+        "nms_thresh": 0.7764850302845057,
+        "score_thresh": 0.15274237749096065,
+        "topk_candidates": 0.338493467579174,
+        "transform": "soft_pad",
+        "uid": "c55130c5-1576-4cf2-a303-3862bfd44e75"
+    },
+    {
+        "accuracy": 0.1089242547750473,
+        "batch": 16,
+        "center_sampling_radius": 0.4034062121337403,
+        "detections_per_img": 0.4914701529887364,
+        "duration": 11435052391306,
+        "lr": 0.00032819471818074986,
+        "momentum": 0.7734201517052048,
+        "nms_thresh": 0.36748501139689993,
+        "score_thresh": 0.6389147802557987,
+        "topk_candidates": 0.5367494738032497,
+        "transform": "soft_pad",
+        "uid": "75f42a01-3c4a-4a7c-a0f2-bb8b4f5dcb55"
+    }
+]
