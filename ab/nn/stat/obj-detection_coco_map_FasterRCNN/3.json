@@ -90,6 +90,21 @@
         "uid": "23c1e39a-ca75-4266-b879-5b7983ec849a"
     },
     {
+        "accuracy": 0.12715952098369598,
+        "batch": 8,
+        "batch_size_per_image": 0.06974929006284691,
+        "bg_iou_thresh": 0.2864929136354205,
+        "duration": 4927698544298,
+        "fg_iou_thresh": 0.4310587790996119,
+        "lr": 6.192627833773585e-05,
+        "momentum": 0.7688509340820169,
+        "nms_thresh": 0.08542697490228957,
+        "positive_fraction": 0.6131863932170287,
+        "score_thresh": 0.9198412317378115,
+        "transform": "soft_pad",
+        "uid": "c2b6f779-fc3c-445e-86d0-31f588e19d39"
+    },
+    {
         "accuracy": 0.03681900352239609,
         "batch": 8,
         "batch_size_per_image": 0.7295747010383804,
