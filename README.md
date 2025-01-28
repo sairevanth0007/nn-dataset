@@ -1,7 +1,7 @@
 ## LEMUR: Neural Network Dataset
 LEMUR - Learning, Evaluation, and Modeling for Unified Research
 
-<img src=![Logo_1 w:o text](https://github.com/user-attachments/assets/690c27d1-b1ba-40ef-be0e-e637098f35b0)/>
+<img src='https://github.com/user-attachments/assets/690c27d1-b1ba-40ef-be0e-e637098f35b0)' width='20%'/>
 <img src='https://abrain.one/img/lemur-nn.jpg' width='20%'/>
 
 The original version of this dataset was created by <strong>Arash Torabi Goodarzi, Roman Kochnev</strong> and <strong>Zofia Antonina Bentyn</strong> at the Computer Vision Laboratory, University of Würzburg, Germany.
