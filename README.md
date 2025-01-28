@@ -93,8 +93,8 @@ The `nn-dataset` package includes the following key modules:
 If you find Neural Network Dataset to be useful for your research, please consider citing:
 ```bibtex
 @misc{ABrain-One.NN-Dataset,
-  author       = {Goodarzi, Arash and Kochnev, Roman and Bentyn, Zofia and Ignatov, Dmitry and Timofte, Radu},
-  title        = {Neural Network Dataset},
+  author       = {Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Kathiriya, Yash Kanubhai and Dhameliya, Yashkumar Sanjaybhai and Ignatov, Dmitry and Timofte, Radu},
+  title        = {Neural Network Dataset: Towards Seamless AutoML},
   howpublished = {\url{https://github.com/ABrain-One/nn-dataset}},
   year         = {2024},
 }
