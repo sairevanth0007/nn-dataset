@@ -1,4 +1,4 @@
-## LEMUR: Neural Network Dataset
+## LEMUR Neural Network Dataset
 LEMUR - Learning, Evaluation, and Modeling for Unified Research
 
 <img src='https://github.com/user-attachments/assets/690c27d1-b1ba-40ef-be0e-e637098f35b0' width='20%'/>
