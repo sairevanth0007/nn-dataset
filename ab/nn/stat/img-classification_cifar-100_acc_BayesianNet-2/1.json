@@ -18,6 +18,15 @@
         "uid": "f903b6de-c696-42aa-a677-255218e7cce2"
     },
     {
+        "accuracy": 0.0974,
+        "batch": 2,
+        "duration": 95873578256,
+        "lr": 0.005752008731643416,
+        "momentum": 0.7557017297334888,
+        "transform": "echo_32_flip",
+        "uid": "fa327470-32a6-446e-aba2-24e0aa0571f4"
+    },
+    {
         "accuracy": 0.02,
         "batch": 4,
         "duration": 538017381931,
@@ -34,5 +43,59 @@
         "momentum": 0.9515373738135082,
         "transform": "norm",
         "uid": "96a92032-a074-43df-8eb3-4cab9046d79d"
+    },
+    {
+        "accuracy": 0.0189,
+        "batch": 128,
+        "duration": 3624239810,
+        "lr": 0.006461875289917736,
+        "momentum": 0.007982797316013812,
+        "transform": "norm_32",
+        "uid": "a8c53478-3c36-4c09-b221-c1c7099670d8"
+    },
+    {
+        "accuracy": 0.0141,
+        "batch": 4,
+        "duration": 49233100177,
+        "lr": 1.2637268725406754e-05,
+        "momentum": 0.9273709493533181,
+        "transform": "norm",
+        "uid": "36dd0f9f-aec6-4b46-af8c-d524e501d02e"
+    },
+    {
+        "accuracy": 0.014,
+        "batch": 128,
+        "duration": 3591936388,
+        "lr": 3.5182781837505344e-05,
+        "momentum": 0.9844200555198177,
+        "transform": "norm",
+        "uid": "a6810e2a-1800-4368-a30b-512ca57677e8"
+    },
+    {
+        "accuracy": 0.0129,
+        "batch": 32,
+        "duration": 7908373289,
+        "lr": 4.24998716416966e-05,
+        "momentum": 0.7505311928832639,
+        "transform": "echo_32",
+        "uid": "6e659195-f283-43d7-9dbe-dc77a6510ace"
+    },
+    {
+        "accuracy": 0.0128,
+        "batch": 1024,
+        "duration": 2337324825,
+        "lr": 0.03731997849205745,
+        "momentum": 0.07352504405888571,
+        "transform": "echo",
+        "uid": "623a2475-e57c-47d5-83a4-dd4347aa84fa"
+    },
+    {
+        "accuracy": 0.0121,
+        "batch": 8,
+        "duration": 25251744746,
+        "lr": 0.0002569550079671193,
+        "momentum": 0.08468981902825434,
+        "transform": "norm_32_flip",
+        "uid": "29427614-da6e-4902-a5c4-bb85e8fa02c3"
     }
 ]

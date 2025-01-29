@@ -1,5 +1,32 @@
 [
     {
+        "accuracy": 0.1026,
+        "batch": 16,
+        "duration": 11418570805,
+        "lr": 0.0018883019926339117,
+        "momentum": 0.9001097531371008,
+        "transform": "norm_32_flip",
+        "uid": "c0156395-14a8-42c0-86d2-455e7e095570"
+    },
+    {
+        "accuracy": 0.0998,
+        "batch": 8,
+        "duration": 21178036113,
+        "lr": 0.00612293696837462,
+        "momentum": 0.49248773883203134,
+        "transform": "norm",
+        "uid": "7d95d8f0-6d0f-466f-a08b-b864ff18336d"
+    },
+    {
+        "accuracy": 0.0955,
+        "batch": 16,
+        "duration": 11461053719,
+        "lr": 0.04192322638019997,
+        "momentum": 0.7100359307679459,
+        "transform": "echo_32_flip",
+        "uid": "2e160cbf-bde1-4b89-b238-9309d43cb017"
+    },
+    {
         "accuracy": 0.0519,
         "batch": 4,
         "duration": 84921821643,
@@ -25,5 +52,41 @@
         "momentum": 0.6039520080649197,
         "transform": "echo_flip",
         "uid": "5257a473-e58e-42c6-9edb-dcb97f05ead0"
+    },
+    {
+        "accuracy": 0.043,
+        "batch": 64,
+        "duration": 4104202092,
+        "lr": 0.004653826575039994,
+        "momentum": 0.31866354963516985,
+        "transform": "norm_32",
+        "uid": "62461664-4ed7-4a69-8e0e-2f10fd4795ac"
+    },
+    {
+        "accuracy": 0.0418,
+        "batch": 2,
+        "duration": 80159215445,
+        "lr": 0.00010388648096368503,
+        "momentum": 0.9625584565617908,
+        "transform": "echo_32_flip",
+        "uid": "2052aa92-11e0-41bc-b8a2-b49a62947c4b"
+    },
+    {
+        "accuracy": 0.0358,
+        "batch": 256,
+        "duration": 2303082313,
+        "lr": 0.8618818118248348,
+        "momentum": 0.3336259746421235,
+        "transform": "norm",
+        "uid": "caff9538-4711-4643-b5ab-dae9ca0edc55"
+    },
+    {
+        "accuracy": 0.0144,
+        "batch": 2048,
+        "duration": 2219024564,
+        "lr": 0.021538965131266137,
+        "momentum": 0.916879188930394,
+        "transform": "norm_flip",
+        "uid": "c5edd237-8319-4d92-afcf-e66a02c68187"
     }
 ]
