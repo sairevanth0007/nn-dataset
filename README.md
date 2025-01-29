@@ -91,7 +91,7 @@ The `nn-dataset` package includes the following key modules:
 
 ## Citation
 
-If you find Neural Network Dataset to be useful for your research, please consider citing:
+If you find the LEMUR Neural Network Dataset to be useful for your research, please consider citing:
 ```bibtex
 @misc{ABrain-One.NN-Dataset,
   author       = {Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Kathiriya, Yash Kanubhai and Dhameliya, Yashkumar Sanjaybhai and Ignatov, Dmitry and Timofte, Radu},
