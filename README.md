@@ -1,4 +1,4 @@
-## LEMUR: Neural Network Dataset
+## LEMUR Neural Network Dataset
 LEMUR - Learning, Evaluation, and Modeling for Unified Research
 
 <img src='https://github.com/user-attachments/assets/690c27d1-b1ba-40ef-be0e-e637098f35b0' width='20%'/>
@@ -7,7 +7,7 @@ LEMUR - Learning, Evaluation, and Modeling for Unified Research
 The original version of this dataset was created by <strong>Arash Torabi Goodarzi, Roman Kochnev</strong> and <strong>Zofia Antonina Bentyn</strong> at the Computer Vision Laboratory, University of Würzburg, Germany.
 
 <h3>Overview 📖</h3>
-The primary goal of NN Dataset project is to provide flexibility for dynamically combining various datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gen">NN Gen</a> project.
+The primary goal of NN Dataset project is to provide flexibility for dynamically combining various deep learing tasks, datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gen">NN Gen</a> project.
 
 ## Installation of the Latest Version of the NN Dataset
 
@@ -91,7 +91,7 @@ The `nn-dataset` package includes the following key modules:
 
 ## Citation
 
-If you find Neural Network Dataset to be useful for your research, please consider citing:
+If you find the LEMUR Neural Network Dataset to be useful for your research, please consider citing:
 ```bibtex
 @misc{ABrain-One.NN-Dataset,
   author       = {Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Kathiriya, Yash Kanubhai and Dhameliya, Yashkumar Sanjaybhai and Ignatov, Dmitry and Timofte, Radu},
