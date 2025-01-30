@@ -1,5 +1,14 @@
 [
     {
+        "accuracy": 0.23694267515923567,
+        "batch": 32,
+        "duration": 13638574945,
+        "lr": 0.03043967301349602,
+        "momentum": 0.07878917625536264,
+        "transform": "norm_32_flip",
+        "uid": "4860bb2b-05ed-49db-b49a-a34cbc460375"
+    },
+    {
         "accuracy": 0.2351592356687898,
         "batch": 4,
         "duration": 59957380949,
@@ -9,6 +18,15 @@
         "uid": "3c8c33c4-29de-4806-b25c-5c517a6a6a98"
     },
     {
+        "accuracy": 0.22853503184713375,
+        "batch": 64,
+        "duration": 11725977340,
+        "lr": 0.030252400217250088,
+        "momentum": 0.4857938604740114,
+        "transform": "norm_32",
+        "uid": "93343778-1423-424a-b35e-85dddaad4cba"
+    },
+    {
         "accuracy": 0.20254777070063695,
         "batch": 4,
         "duration": 62301040493,
@@ -16,5 +34,41 @@
         "momentum": 0.25453975712906995,
         "transform": "echo_32_flip",
         "uid": "4c6d847b-cb80-4a89-93a3-5de28824fa08"
+    },
+    {
+        "accuracy": 0.19796178343949045,
+        "batch": 2,
+        "duration": 23396922556,
+        "lr": 0.0004988128035817712,
+        "momentum": 0.5255218016407942,
+        "transform": "norm_32",
+        "uid": "f0de0816-3c41-44bf-8cb8-f1ebdce43959"
+    },
+    {
+        "accuracy": 0.17834394904458598,
+        "batch": 64,
+        "duration": 12036101615,
+        "lr": 0.0003849936659719759,
+        "momentum": 0.907363829777281,
+        "transform": "norm_32_flip",
+        "uid": "42579963-977e-4fba-bff0-21b0fb8e8f87"
+    },
+    {
+        "accuracy": 0.12585987261146497,
+        "batch": 2,
+        "duration": 23074013214,
+        "lr": 0.00011966960882534631,
+        "momentum": 0.3297085866897158,
+        "transform": "norm_32_flip",
+        "uid": "c9a437b6-b851-41f9-adb7-32de78e412d7"
+    },
+    {
+        "accuracy": 0.12076433121019109,
+        "batch": 64,
+        "duration": 11716611649,
+        "lr": 0.0016783782017077656,
+        "momentum": 0.09425071980544697,
+        "transform": "echo_32_flip",
+        "uid": "75acd8a3-865d-4afc-829b-840d3421f4b8"
     }
 ]
