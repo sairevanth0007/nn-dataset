@@ -1,4 +1,7 @@
 import importlib
+import pprint
+import sys
+import tempfile
 import time as time
 from os.path import join
 
@@ -12,6 +15,7 @@ from ab.nn.util.Loader import Loader
 from ab.nn.util.Util import *
 from ab.nn.util.db.Calc import save_results
 from ab.nn.util.db.Read import supported_transformers
+import ab.nn.util.codeEvaluator as codeEvaluator
 
 
 def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, max_momentum,
@@ -76,7 +80,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
 
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, model_name, task,
-                 train_dataset, test_dataset, metric, num_workers, prm: dict):
+                 train_dataset, test_dataset, metric, num_workers, prm: dict, is_code=False, save_to_db=False):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: The tuple of names (Task, Dataset, Metric, Model).
@@ -102,6 +106,7 @@ class Train:
 
         self.metric_name = metric
         self.metric_function = self.load_metric_function(metric)
+        self.save_to_db = save_to_db
 
         self.train_loader = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.batch, shuffle=True,
                                                         num_workers=get_obj_attr(self.train_dataset, 'num_workers', default=num_workers),
@@ -123,9 +128,13 @@ class Train:
         self.device = device
 
         # Load model
-        model_net = get_attr(f"nn.{model_name}", "Net")
-        model_net.device = self.device
-        self.model = model_net(self.in_shape, out_shape, prm)
+        if is_code:
+            # if model_name is model
+            self.model = model_name(self.in_shape, out_shape, prm)
+        else:
+            # if model_name is model name
+            model_net = get_attr(f"nn.{model_name}", "Net")
+            self.model = model_net(self.in_shape, out_shape, prm)
         self.model.to(self.device)
 
     def load_metric_function(self, metric_name):
@@ -171,7 +180,8 @@ class Train:
                           f"' dataset is {minimum_accepted_accuracy}."
                     )
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
-            save_results(self.config, epoch, join(model_stat_dir(self.config), f"{epoch}.json"), prm)
+            if not self.save_to_db:
+                save_results(self.config, epoch, join(model_stat_dir(self.config), f"{epoch}.json"), prm)
         return accuracy_to_time
 
     def eval(self, test_loader):
@@ -200,6 +210,68 @@ class Train:
 
 
 def train_new(nn_code, task, dataset, metric, prm):
-    # todo: train and if result is appropriate save the code of the new NN model into database
-    DB_Write.save_nn(nn_code, task, dataset, metric)
-    return None
+    """
+    train the model with the given code and hyperparameters and evaluate it.
+
+    parameter:
+        nn_code (str): the code of the model
+        task (str): task type
+        dataset (str): name of the dataset
+        metric (str): evaluation metric
+        prm (dict): hyperparameters, including 'lr', 'momentum', 'dropout', 'batch', 'num_workers', 'n_epochs'
+    return:
+        (str, float): the name of the model and the accuracy
+    """
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=True) as temp_file:
+        temp_file_path = temp_file.name
+        temp_file.write(nn_code)  # write the code to the temp file
+    try:
+        res = codeEvaluator.evaluate_single_file(temp_file_path)
+        pprint.pprint(res.get('score'))
+        model_module = {}  # store the model class
+        exec(nn_code, model_module)  # execute the code to get the model class
+        ModelClass = model_module['Net']  # get the model class
+
+        # load dataset
+        # TODO: exception
+        out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(task, dataset, prm.get('transform', None))
+
+        # initialize model and trainer
+        trainer = Train(
+            config=(task, dataset, metric, nn_code),
+            out_shape=out_shape,
+            minimum_accuracy=minimum_accuracy,
+            batch=prm['batch'],
+            model_name=ModelClass,
+            task=task,
+            train_dataset=train_set,
+            test_dataset=test_set,
+            metric=metric,
+            num_workers=prm.get('num_workers', 1),
+            prm=prm,
+            is_code=True,
+            save_to_db=True
+        )
+
+        # train and evaluate the model
+        # TODO: save
+        result = trainer.train_n_eval(prm.get('n_epochs', 10))
+
+        # if result fits the requirement, save the model to database
+        if result >= minimum_accuracy:
+            name = DB_Write.save_nn(nn_code, task, dataset, metric)
+            print(f"Model saved to database with accuracy: {result}")
+        else:
+            print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
+
+    except Exception as e:
+        print(f"Error during training: {e}")
+        raise
+
+    return (name, result)
+
+if __name__ == "__main__":
+    file_path = 'ab/nn/nn/AlexNet.py'
+    nn_code = codeEvaluator.read_py_file_as_string(file_path)
+    pprint.pprint(train_new(nn_code, 'img-classification', 'cifar-10', 
+              'acc', {'lr': 0.01, 'batch': 10,'dropout': 0.2, 'momentum': 0.9, 'transform': 'norm_256_flip'}))
