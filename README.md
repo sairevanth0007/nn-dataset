@@ -1,4 +1,4 @@
-## <img src='https://abrain.one/img/lemur-nn-icon-64x64.png' width='64px'/> Neural Network Dataset 
+## <img src='https://abrain.one/img/lemur-nn-icon-64x64.png'/> Neural Network Dataset 
 LEMUR - Learning, Evaluation, and Modeling for Unified Research
 
 <img src='https://abrain.one/img/lemur-nn.jpg' width='20%'/>
