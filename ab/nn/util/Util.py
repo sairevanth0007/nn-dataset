@@ -38,7 +38,7 @@ def accuracy_to_time_metric (accuracy, min_accuracy, training_duration):
     """
     Naive accuracy-to-time metric for fixed number of training epochs.
     """
-    return accuracy / (training_duration / 1e11)
+    return max(0.0, (accuracy - min_accuracy)) / (training_duration / 1e11)
 
 def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max):
     if batch_min > batch_max: raise Exception(f"min_batch_binary_power {batch_min} > max_batch_binary_power {batch_max}")

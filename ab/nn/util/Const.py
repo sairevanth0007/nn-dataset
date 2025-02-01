@@ -14,8 +14,6 @@ default_num_workers = 2
 default_random_config_order = False
 default_transform = None
 
-minimum_accuracy_multiplayer =  1.2
-
 max_epoch_seconds = 30 * 60
 
 base_module = 'ab'

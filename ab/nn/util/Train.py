@@ -1,6 +1,5 @@
 import importlib
 import pprint
-import sys
 import tempfile
 import time as time
 from os.path import join
@@ -8,6 +7,7 @@ from os.path import join
 import numpy as np
 from torch.cuda import OutOfMemoryError
 
+import ab.nn.util.codeEvaluator as codeEvaluator
 import ab.nn.util.db.Write as DB_Write
 from ab.nn.util.Classes import DataRoll
 from ab.nn.util.Exception import *
@@ -15,7 +15,6 @@ from ab.nn.util.Loader import Loader
 from ab.nn.util.Util import *
 from ab.nn.util.db.Calc import save_results
 from ab.nn.util.db.Read import supported_transformers
-import ab.nn.util.codeEvaluator as codeEvaluator
 
 
 def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, max_momentum,
@@ -169,16 +168,13 @@ class Train:
 
             accuracy = self.eval(self.test_loader)
             accuracy = 0.0 if math.isnan(accuracy) or math.isinf(accuracy) else accuracy
-            minimum_accepted_accuracy = self.minimum_accuracy * minimum_accuracy_multiplayer
             duration = time.time_ns() - start_time
             accuracy_to_time = accuracy_to_time_metric(accuracy, self.minimum_accuracy, duration)
-            if accuracy < minimum_accepted_accuracy:
-                raise AccuracyException(
-                    accuracy_to_time,
+            if accuracy <= self.minimum_accuracy:
+                raise AccuracyException(accuracy_to_time,
                     f"Accuracy is too low: {accuracy}."
                           f" The minimum accepted accuracy for the '{self.config[1]}"
-                          f"' dataset is {minimum_accepted_accuracy}."
-                    )
+                    f"' dataset is {self.minimum_accuracy}.")
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
             if not self.save_to_db:
                 save_results(self.config, epoch, join(model_stat_dir(self.config), f"{epoch}.json"), prm)
