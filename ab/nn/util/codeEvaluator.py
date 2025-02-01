@@ -1,18 +1,16 @@
-import os
-import subprocess
-import json
 import ast
-from radon.complexity import cc_visit
-import pprint
-import concurrent.futures
-import logging
 import importlib.util
-import sys
 import importlib.util
 import inspect
-
+import json
+import logging
+import os
+import pprint
+import subprocess
 
 import torch
+from radon.complexity import cc_visit
+from ab.nn.util.Const import nn_dir
 
 def read_py_file_as_string(file_path):
     """
@@ -21,7 +19,7 @@ def read_py_file_as_string(file_path):
     param:
         file_path (str): path of the file to read.
 
-    返回:
+    Return:
         str: the content of the file.
     """
     try:
@@ -245,7 +243,7 @@ def evaluate_directory_code_quality(directory):
 
     for file_path in python_files:
         print(f"Evaluating {file_path}...")
-        file_report = evaluate_code_quality(file_path)
+        success, file_report = evaluate_code_quality(file_path)
         report['files'][file_path] = file_report
         report['total_score'] += file_report['score']
 
@@ -268,18 +266,16 @@ def evaluate_single_file(file_path):
 # Main Function
 if __name__ == "__main__":
     # Single file evaluation
-    file_path = '../nn-dataset/ab/nn/nn/AlexNet.py'
+    file_path = nn_dir / 'AlexNet.py'
     res = evaluate_single_file(file_path)
     pprint.pprint(res.get('score'))
 
-    # directory = os.path.join("../nn-dataset/ab/nn/nn")
-
-    # quality_report = evaluate_directory_code_quality(directory)
+    quality_report = evaluate_directory_code_quality(nn_dir)
     # # Print detailed report
-    # # pprint.pprint(quality_report)
+    pprint.pprint(quality_report)
 
     # # Save as JSON file
-    # with open('quality_report.json', 'w', encoding='utf-8') as f:
-    #     json.dump(quality_report, f, ensure_ascii=False, indent=4)
+    with open('quality_report.json', 'w', encoding='utf-8') as f:
+        json.dump(quality_report, f, ensure_ascii=False, indent=4)
 
-    # print("Quality report saved to quality_report.json")
+    print("Quality report saved to quality_report.json")
