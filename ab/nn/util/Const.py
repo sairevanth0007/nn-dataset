@@ -47,6 +47,7 @@ def __project_root_path():
 
 
 ab_root_path = __project_root_path()
+out_dir = ab_root_path / 'out'
 data_dir = ab_root_path / 'data'
 db_dir = ab_root_path / 'db'
 db_file = db_dir / 'ab.nn.db'

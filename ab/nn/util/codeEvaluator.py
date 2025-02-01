@@ -7,10 +7,11 @@ import logging
 import os
 import pprint
 import subprocess
+from os import makedirs
 
 import torch
 from radon.complexity import cc_visit
-from ab.nn.util.Const import nn_dir
+from ab.nn.util.Const import nn_dir, out_dir
 
 def read_py_file_as_string(file_path):
     """
@@ -275,7 +276,8 @@ if __name__ == "__main__":
     pprint.pprint(quality_report)
 
     # # Save as JSON file
-    with open('quality_report.json', 'w', encoding='utf-8') as f:
+    makedirs(out_dir, exist_ok=True)
+    with open(out_dir / 'quality_report.json', 'w', encoding='utf-8') as f:
         json.dump(quality_report, f, ensure_ascii=False, indent=4)
 
     print("Quality report saved to quality_report.json")
