@@ -31,6 +31,7 @@ def nn_path(dr):
 
 metric_dir = nn_path('metric')
 nn_dir = nn_path('nn')
+default_nn_path = nn_dir / 'AlexNet.py'
 transform_dir = nn_path('transform')
 stat_dir = nn_path('stat')
 
@@ -53,6 +54,8 @@ db_dir = ab_root_path / 'db'
 db_file = db_dir / 'ab.nn.db'
 
 main_tables = ('stat',)
+main_columns = ('task', 'dataset', 'metric', 'nn')
+main_columns_ext = main_columns + ('epoch',)
 code_tables = ('nn', 'transform', 'metric')
 param_tables = ('prm',)
 dependent_tables = code_tables + param_tables

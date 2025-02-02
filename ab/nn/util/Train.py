@@ -82,16 +82,16 @@ class Train:
                  train_dataset, test_dataset, metric, num_workers, prm: dict, is_code=False, save_to_db=False):
         """
         Universal class for training CV, Text Generation and other models.
-        :param config: The tuple of names (Task, Dataset, Metric, Model).
-        :param out_shape: The shape of output tensor of the model (e.g., number of classes for classification tasks).
+        :param config: Tuple of names (Task, Dataset, Metric, Model).
+        :param out_shape: Shape of output tensor of the model (e.g., number of classes for classification tasks).
         :param batch: Batch size used for both training and evaluation.
         :param minimum_accuracy: Expected average value for accuracy provided by the untrained NN model due to random output generation. This value is essential for excluding NN models without accuracy gains.
         :param model_name: Neural network model name (e.g., 'ResNet').
         :param task: e.g., 'img-segmentation' to specify the task type.
-        :param train_dataset: The dataset used for training the model (e.g., torch.utils.data.Dataset).
-        :param test_dataset: The dataset used for evaluating/testing the model (e.g., torch.utils.data.Dataset).
-        :param metric: The name of the evaluation metric (e.g., 'acc', 'iou').
-        :param prm: dictionary of hyperparameters and their values (e.g., {'lr': 0.11, 'momentum': 0.2})
+        :param train_dataset: Dataset used for training the model (e.g., torch.utils.data.Dataset).
+        :param test_dataset: Dataset used for evaluating/testing the model (e.g., torch.utils.data.Dataset).
+        :param metric: Name of the evaluation metric (e.g., 'acc', 'iou').
+        :param prm: Dictionary of hyperparameters and their values (e.g., {'lr': 0.11, 'momentum': 0.2})
         """
         self.config = config
         self.train_dataset = train_dataset
@@ -177,7 +177,7 @@ class Train:
                     f"' dataset is {self.minimum_accuracy}.")
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
             if not self.save_to_db:
-                save_results(self.config, epoch, join(model_stat_dir(self.config), f"{epoch}.json"), prm)
+                save_results(self.config + (epoch,), join(model_stat_dir(self.config), f"{epoch}.json"), prm)
         return accuracy_to_time
 
     def eval(self, test_loader):
@@ -210,13 +210,13 @@ def train_new(nn_code, task, dataset, metric, prm):
     train the model with the given code and hyperparameters and evaluate it.
 
     parameter:
-        nn_code (str): the code of the model
-        task (str): task type
-        dataset (str): name of the dataset
-        metric (str): evaluation metric
-        prm (dict): hyperparameters, including 'lr', 'momentum', 'dropout', 'batch', 'num_workers', 'n_epochs'
+        nn_code (str): Code of the model
+        task (str): Task type
+        dataset (str): Name of the dataset
+        metric (str): Evaluation metric
+        prm (dict): Hyperparameters, e.g., 'lr', 'momentum', 'batch', 'epoch', 'dropout'
     return:
-        (str, float): the name of the model and the accuracy
+        (str, float): Name of the model and the accuracy
     """
     with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=True) as temp_file:
         temp_file_path = temp_file.name
@@ -246,16 +246,14 @@ def train_new(nn_code, task, dataset, metric, prm):
             num_workers=prm.get('num_workers', 1),
             prm=prm,
             is_code=True,
-            save_to_db=True
-        )
+            save_to_db=True)
 
-        # train and evaluate the model
-        # TODO: save
-        result = trainer.train_n_eval(prm.get('n_epochs', 10))
+        epoch = prm['epoch']
+        result = trainer.train_n_eval(epoch)
 
         # if result fits the requirement, save the model to database
         if result >= minimum_accuracy:
-            name = DB_Write.save_nn(nn_code, task, dataset, metric)
+            name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm)
             print(f"Model saved to database with accuracy: {result}")
         else:
             print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
@@ -267,7 +265,6 @@ def train_new(nn_code, task, dataset, metric, prm):
     return (name, result)
 
 if __name__ == "__main__":
-    file_path = 'ab/nn/nn/AlexNet.py'
-    nn_code = codeEvaluator.read_py_file_as_string(file_path)
-    pprint.pprint(train_new(nn_code, 'img-classification', 'cifar-10', 
-              'acc', {'lr': 0.01, 'batch': 10,'dropout': 0.2, 'momentum': 0.9, 'transform': 'norm_256_flip'}))
+    code = codeEvaluator.read_py_file_as_string(default_nn_path)
+    pprint.pprint(train_new(code, 'img-classification', 'cifar-10', 'acc',
+                            {'lr': 0.01, 'batch': 10,'dropout': 0.2, 'momentum': 0.9, 'transform': 'norm_256_flip', 'epoch': 10}))

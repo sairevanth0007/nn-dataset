@@ -11,7 +11,7 @@ from os import makedirs
 
 import torch
 from radon.complexity import cc_visit
-from ab.nn.util.Const import nn_dir, out_dir
+from ab.nn.util.Const import nn_dir, out_dir, default_nn_path
 
 def read_py_file_as_string(file_path):
     """
@@ -21,7 +21,7 @@ def read_py_file_as_string(file_path):
         file_path (str): path of the file to read.
 
     Return:
-        str: the content of the file.
+        str: Content of the file.
     """
     try:
         spec = importlib.util.spec_from_file_location("module_name", file_path)
@@ -267,8 +267,7 @@ def evaluate_single_file(file_path):
 # Main Function
 if __name__ == "__main__":
     # Single file evaluation
-    file_path = nn_dir / 'AlexNet.py'
-    res = evaluate_single_file(file_path)
+    res = evaluate_single_file(default_nn_path)
     pprint.pprint(res.get('score'))
 
     quality_report = evaluate_directory_code_quality(nn_dir)

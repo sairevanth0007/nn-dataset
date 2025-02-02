@@ -2,11 +2,9 @@ from ab.nn.util.db.Write import init_population
 
 init_population()
 
-from ab.nn.util.db.Write import init_population
-from ab.nn.util.Const import config_splitter  # You already use this
+from ab.nn.util.Const import config_splitter, main_columns_ext
 from ab.nn.util.db.Init import sql_conn, close_conn
 
-init_population()
 
 def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None) -> tuple[dict[str, int | float | str | dict[str, int | float | str]], ...]:
     """
@@ -149,7 +147,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
     close_conn(conn)
     return tuple(results)
 
-def remaining_trials(trial_file, model_name, n_optuna_trials) -> tuple[int, int]:
+def remaining_trials(config_ext, n_optuna_trials) -> tuple[int, int]:
     """
     Calculate the number of remaining Optuna trials for a given model configuration by querying the database.
     
@@ -162,9 +160,8 @@ def remaining_trials(trial_file, model_name, n_optuna_trials) -> tuple[int, int]
     
         remaining_trials = max(0, n_optuna_trials - n_passed_trials)
     
-    :param trial_file: A file path that used to store trial data (not used in this database-based implementation).
-    :param model_name: The name of the model configuration (used to filter the trials).
-    :param n_optuna_trials: The target number of trials. If negative, its absolute value specifies the additional trials required.
+    :param config_ext: Tuple of names (Task, Dataset, Metric, Model, Epoch).
+    :param n_optuna_trials: Target number of trials. If negative, its absolute value specifies the additional trials required.
     :return: A tuple (n_remaining_trials, n_passed_trials) where:
              - n_remaining_trials is the number of new trials to run (or 0 if none remain).
              - n_passed_trials is the number of trials already recorded in the database for this model.
@@ -172,8 +169,8 @@ def remaining_trials(trial_file, model_name, n_optuna_trials) -> tuple[int, int]
 
     conn, cursor = sql_conn()
     
-    query = "SELECT COUNT(*) AS trial_count FROM stat WHERE nn = ?"
-    cursor.execute(query, (model_name,))
+    query = "SELECT COUNT(*) AS trial_count FROM stat WHERE " + " and ".join([f"{c} = ?" for c in main_columns_ext])
+    cursor.execute(query, config_ext)
     row = cursor.fetchone()
     if row:
         # Convert the tuple row to a dict
@@ -189,7 +186,7 @@ def remaining_trials(trial_file, model_name, n_optuna_trials) -> tuple[int, int]
         n_remaining_trials = max(0, n_optuna_trials - n_passed_trials)
 
     if n_passed_trials > 0:
-        print(f"Model '{model_name}' has {n_passed_trials} recorded trial(s), {n_remaining_trials} remaining.")
+        print(f"Model '{config_ext[-2]}' has {n_passed_trials} recorded trial(s), {n_remaining_trials} remaining.")
 
     close_conn(conn)
     return n_remaining_trials, n_passed_trials

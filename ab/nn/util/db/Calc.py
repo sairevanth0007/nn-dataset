@@ -24,7 +24,7 @@ def patterns_to_configs(config_pattern: str | tuple, random_config_order: bool) 
     return tuple(all_configs)
 
 
-def save_results(config: tuple[str, str, str, str], epoch: int, model_stat_file: str, prm: dict):
+def save_results(config_ext: tuple[str, str, str, str, int], model_stat_file: str, prm: dict):
     trials_dict_all = [prm]
 
     if exists(model_stat_file):
@@ -37,5 +37,5 @@ def save_results(config: tuple[str, str, str, str], epoch: int, model_stat_file:
     with open(model_stat_file, 'w') as f:
         json.dump(trials_dict_all, f, indent=4)
 
-    print(f"Trial (accuracy {prm['accuracy']}) for {config_splitter.join(config)} saved at {model_stat_file}")
-    DB_Write.save_results(config, epoch, prm)
+    print(f"Trial (accuracy {prm['accuracy']}) for ({', '.join([str(o) for o in config_ext])}) saved at {model_stat_file}")
+    DB_Write.save_results(config_ext, prm)
