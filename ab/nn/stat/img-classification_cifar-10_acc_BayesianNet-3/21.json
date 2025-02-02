@@ -18,6 +18,15 @@
         "uid": "76319952-ff99-4c67-a255-bf33f8cea284"
     },
     {
+        "accuracy": 0.3408,
+        "batch": 64,
+        "duration": 84327435274,
+        "lr": 0.00048807399566780835,
+        "momentum": 0.6084419289328522,
+        "transform": "echo_flip",
+        "uid": "604d00d1-8af2-4c8d-add4-2ec36027844d"
+    },
+    {
         "accuracy": 0.262,
         "batch": 8,
         "duration": 465592292276,

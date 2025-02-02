@@ -80,6 +80,15 @@
         "uid": "8f251e39-3e01-4ec5-ac5a-044cd2a75505"
     },
     {
+        "accuracy": 0.2079,
+        "batch": 64,
+        "duration": 20173404822,
+        "lr": 0.00048807399566780835,
+        "momentum": 0.6084419289328522,
+        "transform": "echo_flip",
+        "uid": "c3748bea-5908-41be-8976-d55cb331150e"
+    },
+    {
         "accuracy": 0.1734,
         "batch": 8,
         "duration": 110885979806,

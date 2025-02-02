@@ -12,6 +12,18 @@
         "uid": "8113dd75-9877-4082-a60b-8727e7cd7323"
     },
     {
+        "accuracy": 0.23210191082802548,
+        "attention_dropout": 0.6439636592499589,
+        "batch": 1024,
+        "dropout": 0.36526280662044947,
+        "duration": 40595600297,
+        "lr": 0.013656247466988652,
+        "momentum": 0.8077961984002857,
+        "patch_size": 0.977935509296353,
+        "transform": "echo_64",
+        "uid": "f9197d88-a59d-4abf-a371-a88f4fe127fc"
+    },
+    {
         "accuracy": 0.21757961783439492,
         "attention_dropout": 0.5828291448416575,
         "batch": 1024,
@@ -22,6 +34,54 @@
         "patch_size": 0.7082607073550787,
         "transform": "echo_32_flip",
         "uid": "975a20f3-e764-414b-887d-95de708b75f2"
+    },
+    {
+        "accuracy": 0.20815286624203821,
+        "attention_dropout": 0.5588533219712458,
+        "batch": 16,
+        "dropout": 0.29166770380293106,
+        "duration": 823254421302,
+        "lr": 0.0013373511224474754,
+        "momentum": 0.3700932516133083,
+        "patch_size": 0.010086670466675662,
+        "transform": "echo_32",
+        "uid": "310d95f8-8f9f-4f41-b307-7dbf2328ad63"
+    },
+    {
+        "accuracy": 0.19796178343949045,
+        "attention_dropout": 0.09467890564339154,
+        "batch": 4096,
+        "dropout": 0.043330219301648376,
+        "duration": 88893866023,
+        "lr": 4.79505319237226e-05,
+        "momentum": 0.4732093763244647,
+        "patch_size": 0.6131408678993558,
+        "transform": "norm_256_flip",
+        "uid": "987c92d5-d850-4150-8066-ee475a9b9cb0"
+    },
+    {
+        "accuracy": 0.19414012738853503,
+        "attention_dropout": 0.8412059124461212,
+        "batch": 1024,
+        "dropout": 0.14238469348723398,
+        "duration": 41488862406,
+        "lr": 1.4451374398126204e-05,
+        "momentum": 0.5133639251489475,
+        "patch_size": 0.46490685930662956,
+        "transform": "norm_64_flip",
+        "uid": "9cfe4519-841a-4c60-892c-e217dbfc652c"
+    },
+    {
+        "accuracy": 0.18802547770700637,
+        "attention_dropout": 0.8635195434123933,
+        "batch": 64,
+        "dropout": 0.3280433203918232,
+        "duration": 44051425172,
+        "lr": 2.3700014848464367e-05,
+        "momentum": 0.1753955869565358,
+        "patch_size": 0.6505639422638608,
+        "transform": "norm_128",
+        "uid": "2c0e4b1e-7eb6-4e6f-b7c4-b51c68ef0f91"
     },
     {
         "accuracy": 0.1648407643312102,

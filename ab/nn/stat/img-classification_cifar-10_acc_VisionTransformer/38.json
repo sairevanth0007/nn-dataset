@@ -22,5 +22,17 @@
         "patch_size": 0.5819025616067257,
         "transform": "echo_32",
         "uid": "c0e907cb-96c6-430d-9baf-3439b7f8cc60"
+    },
+    {
+        "accuracy": 0.2182,
+        "attention_dropout": 0.9636887422802848,
+        "batch": 2,
+        "dropout": 0.19013355085912298,
+        "duration": 11988258720383,
+        "lr": 1.6741844009078804e-05,
+        "momentum": 0.41465515255423047,
+        "patch_size": 0.6590309682339331,
+        "transform": "norm_128_flip",
+        "uid": "43708885-9d64-4d2d-af42-df58e9de415e"
     }
 ]
