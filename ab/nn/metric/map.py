@@ -71,7 +71,7 @@ class MAPMetric:
             iou_threshold: IoU threshold for considering a detection as correct.
 
         Returns:
-            float: The AP score for the class.
+            float: AP score for the class.
         """
         boxes_all = []
         scores_all = []

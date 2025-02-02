@@ -22,7 +22,7 @@ class ToComplex64:
     def __call__(self, x):
         """
         Transform method to convert the tensor to torch.complex64.
-        :param x: The input tensor, usually a NumPy array, PIL Image, or PyTorch tensor.
+        :param x: Input tensor, usually a NumPy array, PIL Image, or PyTorch tensor.
         :return: Tensor converted to torch.complex64.
         """
         if not isinstance(x, torch.Tensor):
