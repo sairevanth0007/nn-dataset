@@ -1,6 +1,8 @@
 import argparse
 import datetime
 import gc
+import importlib.util
+import inspect
 
 import torch
 
@@ -55,6 +57,27 @@ def format_time(sec):
 def release_memory():
     gc.collect()
     if torch.cuda.is_available(): torch.cuda.empty_cache()
+
+def read_py_file_as_string(file_path):
+    """
+    read_py_file_as_string。
+
+    param:
+        file_path (str): path of the file to read.
+
+    Return:
+        str: Content of the file.
+    """
+    try:
+        spec = importlib.util.spec_from_file_location("module_name", file_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        source_code = inspect.getsource(module)
+        return source_code
+    except Exception as e:
+        print(f"error when reading file: {e}")
+        return None
 
 def args():
     parser = argparse.ArgumentParser()

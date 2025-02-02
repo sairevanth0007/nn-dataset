@@ -1,5 +1,5 @@
 import importlib
-import pprint
+from pprint import pprint
 import tempfile
 import time as time
 from os.path import join
@@ -7,7 +7,7 @@ from os.path import join
 import numpy as np
 from torch.cuda import OutOfMemoryError
 
-import ab.nn.util.codeEvaluator as codeEvaluator
+import ab.nn.util.CodeEval as codeEvaluator
 import ab.nn.util.db.Write as DB_Write
 from ab.nn.util.Classes import DataRoll
 from ab.nn.util.Exception import *
@@ -79,7 +79,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
 
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, model_name, task,
-                 train_dataset, test_dataset, metric, num_workers, prm: dict, is_code=False, save_to_db=False):
+                 train_dataset, test_dataset, metric, num_workers, prm: dict, is_code=False, save_to_db=True):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: Tuple of names (Task, Dataset, Metric, Model).
@@ -176,7 +176,7 @@ class Train:
                           f" The minimum accepted accuracy for the '{self.config[1]}"
                     f"' dataset is {self.minimum_accuracy}.")
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
-            if not self.save_to_db:
+            if self.save_to_db:
                 save_results(self.config + (epoch,), join(model_stat_dir(self.config), f"{epoch}.json"), prm)
         return accuracy_to_time
 
@@ -205,7 +205,7 @@ class Train:
         return result
 
 
-def train_new(nn_code, task, dataset, metric, prm):
+def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
     """
     train the model with the given code and hyperparameters and evaluate it.
 
@@ -221,15 +221,14 @@ def train_new(nn_code, task, dataset, metric, prm):
     with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=True) as temp_file:
         temp_file_path = temp_file.name
         temp_file.write(nn_code)  # write the code to the temp file
-    try:
         res = codeEvaluator.evaluate_single_file(temp_file_path)
-        pprint.pprint(res.get('score'))
+    try:
+        pprint(f"score: {res['score']}")
         model_module = {}  # store the model class
         exec(nn_code, model_module)  # execute the code to get the model class
         ModelClass = model_module['Net']  # get the model class
 
         # load dataset
-        # TODO: exception
         out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(task, dataset, prm.get('transform', None))
 
         # initialize model and trainer
@@ -246,25 +245,21 @@ def train_new(nn_code, task, dataset, metric, prm):
             num_workers=prm.get('num_workers', 1),
             prm=prm,
             is_code=True,
-            save_to_db=True)
+            save_to_db=save_to_db)
 
         epoch = prm['epoch']
         result = trainer.train_n_eval(epoch)
-
-        # if result fits the requirement, save the model to database
-        if result >= minimum_accuracy:
-            name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm)
-            print(f"Model saved to database with accuracy: {result}")
-        else:
-            print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
+        name = None
+        if save_to_db:
+            # if result fits the requirement, save the model to database
+            if result >= minimum_accuracy:
+                name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm)
+                print(f"Model saved to database with accuracy: {result}")
+            else:
+                print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
 
     except Exception as e:
         print(f"Error during training: {e}")
         raise
 
     return (name, result)
-
-if __name__ == "__main__":
-    code = codeEvaluator.read_py_file_as_string(default_nn_path)
-    pprint.pprint(train_new(code, 'img-classification', 'cifar-10', 'acc',
-                            {'lr': 0.01, 'batch': 10,'dropout': 0.2, 'momentum': 0.9, 'transform': 'norm_256_flip', 'epoch': 10}))
