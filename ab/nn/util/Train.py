@@ -1,8 +1,9 @@
 import importlib
-from pprint import pprint
+import sys
 import tempfile
 import time as time
 from os.path import join
+from pprint import pprint
 
 import numpy as np
 from torch.cuda import OutOfMemoryError
@@ -56,7 +57,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
             else:
                 raise ValueError(f"Unsupported text generation model: {nn}")
         return Train(config, out_shape, minimum_accuracy, batch, nn, task, train_set, test_set, metric,
-                     num_workers, prms).train_n_eval(n_epochs)
+                     num_workers, prms).train_n_eval(n_epochs)[0]
     except Exception as e:
         if isinstance(e, OutOfMemoryError):
             if max_batch_binary_power_local <= min_batch_binary_power:
@@ -161,6 +162,7 @@ class Train:
         start_time = time.time_ns()
         self.model.train_setup(self.prm)
         accuracy_to_time = 0.0
+        duration = sys.maxsize
         for epoch in range(1, num_epochs + 1):
             print(f"epoch {epoch}", flush=True)
             self.model.train()
@@ -178,7 +180,7 @@ class Train:
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
             if self.save_to_db:
                 save_results(self.config + (epoch,), join(model_stat_dir(self.config), f"{epoch}.json"), prm)
-        return accuracy_to_time
+        return accuracy_to_time, duration
 
     def eval(self, test_loader):
         """ Evaluation """
@@ -248,11 +250,11 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
             save_to_db=save_to_db)
 
         epoch = prm['epoch']
-        result = trainer.train_n_eval(epoch)
+        result, duration = trainer.train_n_eval(epoch)
         name = None
         if save_to_db:
             # if result fits the requirement, save the model to database
-            if result >= minimum_accuracy:
+            if good(result, minimum_accuracy, duration):
                 name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm)
                 print(f"Model saved to database with accuracy: {result}")
             else:
