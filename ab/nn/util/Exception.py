@@ -8,7 +8,7 @@ class CudaOutOfMemory(Exception):
         return self.batch_power
 
 
-class ModelException(Exception):
+class NNException(Exception):
     def __init__(self):
         pass
 

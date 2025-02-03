@@ -74,7 +74,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
             if fail_iterations < 0:
                 return 0.0
             else:
-                raise ModelException()
+                raise NNException()
 
 
 class Train:

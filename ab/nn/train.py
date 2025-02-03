@@ -74,7 +74,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                                 continue_study = True
                                 if isinstance(e, CudaOutOfMemory):
                                     raise e
-                                if isinstance(e, ModelException):
+                                if isinstance(e, NNException):
                                     fail_iterations -= 1
                                 return 0.0
 
