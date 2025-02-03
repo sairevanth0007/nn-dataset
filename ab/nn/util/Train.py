@@ -172,7 +172,7 @@ class Train:
             accuracy = 0.0 if math.isnan(accuracy) or math.isinf(accuracy) else accuracy
             duration = time.time_ns() - start_time
             accuracy_to_time = accuracy_to_time_metric(accuracy, self.minimum_accuracy, duration)
-            if accuracy <= self.minimum_accuracy:
+            if not good(accuracy, self.minimum_accuracy, duration):
                 raise AccuracyException(accuracy_to_time,
                     f"Accuracy is too low: {accuracy}."
                           f" The minimum accepted accuracy for the '{self.config[1]}"
