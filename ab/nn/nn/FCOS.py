@@ -17,9 +17,11 @@ from torchvision.ops.boxes import batched_nms
 from torch.nn import functional as F
 from torchvision.models.detection import _utils as det_utils
 
+
 def supported_hyperparameters():
     return {'lr', 'momentum', 'center_sampling_radius', 'score_thresh',
             'nms_thresh', 'detections_per_img', 'topk_candidates'}
+
 
 class FCOSHead(nn.Module):
     def __init__(self, in_channels, num_anchors, num_classes, num_convs=4):
@@ -99,6 +101,7 @@ class FCOSHead(nn.Module):
             "bbox_ctrness": bbox_ctrness,
         }
 
+
 class FCOSClassificationHead(nn.Module):
     def __init__(self, in_channels, num_anchors, num_classes, num_convs=4, prior_probability=0.01):
         super().__init__()
@@ -137,6 +140,7 @@ class FCOSClassificationHead(nn.Module):
             all_cls_logits.append(cls_logits)
 
         return torch.cat(all_cls_logits, dim=1)
+
 
 class FCOSRegressionHead(nn.Module):
     def __init__(self, in_channels, num_anchors, num_convs=4):
@@ -184,9 +188,11 @@ class FCOSRegressionHead(nn.Module):
 
         return torch.cat(all_bbox_regression, dim=1), torch.cat(all_bbox_ctrness, dim=1)
 
+
 class Net(nn.Module):
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
 
         num_classes = out_shape[0]
         self.center_sampling_radius = 3 * prm['center_sampling_radius']
@@ -212,18 +218,17 @@ class Net(nn.Module):
 
         self.box_coder = det_utils.BoxLinearCoder(normalize_by_size=True)
 
-
         self.transform = GeneralizedRCNNTransform(
             min_size=800, max_size=1333, image_mean=[0.485, 0.456, 0.406], image_std=[0.229, 0.224, 0.225]
         )
         self.num_classes = num_classes
 
     def compute_loss(
-        self,
-        targets: List[Dict[str, Tensor]],
-        head_outputs: Dict[str, Tensor],
-        anchors: List[Tensor],
-        num_anchors_per_level: List[int],
+            self,
+            targets: List[Dict[str, Tensor]],
+            head_outputs: Dict[str, Tensor],
+            anchors: List[Tensor],
+            num_anchors_per_level: List[int],
     ) -> Dict[str, Tensor]:
         matched_idxs = []
         for anchors_per_image, targets_per_image in zip(anchors, targets):
@@ -249,7 +254,7 @@ class Net(nn.Module):
             lower_bound = anchor_sizes * 4
             lower_bound[: num_anchors_per_level[0]] = 0
             upper_bound = anchor_sizes * 8
-            upper_bound[-num_anchors_per_level[-1] :] = float("inf")
+            upper_bound[-num_anchors_per_level[-1]:] = float("inf")
             pairwise_dist = pairwise_dist.max(dim=2).values
             pairwise_match &= (pairwise_dist > lower_bound[:, None]) & (pairwise_dist < upper_bound[:, None])
 
@@ -263,10 +268,10 @@ class Net(nn.Module):
         return self.head.compute_loss(targets, head_outputs, anchors, matched_idxs)
 
     def postprocess_detections(
-        self,
-        head_outputs: Dict[str, List[Tensor]],
-        anchors: List[List[Tensor]],
-        image_shapes: List[Tuple[int, int]],
+            self,
+            head_outputs: Dict[str, List[Tensor]],
+            anchors: List[List[Tensor]],
+            image_shapes: List[Tuple[int, int]],
     ) -> List[Dict[str, Tensor]]:
         class_logits = head_outputs["cls_logits"]
         box_regression = head_outputs["bbox_regression"]
@@ -287,7 +292,7 @@ class Net(nn.Module):
             image_labels = []
 
             for box_regression_per_level, logits_per_level, box_ctrness_per_level, anchors_per_level in zip(
-                box_regression_per_image, logits_per_image, box_ctrness_per_image, anchors_per_image
+                    box_regression_per_image, logits_per_image, box_ctrness_per_image, anchors_per_image
             ):
                 num_classes = logits_per_level.shape[-1]
 
@@ -332,7 +337,6 @@ class Net(nn.Module):
         return detections
 
     def forward(self, images, targets=None):
-    
 
         original_image_sizes: List[Tuple[int, int]] = []
         for img in images:
@@ -391,8 +395,8 @@ class Net(nn.Module):
         else:
             return detections
 
-    def train_setup(self, device, prm):
-        self.device = device
+    def train_setup(self, prm):
+        self.to(self.device)
         self.optimizer = torch.optim.SGD(
             self.parameters(),
             lr=prm['lr'],
@@ -404,7 +408,7 @@ class Net(nn.Module):
         for images, targets in train_data:
             # Move images and targets to device
             images = images.to(self.device)  # Your dataloader already stacks images
-            
+
             # Convert targets to list of dicts on device
             targets = [{
                 'boxes': t['boxes'].to(self.device),
@@ -414,16 +418,15 @@ class Net(nn.Module):
                 'iscrowd': t['iscrowd'].to(self.device),
                 'orig_size': t['orig_size'].to(self.device)
             } for t in targets]
-            
+
             self.optimizer.zero_grad()
-            
+
             # Forward pass
             loss_dict = self.forward(images, targets)
-            
+
             # Calculate total loss
             losses = sum(loss for loss in loss_dict.values())
-            
+
             # Backward pass
             losses.backward()
             self.optimizer.step()
-

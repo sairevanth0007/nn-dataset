@@ -29,16 +29,16 @@ class _MBConvConfig:
 
 class MBConvConfig(_MBConvConfig):
     def __init__(
-        self,
-        expand_ratio: float,
-        kernel: int,
-        stride: int,
-        input_channels: int,
-        out_channels: int,
-        num_layers: int,
-        width_mult: float = 1.0,
-        depth_mult: float = 1.0,
-        block: Optional[Callable[..., nn.Module]] = None,
+            self,
+            expand_ratio: float,
+            kernel: int,
+            stride: int,
+            input_channels: int,
+            out_channels: int,
+            num_layers: int,
+            width_mult: float = 1.0,
+            depth_mult: float = 1.0,
+            block: Optional[Callable[..., nn.Module]] = None,
     ) -> None:
         input_channels = self.adjust_channels(input_channels, width_mult)
         out_channels = self.adjust_channels(out_channels, width_mult)
@@ -54,14 +54,14 @@ class MBConvConfig(_MBConvConfig):
 
 class FusedMBConvConfig(_MBConvConfig):
     def __init__(
-        self,
-        expand_ratio: float,
-        kernel: int,
-        stride: int,
-        input_channels: int,
-        out_channels: int,
-        num_layers: int,
-        block: Optional[Callable[..., nn.Module]] = None,
+            self,
+            expand_ratio: float,
+            kernel: int,
+            stride: int,
+            input_channels: int,
+            out_channels: int,
+            num_layers: int,
+            block: Optional[Callable[..., nn.Module]] = None,
     ) -> None:
         if block is None:
             block = FusedMBConv
@@ -70,11 +70,11 @@ class FusedMBConvConfig(_MBConvConfig):
 
 class MBConv(nn.Module):
     def __init__(
-        self,
-        cnf: MBConvConfig,
-        stochastic_depth_prob: float,
-        norm_layer: Callable[..., nn.Module],
-        se_layer: Callable[..., nn.Module] = SqueezeExcitation,
+            self,
+            cnf: MBConvConfig,
+            stochastic_depth_prob: float,
+            norm_layer: Callable[..., nn.Module],
+            se_layer: Callable[..., nn.Module] = SqueezeExcitation,
     ) -> None:
         super().__init__()
 
@@ -132,10 +132,10 @@ class MBConv(nn.Module):
 
 class FusedMBConv(nn.Module):
     def __init__(
-        self,
-        cnf: FusedMBConvConfig,
-        stochastic_depth_prob: float,
-        norm_layer: Callable[..., nn.Module],
+            self,
+            cnf: FusedMBConvConfig,
+            stochastic_depth_prob: float,
+            norm_layer: Callable[..., nn.Module],
     ) -> None:
         super().__init__()
 
@@ -195,9 +195,9 @@ def supported_hyperparameters():
 
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -210,8 +210,9 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         inverted_residual_setting: Sequence[Union[MBConvConfig, FusedMBConvConfig]] = None
         dropout: float = prm['dropout']
         stochastic_depth_prob: float = 0.2
@@ -233,8 +234,8 @@ class Net(nn.Module):
         if not inverted_residual_setting:
             raise ValueError("The inverted_residual_setting should not be empty")
         elif not (
-            isinstance(inverted_residual_setting, Sequence)
-            and all([isinstance(s, _MBConvConfig) for s in inverted_residual_setting])
+                isinstance(inverted_residual_setting, Sequence)
+                and all([isinstance(s, _MBConvConfig) for s in inverted_residual_setting])
         ):
             raise TypeError("The inverted_residual_setting should be List[MBConvConfig]")
 
@@ -312,12 +313,12 @@ class Net(nn.Module):
 
 
 def _efficientnet(
-    inverted_residual_setting: Sequence[Union[MBConvConfig, FusedMBConvConfig]],
-    dropout: float,
-    last_channel: Optional[int],
-    weights: Optional[WeightsEnum],
-    progress: bool,
-    **kwargs: Any,
+        inverted_residual_setting: Sequence[Union[MBConvConfig, FusedMBConvConfig]],
+        dropout: float,
+        last_channel: Optional[int],
+        weights: Optional[WeightsEnum],
+        progress: bool,
+        **kwargs: Any,
 ) -> Net:
     if weights is not None:
         _ovewrite_named_param(kwargs, "num_classes", len(weights.meta["categories"]))
@@ -331,8 +332,8 @@ def _efficientnet(
 
 
 def _efficientnet_conf(
-    arch: str,
-    **kwargs: Any,
+        arch: str,
+        **kwargs: Any,
 ) -> Tuple[Sequence[Union[MBConvConfig, FusedMBConvConfig]], Optional[int]]:
     inverted_residual_setting: Sequence[Union[MBConvConfig, FusedMBConvConfig]]
     if arch.startswith("efficientnet_b"):

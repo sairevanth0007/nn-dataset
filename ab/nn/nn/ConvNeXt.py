@@ -18,11 +18,11 @@ class LayerNorm2d(nn.LayerNorm):
 
 class CNBlock(nn.Module):
     def __init__(
-        self,
-        dim,
-        layer_scale: float,
-        stochastic_depth_prob: float,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
+            self,
+            dim,
+            layer_scale: float,
+            stochastic_depth_prob: float,
+            norm_layer: Optional[Callable[..., nn.Module]] = None,
     ) -> None:
         super().__init__()
         if norm_layer is None:
@@ -49,10 +49,10 @@ class CNBlock(nn.Module):
 
 class CNBlockConfig:
     def __init__(
-        self,
-        input_channels: int,
-        out_channels: Optional[int],
-        num_layers: int,
+            self,
+            input_channels: int,
+            out_channels: Optional[int],
+            num_layers: int,
     ) -> None:
         self.input_channels = input_channels
         self.out_channels = out_channels
@@ -73,9 +73,9 @@ def supported_hyperparameters():
 
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -87,8 +87,9 @@ class Net(nn.Module):
             loss.backward()
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         num_classes: int = out_shape[0]
         stochastic_depth_prob: float = prm['stochastic_depth_prob']
         layer_scale: float = 1e-6

@@ -138,20 +138,22 @@ def get_divisors(n, res=None):
         i = i + 1
     return res
 
+
 def get_closest_split(n, close_to):
     all_divisors = get_divisors(n)
     for ix, val in enumerate(all_divisors):
         if close_to < val:
             if ix == 0: return val
-            if (val-close_to)>(close_to - all_divisors[ix-1]):
-                return all_divisors[ix-1]
+            if (val - close_to) > (close_to - all_divisors[ix - 1]):
+                return all_divisors[ix - 1]
             return val
+
 
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -164,8 +166,9 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         image_size: int = in_shape[2]
         patch_size: int = get_closest_split(image_size, int(image_size * prm['patch_size']))
         num_layers: int = 12

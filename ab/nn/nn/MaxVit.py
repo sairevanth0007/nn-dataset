@@ -40,15 +40,15 @@ def _get_relative_position_index(height: int, width: int) -> torch.Tensor:
 
 class MBConv(nn.Module):
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        expansion_ratio: float,
-        squeeze_ratio: float,
-        stride: int,
-        activation_layer: Callable[..., nn.Module],
-        norm_layer: Callable[..., nn.Module],
-        p_stochastic_dropout: float = 0.0,
+            self,
+            in_channels: int,
+            out_channels: int,
+            expansion_ratio: float,
+            squeeze_ratio: float,
+            stride: int,
+            activation_layer: Callable[..., nn.Module],
+            norm_layer: Callable[..., nn.Module],
+            p_stochastic_dropout: float = 0.0,
     ) -> None:
         super().__init__()
 
@@ -108,10 +108,10 @@ class MBConv(nn.Module):
 
 class RelativePositionalMultiHeadAttention(nn.Module):
     def __init__(
-        self,
-        feat_dim: int,
-        head_dim: int,
-        max_seq_len: int,
+            self,
+            feat_dim: int,
+            head_dim: int,
+            max_seq_len: int,
     ) -> None:
         super().__init__()
 
@@ -124,7 +124,7 @@ class RelativePositionalMultiHeadAttention(nn.Module):
         self.max_seq_len = max_seq_len
 
         self.to_qkv = nn.Linear(feat_dim, self.n_heads * self.head_dim * 3)
-        self.scale_factor = feat_dim**-0.5
+        self.scale_factor = feat_dim ** -0.5
 
         self.merge = nn.Linear(self.head_dim * self.n_heads, feat_dim)
         self.relative_position_bias_table = nn.parameter.Parameter(
@@ -204,18 +204,18 @@ class WindowDepartition(nn.Module):
 
 class PartitionAttentionLayer(nn.Module):
     def __init__(
-        self,
-        in_channels: int,
-        head_dim: int,
-        partition_size: int,
-        partition_type: str,
-        grid_size: Tuple[int, int],
-        mlp_ratio: int,
-        activation_layer: Callable[..., nn.Module],
-        norm_layer: Callable[..., nn.Module],
-        attention_dropout: float,
-        mlp_dropout: float,
-        p_stochastic_dropout: float,
+            self,
+            in_channels: int,
+            head_dim: int,
+            partition_size: int,
+            partition_type: str,
+            grid_size: Tuple[int, int],
+            mlp_ratio: int,
+            activation_layer: Callable[..., nn.Module],
+            norm_layer: Callable[..., nn.Module],
+            attention_dropout: float,
+            mlp_dropout: float,
+            p_stochastic_dropout: float,
     ) -> None:
         super().__init__()
 
@@ -240,7 +240,7 @@ class PartitionAttentionLayer(nn.Module):
 
         self.attn_layer = nn.Sequential(
             norm_layer(in_channels),
-            RelativePositionalMultiHeadAttention(in_channels, head_dim, partition_size**2),
+            RelativePositionalMultiHeadAttention(in_channels, head_dim, partition_size ** 2),
             nn.Dropout(attention_dropout),
         )
 
@@ -275,21 +275,21 @@ class PartitionAttentionLayer(nn.Module):
 
 class MaxVitLayer(nn.Module):
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        squeeze_ratio: float,
-        expansion_ratio: float,
-        stride: int,
-        norm_layer: Callable[..., nn.Module],
-        activation_layer: Callable[..., nn.Module],
-        head_dim: int,
-        mlp_ratio: int,
-        mlp_dropout: float,
-        attention_dropout: float,
-        p_stochastic_dropout: float,
-        partition_size: int,
-        grid_size: Tuple[int, int],
+            self,
+            in_channels: int,
+            out_channels: int,
+            squeeze_ratio: float,
+            expansion_ratio: float,
+            stride: int,
+            norm_layer: Callable[..., nn.Module],
+            activation_layer: Callable[..., nn.Module],
+            head_dim: int,
+            mlp_ratio: int,
+            mlp_dropout: float,
+            attention_dropout: float,
+            p_stochastic_dropout: float,
+            partition_size: int,
+            grid_size: Tuple[int, int],
     ) -> None:
         super().__init__()
 
@@ -340,21 +340,21 @@ class MaxVitLayer(nn.Module):
 
 class MaxVitBlock(nn.Module):
     def __init__(
-        self,
-        in_channels: int,
-        out_channels: int,
-        squeeze_ratio: float,
-        expansion_ratio: float,
-        norm_layer: Callable[..., nn.Module],
-        activation_layer: Callable[..., nn.Module],
-        head_dim: int,
-        mlp_ratio: int,
-        mlp_dropout: float,
-        attention_dropout: float,
-        partition_size: int,
-        input_grid_size: Tuple[int, int],
-        n_layers: int,
-        p_stochastic: List[float],
+            self,
+            in_channels: int,
+            out_channels: int,
+            squeeze_ratio: float,
+            expansion_ratio: float,
+            norm_layer: Callable[..., nn.Module],
+            activation_layer: Callable[..., nn.Module],
+            head_dim: int,
+            mlp_ratio: int,
+            mlp_dropout: float,
+            attention_dropout: float,
+            partition_size: int,
+            input_grid_size: Tuple[int, int],
+            n_layers: int,
+            p_stochastic: List[float],
     ) -> None:
         super().__init__()
         if not len(p_stochastic) == n_layers:
@@ -389,6 +389,7 @@ class MaxVitBlock(nn.Module):
             x = layer(x)
         return x
 
+
 args = [
     (299, 299),
     64,
@@ -406,9 +407,9 @@ def supported_hyperparameters():
 
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -421,8 +422,9 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         input_size: Tuple[int, int] = in_shape[2:]
         stem_channels: int = 64
         partition_size: int = 1
@@ -499,7 +501,7 @@ class Net(nn.Module):
                     partition_size=partition_size,
                     input_grid_size=input_size,
                     n_layers=num_layers,
-                    p_stochastic=p_stochastic[p_idx : p_idx + num_layers],
+                    p_stochastic=p_stochastic[p_idx: p_idx + num_layers],
                 ),
             )
             input_size = self.blocks[-1].grid_size

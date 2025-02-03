@@ -149,8 +149,9 @@ class Top2Gating(nn.Module):
         return dispatch_tensor, combine_tensor, loss
 
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm):
+     def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         dim = in_shape[2]
         num_experts = 16
         self.num_experts = num_experts
@@ -170,8 +171,8 @@ class Net(nn.Module):
         output = torch.einsum('ebcd,bnec->bnd', expert_outputs, combine_tensor)
         return output, loss * self.loss_coef
 
-    def train_setup(self, device, prm):
-        self.to(device)
+    def train_setup(self, prm):
+        self.to(self.device)
         self.optimizer = torch.optim.Adam(self.parameters(), lr=prm['lr'], betas=(prm['adam_betas_1'],prm['adam_betas_2']),
                                      eps=prm['adam_eps'], weight_decay=prm['adam_weight_decay'])
         # todo self.criterion = ???

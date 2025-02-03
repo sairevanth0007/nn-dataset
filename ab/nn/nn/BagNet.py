@@ -65,10 +65,10 @@ class BagNetUnit(nn.Module):
         return self.activ(x + identity)
 
 
-
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         channel_number = in_shape[1]
         image_size = in_shape[2]
         class_number = out_shape[0]
@@ -108,17 +108,11 @@ class Net(nn.Module):
         x = torch.flatten(x, 1)
         return self.output(x)
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.to(device)
-        self.criteria = nn.CrossEntropyLoss().to(device)
-        
-        self.optimizer = torch.optim.SGD(
-            self.parameters(),
-            lr=prm['lr'],
-            momentum=prm['momentum'],
-        )
-        
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = nn.CrossEntropyLoss().to(self.device)
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'],)
+
         if self.dropout > 0:
             self.dropout_layer = nn.Dropout(self.dropout)
 

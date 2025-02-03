@@ -10,16 +10,16 @@ from torchvision.ops.misc import Conv2dNormActivation, SqueezeExcitation as SEla
 
 class InvertedResidualConfig:
     def __init__(
-        self,
-        input_channels: int,
-        kernel: int,
-        expanded_channels: int,
-        out_channels: int,
-        use_se: bool,
-        activation: str,
-        stride: int,
-        dilation: int,
-        width_mult: float,
+            self,
+            input_channels: int,
+            kernel: int,
+            expanded_channels: int,
+            out_channels: int,
+            use_se: bool,
+            activation: str,
+            stride: int,
+            dilation: int,
+            width_mult: float,
     ):
         self.input_channels = self.adjust_channels(input_channels, width_mult)
         self.kernel = kernel
@@ -37,10 +37,10 @@ class InvertedResidualConfig:
 
 class InvertedResidual(nn.Module):
     def __init__(
-        self,
-        cnf: InvertedResidualConfig,
-        norm_layer: Callable[..., nn.Module],
-        se_layer: Callable[..., nn.Module] = partial(SElayer, scale_activation=nn.Hardsigmoid),
+            self,
+            cnf: InvertedResidualConfig,
+            norm_layer: Callable[..., nn.Module],
+            se_layer: Callable[..., nn.Module] = partial(SElayer, scale_activation=nn.Hardsigmoid),
     ):
         super().__init__()
         if not (1 <= cnf.stride <= 2):
@@ -94,17 +94,17 @@ class InvertedResidual(nn.Module):
         if self.use_res_connect:
             result += input
         return result
-    
+
 
 class MobileNetV3(nn.Module):
     def __init__(
-        self,
-        channels: int,
-        inverted_residual_setting: List[InvertedResidualConfig],
-        last_channel: int,
-        num_classes: int = 1000,
-        block: Optional[Callable[..., nn.Module]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
+            self,
+            channels: int,
+            inverted_residual_setting: List[InvertedResidualConfig],
+            last_channel: int,
+            num_classes: int = 1000,
+            block: Optional[Callable[..., nn.Module]] = None,
+            norm_layer: Optional[Callable[..., nn.Module]] = None,
             dropout: float = 0.2
     ) -> None:
         super().__init__()
@@ -112,8 +112,8 @@ class MobileNetV3(nn.Module):
         if not inverted_residual_setting:
             raise ValueError("The inverted_residual_setting should not be empty")
         elif not (
-            isinstance(inverted_residual_setting, Sequence)
-            and all([isinstance(s, InvertedResidualConfig) for s in inverted_residual_setting])
+                isinstance(inverted_residual_setting, Sequence)
+                and all([isinstance(s, InvertedResidualConfig) for s in inverted_residual_setting])
         ):
             raise TypeError("The inverted_residual_setting should be List[InvertedResidualConfig]")
 
@@ -185,7 +185,7 @@ class MobileNetV3(nn.Module):
 
 
 def _mobilenet_v3_conf(
-    arch: str, width_mult: float = 1.0, reduced_tail: bool = False, dilated: bool = False, **kwargs: Any
+        arch: str, width_mult: float = 1.0, reduced_tail: bool = False, dilated: bool = False, **kwargs: Any
 ):
     reduce_divider = 2 if reduced_tail else 1
     dilation = 2 if dilated else 1
@@ -234,17 +234,17 @@ def _mobilenet_v3_conf(
 
 
 def _mobilenet_v3(
-    inverted_residual_setting: List[InvertedResidualConfig],
-    last_channel: int,
-    **kwargs: Any,
+        inverted_residual_setting: List[InvertedResidualConfig],
+        last_channel: int,
+        **kwargs: Any,
 ) -> MobileNetV3:
-
     model = MobileNetV3(inverted_residual_setting, last_channel, **kwargs)
 
     return model
 
+
 def mobilenet_v3_large(
-    *, weights = None, progress: bool = True, **kwargs: Any
+        *, weights=None, progress: bool = True, **kwargs: Any
 ) -> MobileNetV3:
     inverted_residual_setting, last_channel = _mobilenet_v3_conf("mobilenet_v3_large", **kwargs)
     return _mobilenet_v3(inverted_residual_setting, last_channel, weights, progress, **kwargs)
@@ -256,9 +256,9 @@ def supported_hyperparameters():
 
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(self.device),)
         params_list = [{'params': self.backbone.parameters(), 'lr': prm['lr']}]
         for module in self.exclusive:
             params_list.append({'params': getattr(self, module).parameters(), 'lr': prm['lr'] * 10})
@@ -274,14 +274,15 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         num_classes: int = out_shape[0]
         backbone: MobileNetV3 | nn.Module = MobileNetV3(in_shape[1], *_mobilenet_v3_conf("mobilenet_v3_large"), num_classes=100)
         low_channels: int | None = None
         high_channels: int | None = None
         inter_channels: int = 128
-        if low_channels is None or high_channels is None or type(backbone)==MobileNetV3:
+        if low_channels is None or high_channels is None or type(backbone) == MobileNetV3:
             backbone = backbone.features
             stage_indices = [0] + [i for i, b in enumerate(backbone) if getattr(b, "_is_cn", False)] + [len(backbone) - 1]
             low_pos = stage_indices[-4]
@@ -293,7 +294,7 @@ class Net(nn.Module):
         else:
             self.backbone = backbone
         self.classifier = LRASPPHead(low_channels, high_channels, num_classes, inter_channels)
-        self.__setattr__('exclusive',['classifier'])
+        self.__setattr__('exclusive', ['classifier'])
 
     def forward(self, input: Tensor) -> Dict[str, Tensor]:
         features = self.backbone(input)
@@ -330,6 +331,7 @@ class LRASPPHead(nn.Module):
 
         return self.low_classifier(low) + self.high_classifier(x)
 
+
 def _lraspp_mobilenetv3(backbone: MobileNetV3, num_classes: int) -> Net:
     backbone = backbone.features
     stage_indices = [0] + [i for i, b in enumerate(backbone) if getattr(b, "_is_cn", False)] + [len(backbone) - 1]
@@ -340,11 +342,12 @@ def _lraspp_mobilenetv3(backbone: MobileNetV3, num_classes: int) -> Net:
 
     return Net(backbone, low_channels, high_channels, num_classes)
 
+
 def lraspp_mobilenet_v3_large(
-    *,
-    progress: bool = True,
-    num_classes: Optional[int] = None,
-    **kwargs: Any,
+        *,
+        progress: bool = True,
+        num_classes: Optional[int] = None,
+        **kwargs: Any,
 ) -> Net:
     if kwargs.pop("aux_loss", False):
         raise NotImplementedError("This model does not use auxiliary loss")

@@ -9,7 +9,7 @@ _BN_MOMENTUM = 1 - 0.9997
 
 class _InvertedResidual(nn.Module):
     def __init__(
-        self, in_ch: int, out_ch: int, kernel_size: int, stride: int, expansion_factor: int, bn_momentum: float = 0.1
+            self, in_ch: int, out_ch: int, kernel_size: int, stride: int, expansion_factor: int, bn_momentum: float = 0.1
     ) -> None:
         super().__init__()
         if stride not in [1, 2]:
@@ -37,7 +37,7 @@ class _InvertedResidual(nn.Module):
 
 
 def _stack(
-    in_ch: int, out_ch: int, kernel_size: int, stride: int, exp_factor: int, repeats: int, bn_momentum: float
+        in_ch: int, out_ch: int, kernel_size: int, stride: int, exp_factor: int, repeats: int, bn_momentum: float
 ) -> nn.Sequential:
     if repeats < 1:
         raise ValueError(f"repeats should be >= 1, instead got {repeats}")
@@ -63,11 +63,12 @@ def _get_depths(alpha: float) -> List[int]:
 def supported_hyperparameters():
     return {'lr', 'momentum', 'dropout'}
 
+
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -82,8 +83,9 @@ class Net(nn.Module):
 
     _version = 2
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         alpha: float = 0.75
         num_classes: int = out_shape[0]
         dropout: float = prm['dropout']
@@ -132,14 +134,14 @@ class Net(nn.Module):
         return self.classifier(x)
 
     def _load_from_state_dict(
-        self,
-        state_dict: Dict,
-        prefix: str,
-        local_metadata: Dict,
-        strict: bool,
-        missing_keys: List[str],
-        unexpected_keys: List[str],
-        error_msgs: List[str],
+            self,
+            state_dict: Dict,
+            prefix: str,
+            local_metadata: Dict,
+            strict: bool,
+            missing_keys: List[str],
+            unexpected_keys: List[str],
+            error_msgs: List[str],
     ) -> None:
         version = local_metadata.get("version", None)
         if version not in [1, 2]:

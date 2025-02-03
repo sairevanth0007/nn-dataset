@@ -8,13 +8,14 @@ from torch import nn, Tensor
 
 class DeepLabHead(nn.Sequential):
     def __init__(self, in_channels: int, num_classes: int = 100, atrous_rates: Sequence[int] = (12, 24, 36)) -> None:
-        super(DeepLabHead,self).__init__(
+        super(DeepLabHead, self).__init__(
             ASPP(in_channels, atrous_rates),
             nn.Conv2d(256, 256, 3, padding=1, bias=False),
             nn.BatchNorm2d(256),
             nn.ReLU(True),
             nn.Conv2d(256, num_classes, 1),
         )
+
 
 class ASPPConv(nn.Sequential):
     def __init__(self, in_channels: int, out_channels: int, dilation: int) -> None:
@@ -23,12 +24,12 @@ class ASPPConv(nn.Sequential):
             nn.BatchNorm2d(out_channels),
             nn.ReLU(True),
         ]
-        super(ASPPConv,self).__init__(*modules)
+        super(ASPPConv, self).__init__(*modules)
 
 
 class ASPPPooling(nn.Sequential):
     def __init__(self, in_channels: int, out_channels: int) -> None:
-        super(ASPPPooling,self).__init__(
+        super(ASPPPooling, self).__init__(
             nn.AdaptiveAvgPool2d(1),
             nn.Conv2d(in_channels, out_channels, 1, bias=False),
             nn.BatchNorm2d(out_channels),
@@ -44,7 +45,7 @@ class ASPPPooling(nn.Sequential):
 
 class ASPP(nn.Module):
     def __init__(self, in_channels: int, atrous_rates: Sequence[int], out_channels: int = 256) -> None:
-        super(ASPP,self).__init__()
+        super(ASPP, self).__init__()
         modules = []
         modules.append(
             nn.Sequential(nn.Conv2d(in_channels, out_channels, 1, bias=False), nn.BatchNorm2d(out_channels), nn.ReLU())
@@ -72,6 +73,7 @@ class ASPP(nn.Module):
         res = torch.cat(_res, dim=1)
         return self.project(res)
 
+
 class FCNHead(nn.Sequential):
     def __init__(self, in_channels: int, channels: int) -> None:
         inter_channels = in_channels // 4
@@ -83,7 +85,8 @@ class FCNHead(nn.Sequential):
             nn.Conv2d(inter_channels, channels, 1),
         ]
 
-        super(FCNHead,self).__init__(*layers)
+        super(FCNHead, self).__init__(*layers)
+
 
 def conv3x3(in_planes: int, out_planes: int, stride: int = 1, groups: int = 1, dilation: int = 1) -> nn.Conv2d:
     return nn.Conv2d(
@@ -104,16 +107,17 @@ def conv1x1(in_planes: int, out_planes: int, stride: int = 1) -> nn.Conv2d:
 
 class BasicBlock(nn.Module):
     expansion: int = 1
+
     def __init__(
-        self,
-        inplanes: int,
-        planes: int,
-        stride: int = 1,
-        downsample: Optional[nn.Module] = None,
-        groups: int = 1,
-        base_width: int = 64,
-        dilation: int = 1,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
+            self,
+            inplanes: int,
+            planes: int,
+            stride: int = 1,
+            downsample: Optional[nn.Module] = None,
+            groups: int = 1,
+            base_width: int = 64,
+            dilation: int = 1,
+            norm_layer: Optional[Callable[..., nn.Module]] = None,
     ) -> None:
         super().__init__()
         if norm_layer is None:
@@ -153,15 +157,15 @@ class Bottleneck(nn.Module):
     expansion: int = 4
 
     def __init__(
-        self,
-        inplanes: int,
-        planes: int,
-        stride: int = 1,
-        downsample: Optional[nn.Module] = None,
-        groups: int = 1,
-        base_width: int = 64,
-        dilation: int = 1,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
+            self,
+            inplanes: int,
+            planes: int,
+            stride: int = 1,
+            downsample: Optional[nn.Module] = None,
+            groups: int = 1,
+            base_width: int = 64,
+            dilation: int = 1,
+            norm_layer: Optional[Callable[..., nn.Module]] = None,
     ) -> None:
         super().__init__()
         if norm_layer is None:
@@ -202,18 +206,18 @@ class Bottleneck(nn.Module):
 
 class ResNet(nn.Module):
     def __init__(
-        self,
-        channels: int,
-        block: Type[Union[BasicBlock, Bottleneck]],
-        layers: List[int],
-        num_classes: int = 1000,
-        zero_init_residual: bool = False,
-        groups: int = 1,
-        width_per_group: int = 64,
-        replace_stride_with_dilation: Optional[List[bool]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None,
+            self,
+            channels: int,
+            block: Type[Union[BasicBlock, Bottleneck]],
+            layers: List[int],
+            num_classes: int = 1000,
+            zero_init_residual: bool = False,
+            groups: int = 1,
+            width_per_group: int = 64,
+            replace_stride_with_dilation: Optional[List[bool]] = None,
+            norm_layer: Optional[Callable[..., nn.Module]] = None,
     ) -> None:
-        super(ResNet,self).__init__()
+        super(ResNet, self).__init__()
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         self._norm_layer = norm_layer
@@ -255,12 +259,12 @@ class ResNet(nn.Module):
                     nn.init.constant_(m.bn2.weight, 0)
 
     def _make_layer(
-        self,
-        block: Type[Union[BasicBlock, Bottleneck]],
-        planes: int,
-        blocks: int,
-        stride: int = 1,
-        dilate: bool = False,
+            self,
+            block: Type[Union[BasicBlock, Bottleneck]],
+            planes: int,
+            blocks: int,
+            stride: int = 1,
+            dilate: bool = False,
     ) -> nn.Sequential:
         norm_layer = self._norm_layer
         downsample = None
@@ -319,12 +323,12 @@ class ResNet(nn.Module):
 def supported_hyperparameters():
     return {'lr', 'momentum'}
 
+
 class Net(nn.Module):
 
-
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(self.device),)
         params_list = [{'params': self.backbone.parameters(), 'lr': prm['lr']}]
         for module in self.exclusive:
             params_list.append({'params': getattr(self, module).parameters(), 'lr': prm['lr'] * 10})
@@ -342,8 +346,9 @@ class Net(nn.Module):
 
     __constants__ = ["aux_classifier"]
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super(Net, self).__init__()
+        self.device = device
         num_classes = out_shape[0]
         self.backbone: nn.Module = ResNet(in_shape[1], Bottleneck, [3, 4, 23, 3], num_classes=100, replace_stride_with_dilation=[False, True, True])
         self.classifier: nn.Module = DeepLabHead(2048, num_classes)

@@ -15,9 +15,11 @@ from torchvision.models.detection.backbone_utils import _resnet_fpn_extractor
 from torchvision.models.detection.transform import GeneralizedRCNNTransform
 from torchvision.models.detection.image_list import ImageList
 
+
 def supported_hyperparameters():
     return {'lr', 'momentum', 'fg_iou_thresh', 'bg_iou_thresh',
             'batch_size_per_image', 'positive_fraction', 'nms_thresh', 'score_thresh'}
+
 
 def _default_anchorgen():
     anchor_sizes = ((32,), (64,), (128,), (256,), (512,))
@@ -79,17 +81,17 @@ def concat_box_prediction_layers(box_cls: List[Tensor], box_regression: List[Ten
 
 class RegionProposalNetwork(nn.Module):
     def __init__(
-        self,
-        anchor_generator: AnchorGenerator,
-        head: nn.Module,
-        fg_iou_thresh: float,
-        bg_iou_thresh: float,
-        batch_size_per_image: int,
-        positive_fraction: float,
-        pre_nms_top_n: Dict[str, int],
-        post_nms_top_n: Dict[str, int],
-        nms_thresh: float,
-        score_thresh: float = 0.0,
+            self,
+            anchor_generator: AnchorGenerator,
+            head: nn.Module,
+            fg_iou_thresh: float,
+            bg_iou_thresh: float,
+            batch_size_per_image: int,
+            positive_fraction: float,
+            pre_nms_top_n: Dict[str, int],
+            post_nms_top_n: Dict[str, int],
+            nms_thresh: float,
+            score_thresh: float = 0.0,
     ):
         super().__init__()
         self.anchor_generator = anchor_generator
@@ -157,11 +159,11 @@ class RegionProposalNetwork(nn.Module):
         return torch.cat(r, dim=1)
 
     def filter_proposals(
-        self,
-        proposals: Tensor,
-        objectness: Tensor,
-        image_shapes: List[Tuple[int, int]],
-        num_anchors_per_level: List[int],
+            self,
+            proposals: Tensor,
+            objectness: Tensor,
+            image_shapes: List[Tuple[int, int]],
+            num_anchors_per_level: List[int],
     ) -> Tuple[List[Tensor], List[Tensor]]:
         num_images = proposals.shape[0]
         device = proposals.device
@@ -203,7 +205,7 @@ class RegionProposalNetwork(nn.Module):
         return final_boxes, final_scores
 
     def compute_loss(
-        self, objectness: Tensor, pred_bbox_deltas: Tensor, labels: List[Tensor], regression_targets: List[Tensor]
+            self, objectness: Tensor, pred_bbox_deltas: Tensor, labels: List[Tensor], regression_targets: List[Tensor]
     ) -> Tuple[Tensor, Tensor]:
         sampled_pos_inds, sampled_neg_inds = self.fg_bg_sampler(labels)
         sampled_pos_inds = torch.where(torch.cat(sampled_pos_inds, dim=0))[0]
@@ -227,10 +229,10 @@ class RegionProposalNetwork(nn.Module):
         return objectness_loss, box_loss
 
     def forward(
-        self,
-        images: ImageList,
-        features: Dict[str, Tensor],
-        targets: Optional[List[Dict[str, Tensor]]] = None,
+            self,
+            images: ImageList,
+            features: Dict[str, Tensor],
+            targets: Optional[List[Dict[str, Tensor]]] = None,
     ) -> Tuple[List[Tensor], Dict[str, Tensor]]:
         features = list(features.values())
         objectness, pred_bbox_deltas = self.head(features)
@@ -309,18 +311,18 @@ def fastrcnn_loss(class_logits, box_regression, labels, regression_targets):
 
 class RoIHeads(nn.Module):
     def __init__(
-        self,
-        box_roi_pool,
-        box_head,
-        box_predictor,
-        fg_iou_thresh,
-        bg_iou_thresh,
-        batch_size_per_image,
-        positive_fraction,
-        bbox_reg_weights,
-        score_thresh,
-        nms_thresh,
-        detections_per_img,
+            self,
+            box_roi_pool,
+            box_head,
+            box_predictor,
+            fg_iou_thresh,
+            bg_iou_thresh,
+            batch_size_per_image,
+            positive_fraction,
+            bbox_reg_weights,
+            score_thresh,
+            nms_thresh,
+            detections_per_img,
     ):
         super().__init__()
         self.box_similarity = box_ops.box_iou
@@ -501,8 +503,9 @@ class RoIHeads(nn.Module):
 
 
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         self.batch_size = in_shape[0]
         self.num_channels = in_shape[1]
         self.height = in_shape[2]
@@ -566,13 +569,9 @@ class Net(nn.Module):
             image_std=[0.229, 0.224, 0.225]
         )
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.optimizer = torch.optim.SGD(
-            self.parameters(),
-            lr=prm['lr'],
-            momentum=prm['momentum']
-        )
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
         self.train()

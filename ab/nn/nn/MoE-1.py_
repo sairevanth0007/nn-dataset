@@ -34,9 +34,9 @@ class Gate(nn.Module):
         return x
 
 class Net(nn.Module):
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -49,8 +49,9 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super(Net, self).__init__()
+        self.device = device
         n_experts = 3
         self.experts = [Expert(in_shape[0], out_shape[0]) for _ in range(n_experts)]
         self.gate = Gate(in_shape[0], n_experts)

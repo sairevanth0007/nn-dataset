@@ -16,22 +16,17 @@ def supported_hyperparameters():
 
 
 def create_backbone(trainable_layers=4):
-
     backbone = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
 
     backbone = backbone.features
-    
 
     stage_indices = [0] + [i for i, b in enumerate(backbone) if isinstance(b, nn.MaxPool2d)][:-1]
     num_stages = len(stage_indices)
-    
 
     assert 0 <= trainable_layers <= num_stages, \
         f"trainable_layers should be in the range [0, {num_stages}]. Instead got {trainable_layers}"
-    
 
     freeze_before = len(backbone) if trainable_layers == 0 else stage_indices[num_stages - trainable_layers]
-    
 
     for b in backbone[:freeze_before]:
         for parameter in b.parameters():
@@ -47,12 +42,14 @@ def create_anchor_generator():
         steps=[8, 16, 32, 64, 100, 300],
     )
 
+
 def _xavier_init(conv: nn.Module):
     for layer in conv.modules():
         if isinstance(layer, nn.Conv2d):
             torch.nn.init.xavier_uniform_(layer.weight)
             if layer.bias is not None:
                 torch.nn.init.constant_(layer.bias, 0.0)
+
 
 class SSDHead(nn.Module):
     def __init__(self, in_channels: List[int], num_anchors: List[int], num_classes: int):
@@ -65,6 +62,7 @@ class SSDHead(nn.Module):
             "bbox_regression": self.regression_head(x),
             "cls_logits": self.classification_head(x),
         }
+
 
 class SSDScoringHead(nn.Module):
     def __init__(self, module_list: nn.ModuleList, num_columns: int):
@@ -97,6 +95,7 @@ class SSDScoringHead(nn.Module):
 
         return torch.cat(all_results, dim=1)
 
+
 class SSDClassificationHead(SSDScoringHead):
     def __init__(self, in_channels: List[int], num_anchors: List[int], num_classes: int):
         cls_logits = nn.ModuleList()
@@ -105,6 +104,7 @@ class SSDClassificationHead(SSDScoringHead):
         _xavier_init(cls_logits)
         super().__init__(cls_logits, num_classes)
 
+
 class SSDRegressionHead(SSDScoringHead):
     def __init__(self, in_channels: List[int], num_anchors: List[int]):
         bbox_reg = nn.ModuleList()
@@ -112,6 +112,7 @@ class SSDRegressionHead(SSDScoringHead):
             bbox_reg.append(nn.Conv2d(channels, 4 * anchors, kernel_size=3, padding=1))
         _xavier_init(bbox_reg)
         super().__init__(bbox_reg, 4)
+
 
 class SSDFeatureExtractorVGG(nn.Module):
     def __init__(self, backbone: nn.Module):
@@ -178,26 +179,26 @@ class Net(nn.Module):
         "proposal_matcher": det_utils.Matcher,
     }
 
-    def __init__(self, in_shape, out_shape, prms):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
-        
+        self.device = device
 
         size = (in_shape[2], in_shape[3])
-        
+
         backbone = create_backbone()
         anchor_generator = create_anchor_generator()
 
         num_classes = out_shape[0]
-        head = prms.get('head', None)
-        score_thresh = prms.get('score_thresh')
-        nms_thresh = prms.get('nms_thresh')
-        detections_per_img = int(400 * prms.get('detections_per_img')) + 1
-        iou_thresh = prms.get('iou_thresh')
-        topk_candidates = int(800 * prms.get('topk_candidates')) + 1
-        positive_fraction = prms.get('positive_fraction')
+        head = prm.get('head', None)
+        score_thresh = prm.get('score_thresh')
+        nms_thresh = prm.get('nms_thresh')
+        detections_per_img = int(400 * prm.get('detections_per_img')) + 1
+        iou_thresh = prm.get('iou_thresh')
+        topk_candidates = int(800 * prm.get('topk_candidates')) + 1
+        positive_fraction = prm.get('positive_fraction')
 
-        image_mean = prms.get('image_mean', [0.485, 0.456, 0.406])
-        image_std = prms.get('image_std', [0.229, 0.224, 0.225])
+        image_mean = prm.get('image_mean', [0.485, 0.456, 0.406])
+        image_std = prm.get('image_std', [0.229, 0.224, 0.225])
 
         self.backbone = backbone
         self.anchor_generator = anchor_generator
@@ -240,7 +241,7 @@ class Net(nn.Module):
         }
 
     def forward(
-        self, images: List[Tensor], targets: Optional[List[Dict[str, Tensor]]] = None
+            self, images: List[Tensor], targets: Optional[List[Dict[str, Tensor]]] = None
     ) -> Tuple[Dict[str, Tensor], List[Dict[str, Tensor]]]:
         if self.training and targets is None:
             raise ValueError("In training mode, targets should be passed")
@@ -287,14 +288,13 @@ class Net(nn.Module):
 
         if torch.jit.is_scripting():
             if not self._has_warned:
-                warnings.warn("SSD always returns a (Losses, Detections) tuple in scripting")
                 self._has_warned = True
             return losses, detections
 
         return self.eager_outputs(losses, detections)
 
     def eager_outputs(
-        self, losses: Dict[str, Tensor], detections: List[Dict[str, Tensor]]
+            self, losses: Dict[str, Tensor], detections: List[Dict[str, Tensor]]
     ) -> Tuple[Dict[str, Tensor], List[Dict[str, Tensor]]]:
         if self.training:
             return losses
@@ -302,11 +302,11 @@ class Net(nn.Module):
         return detections
 
     def compute_loss(
-        self,
-        targets: List[Dict[str, Tensor]],
-        head_outputs: Dict[str, Tensor],
-        anchors: List[Tensor],
-        matched_idxs: List[Tensor],
+            self,
+            targets: List[Dict[str, Tensor]],
+            head_outputs: Dict[str, Tensor],
+            anchors: List[Tensor],
+            matched_idxs: List[Tensor],
     ) -> Dict[str, Tensor]:
         bbox_regression = head_outputs["bbox_regression"]
         cls_logits = head_outputs["cls_logits"]
@@ -315,11 +315,11 @@ class Net(nn.Module):
         bbox_loss = []
         cls_targets = []
         for (
-            targets_per_image,
-            bbox_regression_per_image,
-            cls_logits_per_image,
-            anchors_per_image,
-            matched_idxs_per_image,
+                targets_per_image,
+                bbox_regression_per_image,
+                cls_logits_per_image,
+                anchors_per_image,
+                matched_idxs_per_image,
         ) in zip(targets, bbox_regression, cls_logits, anchors, matched_idxs):
             foreground_idxs_per_image = torch.where(matched_idxs_per_image >= 0)[0]
             foreground_matched_idxs_per_image = matched_idxs_per_image[foreground_idxs_per_image]
@@ -365,7 +365,7 @@ class Net(nn.Module):
         }
 
     def postprocess_detections(
-        self, head_outputs: Dict[str, Tensor], anchors: List[Tensor], image_shapes: List[Tuple[int, int]]
+            self, head_outputs: Dict[str, Tensor], anchors: List[Tensor], image_shapes: List[Tuple[int, int]]
     ) -> List[Dict[str, Tensor]]:
         bbox_regression = head_outputs["bbox_regression"]
         pred_scores = F.softmax(head_outputs["cls_logits"], dim=-1)
@@ -412,26 +412,24 @@ class Net(nn.Module):
                 }
             )
         return detections
-        
-        
-    def train_setup(self, device, prm):
-        self.device = device
+
+    def train_setup(self, prm):
+        self.to(self.device)
         self.optimizer = torch.optim.SGD(
             self.parameters(),
             lr=prm['lr'],
             momentum=prm['momentum']
         )
-        
+
     def learn(self, train_data):
         self.train()
         for inputs, labels in train_data:
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
-            self.optimizer.zero_grad()  
-        
-            losses = self(inputs, labels) 
+            self.optimizer.zero_grad()
+
+            losses = self(inputs, labels)
             loss = sum(loss for loss in losses.values())
-            
+
             loss.backward()
             self.optimizer.step()
-

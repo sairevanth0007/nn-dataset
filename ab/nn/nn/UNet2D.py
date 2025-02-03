@@ -2,19 +2,21 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+
 def supported_hyperparameters():
     return {'lr', 'momentum', 'dropout'}
 
+
 class UNet2DModel(nn.Module):
     def __init__(
-        self,
-        sample_size=32,
-        in_channels=3,
-        out_channels=128,
-        layers_per_block=2,
-        block_out_channels=(32, 64, 128),
-        down_block_types=("DownBlock2D", "AttnDownBlock2D", "DownBlock2D"),
-        up_block_types=("UpBlock2D", "AttnUpBlock2D", "UpBlock2D"),
+            self,
+            sample_size=32,
+            in_channels=3,
+            out_channels=128,
+            layers_per_block=2,
+            block_out_channels=(32, 64, 128),
+            down_block_types=("DownBlock2D", "AttnDownBlock2D", "DownBlock2D"),
+            up_block_types=("UpBlock2D", "AttnUpBlock2D", "UpBlock2D"),
     ):
         super(UNet2DModel, self).__init__()
         self.sample_size = sample_size
@@ -72,8 +74,9 @@ class UNet2DModel(nn.Module):
 
 
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super(Net, self).__init__()
+        self.device = device
 
         channel_number = in_shape[1]
         image_size = in_shape[2]
@@ -86,7 +89,7 @@ class Net(nn.Module):
             layers_per_block=2,
             block_out_channels=(32, 64, 128),
             down_block_types=("DownBlock2D", "AttnDownBlock2D", "DownBlock2D"),
-            up_block_types=("UpBlock2D", "AttnUpBlock2D", "UpBlock2D"),)
+            up_block_types=("UpBlock2D", "AttnUpBlock2D", "UpBlock2D"), )
         self.classifier = nn.Sequential(nn.Dropout(prm['dropout']), nn.Linear(128, class_number))
         self._initialize_weights()
 
@@ -113,14 +116,13 @@ class Net(nn.Module):
         logits = self.classifier(pooled_features)
         return logits
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.to(device)
-        self.criteria = nn.CrossEntropyLoss().to(device)
-        
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = nn.CrossEntropyLoss().to(self.device)
+
         lr = prm['lr']
         momentum = prm['momentum']
-        
+
         self.optimizer = optim.SGD(self.parameters(), lr=lr, momentum=momentum)
 
     def learn(self, train_data):
@@ -133,5 +135,3 @@ class Net(nn.Module):
             loss.backward()
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
-
-

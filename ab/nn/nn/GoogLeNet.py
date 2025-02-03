@@ -18,10 +18,9 @@ def supported_hyperparameters():
 
 class Net(nn.Module):
 
-
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -35,8 +34,9 @@ class Net(nn.Module):
 
     __constants__ = ["aux_logits", "transform_input"]
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         transform_input: bool = False
         blocks: Optional[List[Callable[..., nn.Module]]] = None
         num_classes: int = out_shape[0]
@@ -152,15 +152,15 @@ class Net(nn.Module):
 
 class Inception(nn.Module):
     def __init__(
-        self,
-        in_channels: int,
-        ch1x1: int,
-        ch3x3red: int,
-        ch3x3: int,
-        ch5x5red: int,
-        ch5x5: int,
-        pool_proj: int,
-        conv_block: Optional[Callable[..., nn.Module]] = None,
+            self,
+            in_channels: int,
+            ch1x1: int,
+            ch3x3red: int,
+            ch3x3: int,
+            ch5x5red: int,
+            ch5x5: int,
+            pool_proj: int,
+            conv_block: Optional[Callable[..., nn.Module]] = None,
     ) -> None:
         super().__init__()
         if conv_block is None:
@@ -197,11 +197,11 @@ class Inception(nn.Module):
 
 class InceptionAux(nn.Module):
     def __init__(
-        self,
-        in_channels: int,
-        num_classes: int,
-        conv_block: Optional[Callable[..., nn.Module]] = None,
-        dropout: float = 0.7,
+            self,
+            in_channels: int,
+            num_classes: int,
+            conv_block: Optional[Callable[..., nn.Module]] = None,
+            dropout: float = 0.7,
     ) -> None:
         super().__init__()
         if conv_block is None:

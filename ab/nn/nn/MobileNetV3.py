@@ -10,16 +10,16 @@ from torchvision.ops.misc import Conv2dNormActivation, SqueezeExcitation as SEla
 
 class InvertedResidualConfig:
     def __init__(
-        self,
-        input_channels: int,
-        kernel: int,
-        expanded_channels: int,
-        out_channels: int,
-        use_se: bool,
-        activation: str,
-        stride: int,
-        dilation: int,
-        width_mult: float,
+            self,
+            input_channels: int,
+            kernel: int,
+            expanded_channels: int,
+            out_channels: int,
+            use_se: bool,
+            activation: str,
+            stride: int,
+            dilation: int,
+            width_mult: float,
     ):
         self.input_channels = self.adjust_channels(input_channels, width_mult)
         self.kernel = kernel
@@ -37,10 +37,10 @@ class InvertedResidualConfig:
 
 class InvertedResidual(nn.Module):
     def __init__(
-        self,
-        cnf: InvertedResidualConfig,
-        norm_layer: Callable[..., nn.Module],
-        se_layer: Callable[..., nn.Module] = partial(SElayer, scale_activation=nn.Hardsigmoid),
+            self,
+            cnf: InvertedResidualConfig,
+            norm_layer: Callable[..., nn.Module],
+            se_layer: Callable[..., nn.Module] = partial(SElayer, scale_activation=nn.Hardsigmoid),
     ):
         super().__init__()
         if not (1 <= cnf.stride <= 2):
@@ -102,9 +102,9 @@ def supported_hyperparameters():
 
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -117,12 +117,13 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         reduce_divider = 2
         width_mult = 1.0
         dilation = 2
-        
+
         inverted_residual_setting = None
         last_channel: int = None
         num_classes: int = out_shape[0]
@@ -151,8 +152,8 @@ class Net(nn.Module):
         if not inverted_residual_setting:
             raise ValueError("The inverted_residual_setting should not be empty")
         elif not (
-            isinstance(inverted_residual_setting, Sequence)
-            and all([isinstance(s, InvertedResidualConfig) for s in inverted_residual_setting])
+                isinstance(inverted_residual_setting, Sequence)
+                and all([isinstance(s, InvertedResidualConfig) for s in inverted_residual_setting])
         ):
             raise TypeError("The inverted_residual_setting should be List[InvertedResidualConfig]")
 
@@ -226,7 +227,7 @@ class Net(nn.Module):
 
 
 def _mobilenet_v3_conf(
-    arch: str, width_mult: float = 1.0, reduced_tail: bool = False, dilated: bool = False, **kwargs: Any
+        arch: str, width_mult: float = 1.0, reduced_tail: bool = False, dilated: bool = False, **kwargs: Any
 ):
     reduce_divider = 2 if reduced_tail else 1
     dilation = 2 if dilated else 1
@@ -275,11 +276,11 @@ def _mobilenet_v3_conf(
 
 
 def _mobilenet_v3(
-    inverted_residual_setting: List[InvertedResidualConfig],
-    last_channel: int,
-    weights: Optional[WeightsEnum],
-    progress: bool,
-    **kwargs: Any,
+        inverted_residual_setting: List[InvertedResidualConfig],
+        last_channel: int,
+        weights: Optional[WeightsEnum],
+        progress: bool,
+        **kwargs: Any,
 ) -> Net:
     if weights is not None:
         _ovewrite_named_param(kwargs, "num_classes", len(weights.meta["categories"]))

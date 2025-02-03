@@ -12,11 +12,11 @@ from torchvision.ops.misc import Conv2dNormActivation, SqueezeExcitation
 
 class SimpleStemIN(Conv2dNormActivation):
     def __init__(
-        self,
-        width_in: int,
-        width_out: int,
-        norm_layer: Callable[..., nn.Module],
-        activation_layer: Callable[..., nn.Module],
+            self,
+            width_in: int,
+            width_out: int,
+            norm_layer: Callable[..., nn.Module],
+            activation_layer: Callable[..., nn.Module],
     ) -> None:
         super().__init__(
             width_in, width_out, kernel_size=3, stride=2, norm_layer=norm_layer, activation_layer=activation_layer
@@ -25,15 +25,15 @@ class SimpleStemIN(Conv2dNormActivation):
 
 class BottleneckTransform(nn.Sequential):
     def __init__(
-        self,
-        width_in: int,
-        width_out: int,
-        stride: int,
-        norm_layer: Callable[..., nn.Module],
-        activation_layer: Callable[..., nn.Module],
-        group_width: int,
-        bottleneck_multiplier: float,
-        se_ratio: Optional[float],
+            self,
+            width_in: int,
+            width_out: int,
+            stride: int,
+            norm_layer: Callable[..., nn.Module],
+            activation_layer: Callable[..., nn.Module],
+            group_width: int,
+            bottleneck_multiplier: float,
+            se_ratio: Optional[float],
     ) -> None:
         layers: OrderedDict[str, nn.Module] = OrderedDict()
         w_b = int(round(width_out * bottleneck_multiplier))
@@ -62,15 +62,15 @@ class BottleneckTransform(nn.Sequential):
 
 class ResBottleneckBlock(nn.Module):
     def __init__(
-        self,
-        width_in: int,
-        width_out: int,
-        stride: int,
-        norm_layer: Callable[..., nn.Module],
-        activation_layer: Callable[..., nn.Module],
-        group_width: int = 1,
-        bottleneck_multiplier: float = 1.0,
-        se_ratio: Optional[float] = None,
+            self,
+            width_in: int,
+            width_out: int,
+            stride: int,
+            norm_layer: Callable[..., nn.Module],
+            activation_layer: Callable[..., nn.Module],
+            group_width: int = 1,
+            bottleneck_multiplier: float = 1.0,
+            se_ratio: Optional[float] = None,
     ) -> None:
         super().__init__()
         self.proj = None
@@ -101,18 +101,18 @@ class ResBottleneckBlock(nn.Module):
 
 class AnyStage(nn.Sequential):
     def __init__(
-        self,
-        width_in: int,
-        width_out: int,
-        stride: int,
-        depth: int,
-        block_constructor: Callable[..., nn.Module],
-        norm_layer: Callable[..., nn.Module],
-        activation_layer: Callable[..., nn.Module],
-        group_width: int,
-        bottleneck_multiplier: float,
-        se_ratio: Optional[float] = None,
-        stage_index: int = 0,
+            self,
+            width_in: int,
+            width_out: int,
+            stride: int,
+            depth: int,
+            block_constructor: Callable[..., nn.Module],
+            norm_layer: Callable[..., nn.Module],
+            activation_layer: Callable[..., nn.Module],
+            group_width: int,
+            bottleneck_multiplier: float,
+            se_ratio: Optional[float] = None,
+            stage_index: int = 0,
     ) -> None:
         super().__init__()
 
@@ -133,13 +133,13 @@ class AnyStage(nn.Sequential):
 
 class BlockParams:
     def __init__(
-        self,
-        depths: List[int],
-        widths: List[int],
-        group_widths: List[int],
-        bottleneck_multipliers: List[float],
-        strides: List[int],
-        se_ratio: Optional[float] = None,
+            self,
+            depths: List[int],
+            widths: List[int],
+            group_widths: List[int],
+            bottleneck_multipliers: List[float],
+            strides: List[int],
+            se_ratio: Optional[float] = None,
     ) -> None:
         self.depths = depths
         self.widths = widths
@@ -150,13 +150,13 @@ class BlockParams:
 
     @classmethod
     def from_init_params(
-        cls,
-        depth: int,
-        w_0: int,
-        w_a: float,
-        w_m: float,
-        group_width: int,
-        bottleneck_multiplier: float = 1.0,
+            cls,
+            depth: int,
+            w_0: int,
+            w_a: float,
+            w_m: float,
+            group_width: int,
+            bottleneck_multiplier: float = 1.0,
             se_ratio: Optional[float] = None
     ) -> "BlockParams":
         QUANT = 8
@@ -202,7 +202,7 @@ class BlockParams:
 
     @staticmethod
     def _adjust_widths_groups_compatibilty(
-        stage_widths: List[int], bottleneck_ratios: List[float], group_widths: List[int]
+            stage_widths: List[int], bottleneck_ratios: List[float], group_widths: List[int]
     ) -> Tuple[List[int], List[int]]:
         widths = [int(w * b) for w, b in zip(stage_widths, bottleneck_ratios)]
         group_widths_min = [min(g, w_bot) for g, w_bot in zip(group_widths, widths)]
@@ -215,11 +215,12 @@ class BlockParams:
 def supported_hyperparameters():
     return {'lr', 'momentum'}
 
+
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -232,8 +233,9 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         block_params: BlockParams = BlockParams.from_init_params(depth=16, w_0=48, w_a=27.89, w_m=2.09, group_width=8, se_ratio=0.25)
         num_classes: int = out_shape[0]
         stem_width: int = 32
@@ -261,15 +263,15 @@ class Net(nn.Module):
 
         blocks = []
         for i, (
-            width_out,
-            stride,
-            depth,
-            group_width,
-            bottleneck_multiplier,
+                width_out,
+                stride,
+                depth,
+                group_width,
+                bottleneck_multiplier,
         ) in enumerate(block_params._get_expanded_params()):
             blocks.append(
                 (
-                    f"block{i+1}",
+                    f"block{i + 1}",
                     AnyStage(
                         current_width,
                         width_out,
@@ -316,10 +318,10 @@ class Net(nn.Module):
 
 
 def _regnet(
-    block_params: BlockParams,
-    weights: Optional[WeightsEnum],
-    progress: bool,
-    **kwargs: Any,
+        block_params: BlockParams,
+        weights: Optional[WeightsEnum],
+        progress: bool,
+        **kwargs: Any,
 ) -> Net:
     if weights is not None:
         _ovewrite_named_param(kwargs, "num_classes", len(weights.meta["categories"]))

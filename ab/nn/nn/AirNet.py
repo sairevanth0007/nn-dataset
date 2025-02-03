@@ -3,8 +3,10 @@ import torch.nn as nn
 
 args = []
 
+
 def supported_hyperparameters():
     return {'lr', 'momentum'}
+
 
 class AirInitBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
@@ -14,9 +16,10 @@ class AirInitBlock(nn.Module):
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True)
         )
-    
+
     def forward(self, x):
         return self.layers(x)
+
 
 class AirUnit(nn.Module):
     def __init__(self, in_channels, out_channels, stride):
@@ -41,9 +44,11 @@ class AirUnit(nn.Module):
         x = self.layers(x)
         return self.relu(x + residual)
 
+
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         self.in_channels = in_shape[1]
         self.image_size = in_shape[2]
         self.num_classes = out_shape[0]
@@ -52,7 +57,7 @@ class Net(nn.Module):
 
         channels = [64, 128, 256, 512]
         init_block_channels = 64
-        
+
         self.features = self.build_features(init_block_channels, channels)
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.classifier = nn.Linear(channels[-1], self.num_classes)
@@ -72,16 +77,15 @@ class Net(nn.Module):
         x = torch.flatten(x, 1)
         return self.classifier(x)
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.to(device)
-        self.criteria = nn.CrossEntropyLoss().to(device)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = nn.CrossEntropyLoss().to(self.device)
         self.optimizer = torch.optim.SGD(
             self.parameters(),
             lr=self.learning_rate,
             momentum=self.momentum
         )
-    
+
     def learn(self, train_data):
         self.train()
         for inputs, labels in train_data:

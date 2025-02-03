@@ -129,11 +129,11 @@ class Train:
         # Load model
         if is_code:
             # if model_name is model
-            self.model = model_name(self.in_shape, out_shape, prm)
+            self.model = model_name(self.in_shape, out_shape, prm, self.device)
         else:
             # if model_name is model name
             model_net = get_attr(f"nn.{model_name}", "Net")
-            self.model = model_net(self.in_shape, out_shape, prm)
+            self.model = model_net(self.in_shape, out_shape, prm, self.device)
         self.model.to(self.device)
 
     def load_metric_function(self, metric_name):
@@ -159,7 +159,7 @@ class Train:
         """ Training and evaluation """
 
         start_time = time.time_ns()
-        self.model.train_setup(self.device, self.prm)
+        self.model.train_setup(self.prm)
         accuracy_to_time = 0.0
         for epoch in range(1, num_epochs + 1):
             print(f"epoch {epoch}", flush=True)

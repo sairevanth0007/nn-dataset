@@ -3,8 +3,10 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
+
 def supported_hyperparameters():
     return {'lr', 'momentum'}
+
 
 class ICInitBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
@@ -20,6 +22,7 @@ class ICInitBlock(nn.Module):
         x = F.relu(self.conv2(x))
         x = F.relu(self.conv3(x))
         return x
+
 
 class PSPBlock(nn.Module):
     def __init__(self, in_channels, pool_sizes):
@@ -38,6 +41,7 @@ class PSPBlock(nn.Module):
         pooled_features = [F.interpolate(stage(x), size=size, mode='bilinear', align_corners=False) for stage in self.stages]
         return F.relu(self.bottleneck(torch.cat([x] + pooled_features, dim=1)))
 
+
 class ICNetClassification(nn.Module):
     def __init__(self, num_classes, in_channels):
         super(ICNetClassification, self).__init__()
@@ -55,9 +59,11 @@ class ICNetClassification(nn.Module):
         x = self.classifier(x)
         return x
 
+
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super(Net, self).__init__()
+        self.device = device
         channel_number = in_shape[1]
         class_number = out_shape[0]
         self.model = ICNetClassification(num_classes=class_number, in_channels=channel_number)
@@ -67,14 +73,13 @@ class Net(nn.Module):
     def forward(self, x):
         return self.model(x)
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.to(device)
-        self.criteria = nn.CrossEntropyLoss().to(device)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = nn.CrossEntropyLoss().to(self.device)
         self.optimizer = optim.SGD(
             self.parameters(),
-            lr=self.learning_rate,
-            momentum=self.momentum
+            lr=prm['ls'],
+            momentum=prm['momentum']
         )
 
     def learn(self, train_data):
@@ -87,7 +92,3 @@ class Net(nn.Module):
             loss.backward()
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
-
-
-
-

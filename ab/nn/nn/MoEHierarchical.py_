@@ -148,8 +148,9 @@ class Top2Gating(nn.Module):
         return dispatch_tensor, combine_tensor, loss
 
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm):
+     def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         dim = in_shape[-1]
         num_experts = prm.get("num_experts", (4, 4))
         hidden_dim = prm.get("hidden_dim", dim * 4)
@@ -193,8 +194,8 @@ class Net(nn.Module):
         total_loss = (loss_outer + loss_inner) * self.loss_coef
         return output, total_loss
 
-    def train_setup(self, device, prm):
-        self.to(device)
+    def train_setup(self, prm):
+        self.to(self.device)
         self.optimizer = torch.optim.Adam(self.parameters(), lr=prm.get("lr", 1e-3))
         self.criterion = nn.MSELoss()
 

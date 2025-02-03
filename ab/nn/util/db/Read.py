@@ -2,7 +2,7 @@ from ab.nn.util.db.Write import init_population
 
 init_population()
 
-from ab.nn.util.Const import config_splitter, main_columns_ext
+from ab.nn.util.Const import config_splitter, main_columns, main_columns_ext
 from ab.nn.util.db.Init import sql_conn, close_conn
 
 
@@ -223,7 +223,7 @@ def unique_configs(patterns: tuple[str, ...]) -> list[str]:
     """
 
     conn, cursor = sql_conn()
-    query = "SELECT DISTINCT task, dataset, metric, nn FROM stat"
+    query = f"SELECT DISTINCT {', '.join(main_columns)} FROM stat"
     cursor.execute(query)
     rows = cursor.fetchall()
     columns = [col[0] for col in cursor.description]

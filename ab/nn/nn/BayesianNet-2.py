@@ -8,6 +8,7 @@ def calculate_kl(mu_q, sig_q, mu_p, sig_p):
     kl = 0.5 * (2 * torch.log(sig_p / sig_q) - 1 + (sig_q / sig_p).pow(2) + ((mu_p - mu_q) / sig_p).pow(2)).sum()
     return kl
 
+
 class ModuleWrapper(nn.Module):
     def __init__(self):
         super(ModuleWrapper, self).__init__()
@@ -39,6 +40,7 @@ class FlattenLayer(ModuleWrapper):
     def forward(self, x):
         return x.view(-1, self.num_features)
 
+
 class BBBLinear(ModuleWrapper):
 
     def __init__(self, in_features, out_features, bias=True, priors=None):
@@ -49,7 +51,7 @@ class BBBLinear(ModuleWrapper):
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         if priors is None:
-                priors = {
+            priors = {
                 'prior_mu': 0,
                 'prior_sigma': 0.1,
                 'posterior_mu_initial': (0, 0.1),
@@ -103,7 +105,8 @@ class BBBLinear(ModuleWrapper):
         if self.use_bias:
             kl += calculate_kl(self.prior_mu, self.prior_sigma, self.bias_mu, self.bias_sigma)
         return kl
-    
+
+
 class BBBConv2d(ModuleWrapper):
 
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
@@ -184,10 +187,9 @@ def supported_hyperparameters():
 
 class Net(ModuleWrapper):
 
-
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -200,8 +202,9 @@ class Net(ModuleWrapper):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super(Net, self).__init__()
+        self.device = device
         inputs: int = in_shape[1]
         outputs: int = out_shape[0]
         self.num_classes = outputs
@@ -212,7 +215,7 @@ class Net(ModuleWrapper):
             'posterior_rho_initial': (-5, 0.1),
         }
         self.act = nn.Softplus
-        
+
         self.conv1 = BBBConv2d(inputs, 64, 11, stride=4, padding=5, bias=True, priors=self.priors)
         self.act1 = self.act()
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)

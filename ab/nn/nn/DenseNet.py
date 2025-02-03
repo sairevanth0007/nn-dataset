@@ -13,7 +13,7 @@ from torchvision.models._utils import _ovewrite_named_param
 
 class _DenseLayer(nn.Module):
     def __init__(
-        self, num_input_features: int, growth_rate: int, bn_size: int, drop_rate: float, memory_efficient: bool = False
+            self, num_input_features: int, growth_rate: int, bn_size: int, drop_rate: float, memory_efficient: bool = False
     ) -> None:
         super().__init__()
         self.norm1 = nn.BatchNorm2d(num_input_features)
@@ -77,13 +77,13 @@ class _DenseBlock(nn.ModuleDict):
     _version = 2
 
     def __init__(
-        self,
-        num_layers: int,
-        num_input_features: int,
-        bn_size: int,
-        growth_rate: int,
-        drop_rate: float,
-        memory_efficient: bool = False,
+            self,
+            num_layers: int,
+            num_input_features: int,
+            bn_size: int,
+            growth_rate: int,
+            drop_rate: float,
+            memory_efficient: bool = False,
     ) -> None:
         super().__init__()
         for i in range(num_layers):
@@ -116,11 +116,12 @@ class _Transition(nn.Sequential):
 def supported_hyperparameters():
     return {'lr', 'momentum', 'dropout'}
 
+
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss().to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
         self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
     def learn(self, train_data):
@@ -133,8 +134,9 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         num_classes: int = out_shape[0]
         growth_rate: int = 32
         block_config: Tuple[int, int, int, int] = (6, 12, 24, 16)
@@ -204,12 +206,12 @@ def _load_state_dict(model: nn.Module, weights: WeightsEnum, progress: bool) -> 
 
 
 def _densenet(
-    growth_rate: int,
-    block_config: Tuple[int, int, int, int],
-    num_init_features: int,
-    weights: Optional[WeightsEnum],
-    progress: bool,
-    **kwargs: Any,
+        growth_rate: int,
+        block_config: Tuple[int, int, int, int],
+        num_init_features: int,
+        weights: Optional[WeightsEnum],
+        progress: bool,
+        **kwargs: Any,
 ) -> Net:
     if weights is not None:
         _ovewrite_named_param(kwargs, "num_classes", len(weights.meta["categories"]))

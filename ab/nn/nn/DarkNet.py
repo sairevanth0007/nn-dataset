@@ -2,8 +2,10 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+
 def supported_hyperparameters():
     return {'lr', 'momentum', 'dropout'}
+
 
 class DarkNetUnit(nn.Module):
     def __init__(self, in_channels: int, out_channels: int, pointwise: bool, alpha: float):
@@ -25,16 +27,14 @@ class DarkNetUnit(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.conv(x)
 
-class Net(nn.Module):
-    def __init__(self, 
-                 in_shape: tuple, 
-                 out_shape: tuple, 
-                 prm: dict, 
-                 channels: list = None, 
-                 odd_pointwise: bool = True, 
-                 alpha: float = 0.1):
-        super(Net, self).__init__()
 
+class Net(nn.Module):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
+        super(Net, self).__init__()
+        self.device = device
+        channels: list = None
+        odd_pointwise: bool = True
+        alpha: float = 0.1
         in_channels = in_shape[1]
         image_size = in_shape[2]
         num_classes = out_shape[0]
@@ -76,12 +76,13 @@ class Net(nn.Module):
         x = x.view(x.size(0), -1)
         return x
 
-    def train_setup(self, device: torch.device, prm: dict):
+    def train_setup(self, prm: dict):
+        self.to(self.device)
         learning_rate = float(prm.get("lr", 0.01))
         momentum = float(prm.get("momentum", 0.9))
         self.criteria = nn.CrossEntropyLoss()
         self.optimizer = optim.SGD(self.parameters(), lr=learning_rate, momentum=momentum)
-        self.to(device)
+        self.to(self.device)
 
     def learn(self, train_data: torch.utils.data.DataLoader):
         self.train()
@@ -92,4 +93,3 @@ class Net(nn.Module):
             loss = self.criteria(outputs, targets)
             loss.backward()
             self.optimizer.step()
-

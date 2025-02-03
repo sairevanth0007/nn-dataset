@@ -16,6 +16,7 @@ from torchvision.models.detection.anchor_utils import AnchorGenerator
 from torchvision.ops.feature_pyramid_network import LastLevelP6P7
 from torchvision.models.detection import _utils as det_utils
 
+
 def supported_hyperparameters():
     return {'lr', 'momentum', 'fg_iou_thresh', 'bg_iou_thresh', 'score_thresh',
             'nms_thresh', 'detections_per_img', 'topk_candidates'}
@@ -27,11 +28,13 @@ def _sum(x: List[Tensor]) -> Tensor:
         res = res + i
     return res
 
+
 def _default_anchorgen():
     anchor_sizes = tuple((x, int(x * 2 ** (1.0 / 3)), int(x * 2 ** (2.0 / 3))) for x in [32, 64, 128, 256, 512])
     aspect_ratios = ((0.5, 1.0, 2.0),) * len(anchor_sizes)
     anchor_generator = AnchorGenerator(anchor_sizes, aspect_ratios)
     return anchor_generator
+
 
 class RetinaNetHead(nn.Module):
     def __init__(self, in_channels, num_anchors, num_classes, norm_layer=None):
@@ -50,6 +53,7 @@ class RetinaNetHead(nn.Module):
             "cls_logits": self.classification_head(x),
             "bbox_regression": self.regression_head(x)
         }
+
 
 class RetinaNetClassificationHead(nn.Module):
     def __init__(self, in_channels, num_anchors, num_classes, prior_probability=0.01, norm_layer=None):
@@ -116,6 +120,7 @@ class RetinaNetClassificationHead(nn.Module):
 
         return torch.cat(all_cls_logits, dim=1)
 
+
 class RetinaNetRegressionHead(nn.Module):
     def __init__(self, in_channels, num_anchors, norm_layer=None):
         super().__init__()
@@ -142,7 +147,7 @@ class RetinaNetRegressionHead(nn.Module):
         bbox_regression = head_outputs["bbox_regression"]
 
         for targets_per_image, bbox_regression_per_image, anchors_per_image, matched_idxs_per_image in zip(
-            targets, bbox_regression, anchors, matched_idxs
+                targets, bbox_regression, anchors, matched_idxs
         ):
             foreground_idxs_per_image = torch.where(matched_idxs_per_image >= 0)[0]
             num_foreground = foreground_idxs_per_image.numel()
@@ -242,16 +247,17 @@ class RetinaNetRegressionHead(nn.Module):
 
 
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prms):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
+        self.device = device
         num_classes = out_shape[0]
-        fg_iou_thresh = prms['fg_iou_thresh']
-        bg_iou_thresh = prms['bg_iou_thresh']
+        fg_iou_thresh = prm['fg_iou_thresh']
+        bg_iou_thresh = prm['bg_iou_thresh']
 
-        self.score_thresh = prms['score_thresh']
-        self.nms_thresh = prms['nms_thresh']
-        self.detections_per_img = int(600 * prms['detections_per_img']) + 1
-        self.topk_candidates = int(2000 * prms['topk_candidates']) + 1
+        self.score_thresh = prm['score_thresh']
+        self.nms_thresh = prm['nms_thresh']
+        self.detections_per_img = int(600 * prm['detections_per_img']) + 1
+        self.topk_candidates = int(2000 * prm['topk_candidates']) + 1
 
         backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
         backbone = _resnet_fpn_extractor(
@@ -260,10 +266,10 @@ class Net(nn.Module):
             returned_layers=[2, 3, 4],
             extra_blocks=LastLevelP6P7(256, 256)
         )
-        
+
         anchor_generator = _default_anchorgen()
         norm_layer = partial(nn.GroupNorm, 32)
-        
+
         self.backbone = backbone
         self.anchor_generator = anchor_generator
         self.head = RetinaNetHead(
@@ -272,7 +278,7 @@ class Net(nn.Module):
             num_classes,
             norm_layer=norm_layer
         )
-        
+
         self.transform = GeneralizedRCNNTransform(
             min_size=320,
             max_size=320,
@@ -280,7 +286,7 @@ class Net(nn.Module):
             image_std=[0.229, 0.224, 0.225]
         )
         self.num_classes = num_classes
-        
+
         self.box_coder = det_utils.BoxCoder(weights=(1.0, 1.0, 1.0, 1.0))
 
         self.proposal_matcher = det_utils.Matcher(
@@ -288,7 +294,6 @@ class Net(nn.Module):
             bg_iou_thresh,
             allow_low_quality_matches=True,
         )
-
 
     def forward(self, images, targets=None):
         if targets is not None:
@@ -307,7 +312,7 @@ class Net(nn.Module):
 
         images = self.transform(images)[0]
         features = self.backbone(images.tensors)
-        
+
         if isinstance(features, torch.Tensor):
             features = OrderedDict([("0", features)])
         features = list(features.values())
@@ -317,7 +322,7 @@ class Net(nn.Module):
 
         losses = {}
         detections = []
-        
+
         if self.training:
             losses = self.compute_loss(targets, head_outputs, anchors)
         else:
@@ -325,10 +330,9 @@ class Net(nn.Module):
 
         if torch.jit.is_scripting():
             if not self._has_warned:
-                warnings.warn("RetinaNet always returns a (Losses, Detections) tuple in scripting")
                 self._has_warned = True
             return losses, detections
-        
+
         return losses if self.training else detections
 
     def compute_loss(self, targets, head_outputs, anchors):
@@ -348,7 +352,7 @@ class Net(nn.Module):
     def postprocess_detections(self, head_outputs, anchors, image_sizes):
         class_logits = head_outputs["cls_logits"]
         box_regression = head_outputs["bbox_regression"]
-        
+
         num_images = len(image_sizes)
         detections = []
 
@@ -363,7 +367,7 @@ class Net(nn.Module):
             # Keep only the top k scores
             top_k = min(self.topk_candidates, scores_per_image.shape[0])
             scores_per_image, topk_idxs = scores_per_image.flatten().topk(top_k)
-            
+
             anchor_idxs = topk_idxs // self.num_classes
             labels_per_image = topk_idxs % self.num_classes
 
@@ -387,29 +391,26 @@ class Net(nn.Module):
             })
 
         return detections
-        
-    def train_setup(self, device, prm):
-        self.device = device
+
+    def train_setup(self, prm):
+        self.to(self.device)
         self.optimizer = torch.optim.SGD(
             self.parameters(),
             lr=prm['lr'],
             momentum=prm['momentum']
         )
-        
+
     def learn(self, train_data):
         self.train()
         for inputs, labels in train_data:
-
-        
             inputs = inputs.to(self.device)
-            
-            #labels = [{k: v.to(self.device) for k, v in t.items()} for t in labels]
+
+            # labels = [{k: v.to(self.device) for k, v in t.items()} for t in labels]
             labels = labels.to(self.device)
             self.optimizer.zero_grad()  # Changed from optimizer to self.optimizer
-        
+
             losses = self(inputs, labels)  # Changed from forward_pass to self()
             loss = sum(loss for loss in losses.values())
-            
+
             loss.backward()
             self.optimizer.step()  # Changed from optimizer to self.optimizer
-

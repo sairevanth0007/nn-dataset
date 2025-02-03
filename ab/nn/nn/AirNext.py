@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 
+
 class AirBlock(nn.Module):
     def __init__(self, in_channels, out_channels, groups=1, ratio=2):
         super(AirBlock, self).__init__()
@@ -61,8 +62,9 @@ class AirNeXtUnit(nn.Module):
 
 
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super(Net, self).__init__()
+        self.device = device
         channel_number = in_shape[1]
         image_size = in_shape[2]
         class_number = out_shape[0]
@@ -100,9 +102,9 @@ class Net(nn.Module):
         x = self.output(x)
         return x
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = nn.CrossEntropyLoss().to(device)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = nn.CrossEntropyLoss().to(self.device)
         self.optimizer = torch.optim.Adam(self.parameters(), lr=prm['lr'], weight_decay=1e-4)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=5, gamma=0.5)
 
@@ -117,6 +119,7 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
         self.scheduler.step()
+
 
 def supported_hyperparameters():
     return {'lr', 'momentum', 'dropout'}

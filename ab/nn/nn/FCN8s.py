@@ -39,6 +39,7 @@ class VGG(nn.Module):
         x = self.classifier(x)
         return x
 
+
 def make_layers(cfg: List[Union[str, int]], batch_norm: bool = False) -> nn.Sequential:
     layers: List[nn.Module] = []
     in_channels = 3
@@ -55,12 +56,14 @@ def make_layers(cfg: List[Union[str, int]], batch_norm: bool = False) -> nn.Sequ
             in_channels = v
     return nn.Sequential(*layers)
 
+
 vgg_cfgs: Dict[str, List[Union[str, int]]] = {
     "A": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
     "B": [64, 64, "M", 128, 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
     "D": [64, 64, "M", 128, 128, "M", 256, 256, 256, "M", 512, 512, 512, "M", 512, 512, 512, "M"],
     "E": [64, 64, "M", 128, 128, "M", 256, 256, 256, 256, "M", 512, 512, 512, 512, "M", 512, 512, 512, 512, "M"],
 }
+
 
 class FCNHead(nn.Sequential):
     def __init__(self, in_channels: int, channels: int) -> None:
@@ -82,9 +85,9 @@ def supported_hyperparameters():
 
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(self.device),)
         params_list = [{'params': self.backbone.parameters(), 'lr': prm['lr']}]
         for module in self.exclusive:
             params_list.append({'params': getattr(self, module).parameters(), 'lr': prm['lr'] * 10})
@@ -100,13 +103,14 @@ class Net(nn.Module):
             nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super(Net, self).__init__()
+        self.device = device
         num_classes = out_shape[0]
         backbone_num_classes = None
         init_weights = True
         dropout = prm['dropout']
-        backbone = VGG(make_layers(vgg_cfgs["D"]),num_classes=num_classes if (backbone_num_classes == None) else backbone_num_classes,init_weights=init_weights,dropout=dropout)
+        backbone = VGG(make_layers(vgg_cfgs["D"]), num_classes=num_classes if (backbone_num_classes == None) else backbone_num_classes, init_weights=init_weights, dropout=dropout)
 
         features = list(backbone.features.children())
         self.backbone = backbone.features
@@ -122,8 +126,8 @@ class Net(nn.Module):
         self.score_pool4.weight.data.zero_()
         self.score_pool4.bias.data.zero_()
 
-        self.head = FCNHead(512,num_classes)
-        self.__setattr__('exclusive',['score_pool3','score_pool4', 'head'])
+        self.head = FCNHead(512, num_classes)
+        self.__setattr__('exclusive', ['score_pool3', 'score_pool4', 'head'])
 
     def forward(self, x):
         pool3 = self.features3(x)
@@ -131,7 +135,7 @@ class Net(nn.Module):
         pool5 = self.features5(pool4)
 
         score_fr = self.head(pool5)
-        
+
         score_pool4 = self.score_pool4(pool4)
         score_pool3 = self.score_pool3(pool3)
 

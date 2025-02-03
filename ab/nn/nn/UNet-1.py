@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class DoubleConv(nn.Module):
     def __init__(self, in_channels, out_channels, mid_channels=None):
         super().__init__()
@@ -53,6 +54,7 @@ class Up(nn.Module):
         x = torch.cat([x2, x1], dim=1)
         return self.conv(x)
 
+
 class OutConv(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(OutConv, self).__init__()
@@ -68,9 +70,9 @@ def supported_hyperparameters():
 
 class Net(nn.Module):
 
-    def train_setup(self, device, prm):
-        self.device = device
-        self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(device),)
+    def train_setup(self, prm):
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss(ignore_index=-1).to(self.device),)
         params_list = []
         for module in self.exclusive:
             params_list.append({'params': getattr(self, module).parameters(), 'lr': prm['lr'] * 10})
@@ -85,8 +87,9 @@ class Net(nn.Module):
             loss.backward()
             self.optimizer.step()
 
-    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict):
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super(Net, self).__init__()
+        self.device = device
         num_classes = out_shape[0]
         self.n_channels = in_shape[1]
         self.n_classes = num_classes
@@ -104,7 +107,7 @@ class Net(nn.Module):
         self.up4 = (Up(128, 64, self.bilinear))
         self.outc = (OutConv(64, num_classes))
         self.__setattr__('exclusive',
-                         ['inc','outc','down1','down2','down3','down4','up1','up2','up3','up4'])
+                         ['inc', 'outc', 'down1', 'down2', 'down3', 'down4', 'up1', 'up2', 'up3', 'up4'])
 
     def forward(self, x):
         x1 = self.inc(x)
