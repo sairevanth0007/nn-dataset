@@ -9,6 +9,15 @@
         "uid": "dae5366d-1d85-4a03-ae60-02b7bfce949f"
     },
     {
+        "accuracy": 0.9781,
+        "batch": 1,
+        "duration": 225985141879,
+        "lr": 0.006773432411957204,
+        "momentum": 0.6850090786472787,
+        "transform": "echo_32",
+        "uid": "fc0778f1-2ca7-4ffa-8da6-446bdd4bfabf"
+    },
+    {
         "accuracy": 0.9751,
         "batch": 8,
         "duration": 148035806092,
@@ -16,6 +25,24 @@
         "momentum": 0.8162189593964383,
         "transform": "echo_32",
         "uid": "b0959bd4-8c11-4dde-861f-afd3dd87b010"
+    },
+    {
+        "accuracy": 0.9721,
+        "batch": 8,
+        "duration": 38666258626,
+        "lr": 0.009959751377502858,
+        "momentum": 0.27402360705202233,
+        "transform": "norm_32",
+        "uid": "e46bde7a-5a25-4020-9f89-2baf1ec55d4c"
+    },
+    {
+        "accuracy": 0.8527,
+        "batch": 4,
+        "duration": 64707315963,
+        "lr": 0.0012947821357527736,
+        "momentum": 0.4539024437338398,
+        "transform": "echo_32",
+        "uid": "99311ca7-2975-4cbc-aa81-64502f8fefd6"
     },
     {
         "accuracy": 0.7289,
@@ -43,5 +70,32 @@
         "momentum": 0.7250220277953341,
         "transform": "norm_32_flip",
         "uid": "cf9a78c9-c272-413b-8e2d-5ed81fb60e8a"
+    },
+    {
+        "accuracy": 0.173,
+        "batch": 8,
+        "duration": 38749762684,
+        "lr": 1.1493613368488067e-05,
+        "momentum": 0.9631018950482776,
+        "transform": "echo_32",
+        "uid": "06b5501e-c0c7-4e7b-900a-fa7026576beb"
+    },
+    {
+        "accuracy": 0.1135,
+        "batch": 128,
+        "duration": 12292086784,
+        "lr": 0.5061613540383885,
+        "momentum": 0.7273228907430718,
+        "transform": "echo_32",
+        "uid": "e3b8ac88-5bc0-4152-906e-f8198f0e0558"
+    },
+    {
+        "accuracy": 0.1048,
+        "batch": 256,
+        "duration": 12858025080,
+        "lr": 4.4643586755141835e-05,
+        "momentum": 0.661016831248146,
+        "transform": "norm_32",
+        "uid": "aeb0fe80-cc47-43b0-a43f-9af1f84e7131"
     }
 ]
