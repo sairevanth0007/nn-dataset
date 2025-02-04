@@ -9,8 +9,10 @@ from ab.nn.util.Util import read_py_file_as_string
 class Testing(unittest.TestCase):
     def test_data(self):
         o = api.data()
-        print(o)
-        self.assertIsNotNone(o)
+        o2 = api.data(task='img-classification')
+        print(o2)
+        self.assertNotEqual(len(o2), 0)
+        self.assertGreater(len(o), len(o2))
 
     def test_check_nn(self):
         code = read_py_file_as_string(default_nn_path)

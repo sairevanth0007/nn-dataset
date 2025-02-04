@@ -1,10 +1,10 @@
-from ab.nn.util.db.Write import init_population
-
-init_population()
-
 from ab.nn.util.Const import main_columns, main_columns_ext
 from ab.nn.util.Util import is_full_config
 from ab.nn.util.db.Init import sql_conn, close_conn
+from ab.nn.util.db.Write import init_population
+import builtins
+
+init_population()
 
 
 def query_cursor_cols_rows(*q) -> tuple[list, list]:
@@ -19,7 +19,7 @@ def query_cursor_cols_rows(*q) -> tuple[list, list]:
 
 def query_rows(*q):
     conn, cursor = sql_conn()
-    cursor.execute(q[0]) if len(q) == 1 else cursor.execute(*q)
+    cursor.execute(*q)
     rows = cursor.fetchall()
     close_conn(conn)
     return rows
@@ -55,27 +55,9 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
       - 'prm': dict           (hyperparameters, reconstructed from the "prm" table)
       - 'transform_code': str (source code from the transform table)
     """
-    
+
     # Build filtering conditions based on provided parameters.
-    filters = []
-    params = []
-    if task is not None:
-        filters.append("s.task = ?")
-        params.append(task)
-    if dataset is not None:
-        filters.append("s.dataset = ?")
-        params.append(dataset)
-    if metric is not None:
-        filters.append("s.metric = ?")
-        params.append(metric)
-    if nn is not None:
-        filters.append("s.nn = ?")
-        params.append(nn)
-    if epoch is not None:
-        filters.append("s.epoch = ?")
-        params.append(epoch)
-    where_clause = "WHERE " + " AND ".join(filters) if filters else ""
-    
+    params, where_clause = sql_where([task, dataset, metric, nn, epoch])
     if not only_best_accuracy:
         # Query that returns all matching rows.
         columns, rows = query_cursor_cols_rows(f"""
@@ -88,7 +70,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             LEFT JOIN transform t ON s.transform = t.name
             {where_clause}
             ORDER BY s.task, s.dataset, s.metric, s.nn, s.epoch;
-        """)
+        """, params)
     else:
         # Query that returns, for each group (task, dataset, metric, nn, epoch),
         # only the row with the maximum accuracy.
@@ -118,7 +100,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             LEFT JOIN metric m ON f.metric = m.name
             LEFT JOIN transform t ON f.transform = t.name
             ORDER BY f.task, f.dataset, f.metric, f.nn, f.epoch;
-        """)
+        """, params)
 
     results = []
     # For each row from the main stat table, reconstruct the hyperparameter dictionary
@@ -133,33 +115,34 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             # Each pr is a tuple (name, value, type)
             pr_name, pr_value, pr_type = pr
             # Convert the stored value to its proper type.
-            if pr_type == "int":
-                try:
-                    pr_value = int(pr_value)
-                except Exception:
-                    pass
-            elif pr_type == "float":
-                try:
-                    pr_value = float(pr_value)
-                except Exception:
-                    pass
-            prm_dict[pr_name] = pr_value
+            prm_dict[pr_name] = getattr(builtins, pr_type)(pr_value)
         row_dict["prm"] = prm_dict
-        
+
         # Remove internal columns not needed in the output.
         row_dict.pop("stat_id", None)
         row_dict.pop("stat_prm", None)
         row_dict.pop("transform", None)  # Only transform_code is needed.
-        
+
         # Ensure that epoch is an integer.
         try:
             row_dict["epoch"] = int(row_dict["epoch"])
         except (ValueError, TypeError):
             pass
-        
+
         results.append(row_dict)
-    
+
     return tuple(results)
+
+
+def sql_where(value_list):
+    filters = []
+    params = []
+    for nm, v in zip(main_columns_ext, value_list):
+        if v is not None:
+            filters.append(f"s.{nm} = ?")
+            params.append(v)
+    return params, ' WHERE ' + ' AND '.join(filters) if filters else ''
+
 
 def remaining_trials(config_ext, n_optuna_trials) -> tuple[int, int]:
     """
@@ -182,9 +165,8 @@ def remaining_trials(config_ext, n_optuna_trials) -> tuple[int, int]:
     """
 
     conn, cursor = sql_conn()
-    
-    query = "SELECT COUNT(*) AS trial_count FROM stat WHERE " + " and ".join([f"{c} = ?" for c in main_columns_ext])
-    cursor.execute(query, config_ext)
+    params, where_clause = sql_where(config_ext)
+    cursor.execute('SELECT COUNT(*) AS trial_count FROM stat s' + where_clause, params)
     row = cursor.fetchone()
     if row:
         # Convert the tuple row to a dict
@@ -228,10 +210,11 @@ def unique_configs(patterns: list[str, ...]) -> list[list[str]]:
     """
     matched_configs = []
     for pattern in patterns:
-        _, rows = query_cols_rows(f"SELECT DISTINCT {', '.join(main_columns)} FROM stat" +
-                                        ('' if len(pattern) == 1 and pattern[0] == '' else
-                                         ' where ' + ' and '.join([f"{nm}='{v}'" for nm, v in zip(main_columns, pattern)]))) #  + "*"
+        pattern = list(filter(None, pattern))
+        params, where_clause = sql_where(pattern)
+        # params = params if not params else params[:-1] + [params[-1] + '*']
+        rows = query_rows(f"SELECT DISTINCT {', '.join(main_columns)} FROM stat s" + where_clause, params)
         if not rows and is_full_config(pattern):
-            rows = [pattern]
+            rows = [tuple(pattern)]
         matched_configs = matched_configs + rows
     return list(set(matched_configs))
