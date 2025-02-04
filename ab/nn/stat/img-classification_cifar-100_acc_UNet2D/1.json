@@ -90,6 +90,16 @@
         "uid": "39ac9733-b6eb-4ded-aa58-514b8dc2c4ee"
     },
     {
+        "accuracy": 0.0165,
+        "batch": 64,
+        "dropout": 0.42430921149440265,
+        "duration": 6488849464,
+        "lr": 0.020582121266623586,
+        "momentum": 0.7928780573853025,
+        "transform": "echo_64_flip",
+        "uid": "9f3a5ccb-0c35-4f2b-a8f2-094dfcc7a7b1"
+    },
+    {
         "accuracy": 0.0141,
         "batch": 16,
         "dropout": 0.18838110298857585,

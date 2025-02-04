@@ -22,5 +22,17 @@
         "stochastic_depth_prob": 0.4471571629199367,
         "transform": "echo_64_flip",
         "uid": "14b38d8f-a6a1-4069-b410-c8ad3dbe372e"
+    },
+    {
+        "accuracy": 0.5239,
+        "batch": 16,
+        "duration": 105181331835,
+        "lr": 0.00011397858977757367,
+        "momentum": 0.3004626764492757,
+        "norm_eps": 0.9387302667876123,
+        "norm_std": 0.06103176720995174,
+        "stochastic_depth_prob": 0.9516616734465936,
+        "transform": "echo_128_flip",
+        "uid": "0cb40501-9850-4d65-859c-558868b1f023"
     }
 ]

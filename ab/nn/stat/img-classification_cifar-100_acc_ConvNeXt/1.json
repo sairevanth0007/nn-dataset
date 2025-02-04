@@ -1,5 +1,29 @@
 [
     {
+        "accuracy": 0.108,
+        "batch": 1,
+        "duration": 687895994067,
+        "lr": 0.012064293512278862,
+        "momentum": 0.014188266431655272,
+        "norm_eps": 0.6669837936640356,
+        "norm_std": 0.025257871534032916,
+        "stochastic_depth_prob": 0.6575829278452543,
+        "transform": "norm_256",
+        "uid": "93a629a4-24e9-4585-8185-a82258c069ce"
+    },
+    {
+        "accuracy": 0.1015,
+        "batch": 2,
+        "duration": 330584702936,
+        "lr": 0.001715682872062716,
+        "momentum": 0.3907434506204954,
+        "norm_eps": 0.26259253061646304,
+        "norm_std": 0.40576528310016247,
+        "stochastic_depth_prob": 0.06944480925893237,
+        "transform": "norm_64",
+        "uid": "8545e4f1-1358-49d0-b398-b4386dd80321"
+    },
+    {
         "accuracy": 0.0372,
         "batch": 8,
         "duration": 80344274384,
@@ -24,6 +48,18 @@
         "uid": "813bce2f-0635-460c-accc-bbffd68f3a75"
     },
     {
+        "accuracy": 0.0281,
+        "batch": 128,
+        "duration": 18654912766,
+        "lr": 0.00018358955288421737,
+        "momentum": 0.3917854213700048,
+        "norm_eps": 0.8937721164405095,
+        "norm_std": 0.554478774075198,
+        "stochastic_depth_prob": 0.9005436832904234,
+        "transform": "norm_64",
+        "uid": "3ccb3e44-18f1-4b0b-a5a9-6cf6c9ad3e06"
+    },
+    {
         "accuracy": 0.0279,
         "batch": 32,
         "duration": 263598457380,
@@ -46,6 +82,18 @@
         "stochastic_depth_prob": 0.39882397669930947,
         "transform": "echo_32",
         "uid": "b125a2fd-7411-403b-b926-283cf50de5d8"
+    },
+    {
+        "accuracy": 0.0212,
+        "batch": 4,
+        "duration": 172616769063,
+        "lr": 2.999945634369846e-05,
+        "momentum": 0.035041989614459035,
+        "norm_eps": 0.033531701257312196,
+        "norm_std": 0.6283108987027741,
+        "stochastic_depth_prob": 0.2811304845938918,
+        "transform": "echo_128_flip",
+        "uid": "22904821-f310-42a5-8505-3591d0b5742c"
     },
     {
         "accuracy": 0.021,
