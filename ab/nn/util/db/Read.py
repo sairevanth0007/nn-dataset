@@ -229,7 +229,7 @@ def unique_configs(patterns: list[str, ...]) -> list[list[str]]:
     matched_configs = []
     for pattern in patterns:
         _, rows = query_cols_rows(f"SELECT DISTINCT {', '.join(main_columns)} FROM stat" +
-                                        ('' if pattern == '' else
+                                        ('' if len(pattern) == 1 and pattern[0] == '' else
                                          ' where ' + ' and '.join([f"{nm}='{v}'" for nm, v in zip(main_columns, pattern)]))) #  + "*"
         if not rows and is_full_config(pattern):
             rows = [pattern]
