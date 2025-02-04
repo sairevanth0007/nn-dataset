@@ -57,7 +57,7 @@ def populate_prm_table(table_name, cursor, prm, uid):
 
 def save_stat(config_ext: tuple[str, str, str, str, int], prm, cursor):
     # Insert each trial into the database with epoch
-    transform = prm.pop('transform')
+    transform = prm['transform']
     uid = prm.pop('uid')
     extra_main_column_values = [prm.pop(nm, None) for nm in extra_main_columns]
     for nm in param_tables:
