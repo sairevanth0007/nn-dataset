@@ -435,6 +435,21 @@
         "uid": "8e06ca11-c8dc-448f-98d5-e847865f9ff0"
     },
     {
+        "accuracy": 0.07806738466024399,
+        "batch": 16,
+        "batch_size_per_image": 0.044242911711278254,
+        "bg_iou_thresh": 0.11595565551197673,
+        "duration": 1811422682959,
+        "fg_iou_thresh": 0.4546342794213625,
+        "lr": 0.0005408799695525553,
+        "momentum": 0.4987965262920242,
+        "nms_thresh": 0.3924687198647594,
+        "positive_fraction": 0.9272028344467891,
+        "score_thresh": 0.6948730134970703,
+        "transform": "soft_pad",
+        "uid": "f9183cb8-efe7-45f4-9e00-766b0150003d"
+    },
+    {
         "accuracy": 0.061680179089307785,
         "batch": 16,
         "batch_size_per_image": 0.7554426362727049,

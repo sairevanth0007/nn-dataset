@@ -15,6 +15,21 @@
         "uid": "d4449269-f0ef-4cad-a408-07a37543d7a3"
     },
     {
+        "accuracy": 0.03008449077606201,
+        "batch": 2,
+        "bg_iou_thresh": 0.00929348101079519,
+        "detections_per_img": 0.4300525947588857,
+        "duration": 951709146169,
+        "fg_iou_thresh": 0.2012107677028685,
+        "lr": 0.009975002896377844,
+        "momentum": 0.39182884757635605,
+        "nms_thresh": 0.6002855794580362,
+        "score_thresh": 0.3544402475183914,
+        "topk_candidates": 0.22138116902685268,
+        "transform": "soft_pad",
+        "uid": "a3b1a38e-fbc7-464d-b7b5-e304c5d88914"
+    },
+    {
         "accuracy": 0.0216606967151165,
         "batch": 64,
         "bg_iou_thresh": 0.2152793819843758,
