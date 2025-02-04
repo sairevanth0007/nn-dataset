@@ -5,13 +5,14 @@ from ab.nn.util.Util import *
 from ab.nn.util.db.Init import init_db, sql_conn, close_conn
 
 
+def uuid4():
+    return str(uuid.uuid4())
+
+
 def init_population():
     if not db_file.exists():
         init_db()
         json_n_code_to_db()
-
-def uuid4():
-    return str(uuid.uuid4())
 
 
 def code_to_db(cursor, table_name, code=None, code_file=None):
@@ -106,11 +107,12 @@ def save_results(config_ext: tuple[str, str, str, str, int], prm: dict):
     close_conn(conn)
 
 
-def save_nn(nn_code : str, task : str, dataset : str, metric : str, epoch: int, prm: dict):
+def save_nn(nn_code: str, task: str, dataset: str, metric: str, epoch: int, prm: dict):
     conn, cursor = sql_conn()
     nn = code_to_db(cursor, 'nn', code=nn_code)
     save_stat((task, dataset, metric, nn, epoch), prm, cursor)
     close_conn(conn)
     return nn
+
 
 init_population()

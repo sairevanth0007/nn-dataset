@@ -7,7 +7,7 @@ from ab.nn.util.db.Calc import patterns_to_configs
 from ab.nn.util.db.Read import remaining_trials
 
 
-def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
+def main(config: str | tuple | list = default_config, n_epochs: int = default_epochs,
          n_optuna_trials: int | str = default_trials,
          min_batch_binary_power: int = default_min_batch_power, max_batch_binary_power: int = default_max_batch_power,
          min_learning_rate: float = default_min_lr, max_learning_rate: float = default_max_lr,
@@ -38,10 +38,9 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
     if transform:
         transform = transform if isinstance(transform, (tuple, list)) else (transform,)
     print(f"Training configurations ({n_epochs} epochs):")
-    for idx, sub_config_str in enumerate(sub_configs, start=1):
-        print(f"{idx}. {sub_config_str}")
-    for sub_config_str in sub_configs:
-            task, dataset_name, metric, model_name = sub_config = conf_to_names(sub_config_str)
+    for idx, sub_config in enumerate(sub_configs, start=1):
+        print(f"{idx}. {sub_config}")
+    for sub_config in sub_configs:
             sub_config_ext = sub_config + (n_epochs,)
             n_optuna_trials_left, n_passed_trials = remaining_trials(sub_config_ext, n_optuna_trials)
             n_expected_trials = n_optuna_trials_left + n_passed_trials
@@ -59,7 +58,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                     continue_study = False
                     try:
                         # Launch Optuna for the current NN model
-                        study = optuna.create_study(study_name=model_name, direction='maximize')
+                        study = optuna.create_study(study_name=sub_config[-1], direction='maximize')
 
                         # Configure Optuna for the current model
                         def objective(trial):
@@ -81,7 +80,7 @@ def main(config: str | tuple = default_config, n_epochs: int = default_epochs,
                         study.optimize(objective, n_trials=n_optuna_trials_left)
                     except CudaOutOfMemory as e:
                         max_batch_binary_power_local = e.batch_size_power() - 1
-                        print(f"Max batch is decreased to {max_batch(max_batch_binary_power_local)} due to a CUDA Out of Memory Exception for model '{model_name}'")
+                        print(f"Max batch is decreased to {max_batch(max_batch_binary_power_local)} due to a CUDA Out of Memory Exception for model '{sub_config[-1]}'")
                     finally:
                         del study
                         release_memory()

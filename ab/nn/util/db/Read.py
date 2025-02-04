@@ -2,8 +2,34 @@ from ab.nn.util.db.Write import init_population
 
 init_population()
 
-from ab.nn.util.Const import config_splitter, main_columns, main_columns_ext
+from ab.nn.util.Const import main_columns, main_columns_ext
+from ab.nn.util.Util import is_full_config
 from ab.nn.util.db.Init import sql_conn, close_conn
+
+
+def query_cursor_cols_rows(*q) -> tuple[list, list]:
+    conn, cursor = sql_conn()
+    cursor.execute(*q)
+    rows = cursor.fetchall()
+    # Extract column names from cursor description.
+    columns = [col[0] for col in cursor.description]
+    close_conn(conn)
+    return columns, rows
+
+
+def query_rows(*q):
+    conn, cursor = sql_conn()
+    cursor.execute(q[0]) if len(q) == 1 else cursor.execute(*q)
+    rows = cursor.fetchall()
+    close_conn(conn)
+    return rows
+
+
+def query_cols_rows(q) -> tuple[list, list]:
+    rows = query_rows(q)
+    # Since each row is a tuple (with one element), you can simply use row[0]
+    columns = [row[0] for row in rows]
+    return columns, rows
 
 
 def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None) -> tuple[dict[str, int | float | str | dict[str, int | float | str]], ...]:
@@ -50,12 +76,9 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
         params.append(epoch)
     where_clause = "WHERE " + " AND ".join(filters) if filters else ""
     
-    # Get a connection and cursor from the database infrastructure.
-    conn, cursor = sql_conn()
-    
     if not only_best_accuracy:
         # Query that returns all matching rows.
-        query = f"""
+        columns, rows = query_cursor_cols_rows(f"""
             SELECT s.task, s.dataset, s.metric, m.code AS metric_code,
                    s.nn, n.code AS nn_code, s.epoch, s.accuracy, s.duration,
                    s.id AS stat_id, s.prm AS stat_prm, t.code AS transform_code, s.transform
@@ -65,13 +88,11 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             LEFT JOIN transform t ON s.transform = t.name
             {where_clause}
             ORDER BY s.task, s.dataset, s.metric, s.nn, s.epoch;
-        """
-        cursor.execute(query, params)
-        rows = cursor.fetchall()
+        """)
     else:
         # Query that returns, for each group (task, dataset, metric, nn, epoch),
         # only the row with the maximum accuracy.
-        query = f"""
+        columns, rows = query_cursor_cols_rows(f"""
             WITH filtered AS (
                 SELECT s.task, s.dataset, s.metric, s.nn, s.transform, s.epoch, s.accuracy, s.duration,
                        s.id AS stat_id, s.prm AS stat_prm
@@ -97,13 +118,8 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             LEFT JOIN metric m ON f.metric = m.name
             LEFT JOIN transform t ON f.transform = t.name
             ORDER BY f.task, f.dataset, f.metric, f.nn, f.epoch;
-        """
-        cursor.execute(query, params)
-        rows = cursor.fetchall()
-    
-    # Extract column names from cursor description.
-    columns = [col[0] for col in cursor.description]
-    
+        """)
+
     results = []
     # For each row from the main stat table, reconstruct the hyperparameter dictionary
     # by querying the "prm" table using the stat's unique id.
@@ -112,8 +128,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
         uid = row_dict.get("stat_id")
         prm_dict = {}
         # Query the prm table to get hyperparameters for this stat record.
-        cursor.execute("SELECT name, value, type FROM prm WHERE uid = ?", (uid,))
-        prm_rows = cursor.fetchall()
+        prm_rows = query_rows("SELECT name, value, type FROM prm WHERE uid = ?", (uid,))
         for pr in prm_rows:
             # Each pr is a tuple (name, value, type)
             pr_name, pr_value, pr_type = pr
@@ -144,7 +159,6 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
         
         results.append(row_dict)
     
-    close_conn(conn)
     return tuple(results)
 
 def remaining_trials(config_ext, n_optuna_trials) -> tuple[int, int]:
@@ -192,7 +206,6 @@ def remaining_trials(config_ext, n_optuna_trials) -> tuple[int, int]:
     return n_remaining_trials, n_passed_trials
 
 
-
 def supported_transformers() -> list[str]:
     """
     Returns a list of all transformer names available in the database.
@@ -200,18 +213,10 @@ def supported_transformers() -> list[str]:
     The function queries the 'transform' table for all records and extracts the 'name'
     field from each row.
     """
-
-    conn, cursor = sql_conn()
-    query = "SELECT name FROM transform"
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    # Since each row is a tuple (with one element), you can simply use row[0]
-    transformer_names = [row[0] for row in rows]
-    close_conn(conn)
-    return transformer_names
+    return query_cols_rows("SELECT name FROM transform")[0]
 
 
-def unique_configs(patterns: tuple[str, ...]) -> list[str]:
+def unique_configs(patterns: list[str, ...]) -> list[list[str]]:
     """
     Returns a list of unique configuration strings from the database that match at least one of the input patterns.
     
@@ -221,24 +226,12 @@ def unique_configs(patterns: tuple[str, ...]) -> list[str]:
     :param patterns: A tuple of configuration prefix patterns.
     :return: A list of unique configuration strings that start with any of the provided patterns.
     """
-
-    conn, cursor = sql_conn()
-    query = f"SELECT DISTINCT {', '.join(main_columns)} FROM stat"
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    columns = [col[0] for col in cursor.description]
-    close_conn(conn)
-    
-    all_configs = []
-    for row in rows:
-        row_dict = dict(zip(columns, row))
-        config_str = f"{row_dict['task']}{config_splitter}{row_dict['dataset']}{config_splitter}{row_dict['metric']}{config_splitter}{row_dict['nn']}"
-        all_configs.append(config_str)
-    
     matched_configs = []
     for pattern in patterns:
-        for config in all_configs:
-            if config.startswith(pattern):
-                matched_configs.append(config)
-    
+        _, rows = query_cols_rows(f"SELECT DISTINCT {', '.join(main_columns)} FROM stat" +
+                                        ('' if pattern == '' else
+                                         ' where ' + ' and '.join([f"{nm}='{v}'" for nm, v in zip(main_columns, pattern)]))) #  + "*"
+        if not rows and is_full_config(pattern):
+            rows = [pattern]
+        matched_configs = matched_configs + rows
     return list(set(matched_configs))

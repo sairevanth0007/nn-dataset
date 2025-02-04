@@ -3,7 +3,7 @@ import datetime
 import gc
 import importlib.util
 import inspect
-
+import random
 import torch
 
 from ab.nn.util.Const import *
@@ -12,31 +12,47 @@ from ab.nn.util.Const import *
 def nn_mod(*nms):
     return ".".join(to_nn + nms)
 
-def get_obj_attr (obj, f_name, default=None):
+
+def get_obj_attr(obj, f_name, default=None):
     return getattr(obj, f_name) if hasattr(obj, f_name) else default
 
-def get_attr (mod, f):
+
+def get_attr(mod, f):
     return get_obj_attr(__import__(nn_mod(mod), fromlist=[f]), f)
+
+
+def order_configs(configs, random_config_order):
+    configs = list(configs)
+    if random_config_order:
+        random.shuffle(configs)
+    else:
+        configs.sort()
+    return configs
+
 
 def conf_to_names(c: str) -> tuple[str, ...]:
     return tuple(c.split(config_splitter))
 
-def is_full_config(s: str):
-    l = conf_to_names(s)
+
+def is_full_config(l: list[str] | tuple[str,...]):
     return 4 == len(l) and (nn_dir / (l[-1] + '.py')).exists()
+
 
 def merge_prm(prm: dict, d: dict):
     prm.update(d)
     prm = dict(sorted(prm.items()))
     return prm
 
-def max_batch (binary_power):
+
+def max_batch(binary_power):
     return 2 ** binary_power
 
-def model_stat_dir(config):
-     return stat_dir / config_splitter.join(config)
 
-def accuracy_to_time_metric (accuracy, min_accuracy, training_duration):
+def model_stat_dir(config):
+    return stat_dir / config_splitter.join(config)
+
+
+def accuracy_to_time_metric(accuracy, min_accuracy, training_duration):
     """
     Naive accuracy-to-time metric for fixed number of training epochs.
     """
@@ -44,8 +60,10 @@ def accuracy_to_time_metric (accuracy, min_accuracy, training_duration):
     print(f"accuracy_to_time_metric {d}")
     return d
 
+
 def good(result, minimum_accuracy, duration):
     return result > minimum_accuracy * 1.2
+
 
 def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max):
     if batch_min > batch_max: raise Exception(f"min_batch_binary_power {batch_min} > max_batch_binary_power {batch_max}")
@@ -60,6 +78,7 @@ def format_time(sec):
 def release_memory():
     gc.collect()
     if torch.cuda.is_available(): torch.cuda.empty_cache()
+
 
 def read_py_file_as_string(file_path):
     """
@@ -81,6 +100,7 @@ def read_py_file_as_string(file_path):
     except Exception as e:
         print(f"error when reading file: {e}")
         return None
+
 
 def args():
     parser = argparse.ArgumentParser()
@@ -111,5 +131,3 @@ def args():
     parser.add_argument('-w', '--workers', type=int, default=default_num_workers,
                         help="Number of data loader workers.")
     return parser.parse_args()
-
-

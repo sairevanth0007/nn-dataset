@@ -5,6 +5,16 @@ from pathlib import Path
 from ab.nn.util.Const import param_tables, db_file, db_dir, main_tables, code_tables, dependent_tables, all_tables, index_colum
 
 
+def sql_conn():
+    conn = sqlite3.connect(db_file)
+    return conn, conn.cursor()
+
+
+def close_conn(conn):
+    conn.commit()
+    conn.close()
+
+
 def create_code_table(name, cursor):
     cursor.execute(f"""
     CREATE TABLE IF NOT EXISTS {name} (
@@ -19,16 +29,6 @@ def create_param_table(name, cursor):
         name TEXT NOT NULL,
         value TEXT NOT NULL,
         type TEXT NOT NULL)""")
-
-
-def sql_conn():
-    conn = sqlite3.connect(db_file)
-    return conn, conn.cursor()
-
-
-def close_conn(conn):
-    conn.commit()
-    conn.close()
 
 
 def init_db():
