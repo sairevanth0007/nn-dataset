@@ -27,6 +27,24 @@
         "uid": "7308275b-99c9-4d4e-9a1f-92cb9b7a8b30"
     },
     {
+        "accuracy": 0.7037,
+        "batch": 8,
+        "duration": 56208405425,
+        "lr": 0.2705153802606448,
+        "momentum": 0.8416325743787101,
+        "transform": "echo_128_flip",
+        "uid": "12a0c449-3c5f-4b92-ac17-532afcfd0e08"
+    },
+    {
+        "accuracy": 0.6966,
+        "batch": 1,
+        "duration": 211494070098,
+        "lr": 0.29549432447093665,
+        "momentum": 0.35203204377363395,
+        "transform": "norm_32_flip",
+        "uid": "f7295ffe-98b0-4e8d-9bdb-4f2833ce8994"
+    },
+    {
         "accuracy": 0.6344,
         "batch": 16,
         "duration": 211277076574,
@@ -43,5 +61,50 @@
         "momentum": 0.04103508061549821,
         "transform": "echo_256_flip",
         "uid": "0b98f68f-c589-4629-a025-fe14176fde22"
+    },
+    {
+        "accuracy": 0.4852,
+        "batch": 2,
+        "duration": 298100756567,
+        "lr": 0.06322377944572431,
+        "momentum": 0.690457096292289,
+        "transform": "echo_299_flip",
+        "uid": "1386ad70-b1cd-4289-8b38-5a2facb70e4b"
+    },
+    {
+        "accuracy": 0.2693,
+        "batch": 4,
+        "duration": 1168381359571,
+        "lr": 0.0027825188685590093,
+        "momentum": 0.8653349055973006,
+        "transform": "echo_512",
+        "uid": "2a104d8a-c975-4ab8-be08-fc1fa55ca2a3"
+    },
+    {
+        "accuracy": 0.2427,
+        "batch": 2,
+        "duration": 224860062648,
+        "lr": 0.031819383049176406,
+        "momentum": 0.013630176069809874,
+        "transform": "echo_256",
+        "uid": "7f3f7c0f-0738-440d-810d-e0f25047a667"
+    },
+    {
+        "accuracy": 0.2197,
+        "batch": 32,
+        "duration": 419861209299,
+        "lr": 9.310513411640167e-05,
+        "momentum": 0.10628679048098633,
+        "transform": "echo_299",
+        "uid": "480cb274-2e55-453a-a609-1eb6105897e8"
+    },
+    {
+        "accuracy": 0.1645,
+        "batch": 64,
+        "duration": 298803700102,
+        "lr": 0.018005604982362235,
+        "momentum": 0.4236413544040858,
+        "transform": "norm_256_flip",
+        "uid": "441784fc-64e4-40d4-9cfe-325b4a062b51"
     }
 ]

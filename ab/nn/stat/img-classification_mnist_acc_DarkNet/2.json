@@ -10,6 +10,46 @@
         "uid": "19787ac5-12de-4d88-8c18-8e1b555f44ca"
     },
     {
+        "accuracy": 0.9883,
+        "batch": 16,
+        "dropout": 0.18069604217482177,
+        "duration": 16407280493,
+        "lr": 0.003985539832830401,
+        "momentum": 0.034768325512004816,
+        "transform": "echo_32",
+        "uid": "70d6f80f-545a-492a-ac35-84fa01d9ac36"
+    },
+    {
+        "accuracy": 0.9859,
+        "batch": 2,
+        "dropout": 0.2775769422319658,
+        "duration": 126194258161,
+        "lr": 0.019311060566406295,
+        "momentum": 0.9610727474717724,
+        "transform": "norm",
+        "uid": "5a465195-98f1-4e0c-a882-a0672c98a511"
+    },
+    {
+        "accuracy": 0.9762,
+        "batch": 128,
+        "dropout": 0.4805128059299812,
+        "duration": 22881783456,
+        "lr": 0.2098146267751242,
+        "momentum": 0.8215256023477655,
+        "transform": "echo_64_flip",
+        "uid": "60972cfc-c071-494f-af46-9df83c7c88da"
+    },
+    {
+        "accuracy": 0.9746,
+        "batch": 2,
+        "dropout": 0.26051678922740007,
+        "duration": 127515376823,
+        "lr": 0.012136492536045469,
+        "momentum": 0.8820968681644175,
+        "transform": "echo_32_flip",
+        "uid": "c14d2739-92c8-4b22-9ea6-9e590ac1cdc2"
+    },
+    {
         "accuracy": 0.8752,
         "batch": 64,
         "dropout": 0.0720653778883571,
@@ -30,6 +70,16 @@
         "uid": "d33b31f1-d84b-41f0-8827-6b4a6117ea89"
     },
     {
+        "accuracy": 0.5421,
+        "batch": 4,
+        "dropout": 0.1965510152047596,
+        "duration": 64488086708,
+        "lr": 3.7669443523934025e-05,
+        "momentum": 0.2933497938329289,
+        "transform": "echo_64_flip",
+        "uid": "b74b7ca3-8ce8-45f1-9939-f999371c49f8"
+    },
+    {
         "accuracy": 0.4976,
         "batch": 1,
         "dropout": 0.04787792107116107,
@@ -38,6 +88,16 @@
         "momentum": 0.5860877506201219,
         "transform": "echo_128",
         "uid": "96c56c7b-3527-445a-8708-2a83cefabed2"
+    },
+    {
+        "accuracy": 0.3486,
+        "batch": 4,
+        "dropout": 0.0711440329301048,
+        "duration": 1492015423834,
+        "lr": 0.00010327769922843078,
+        "momentum": 0.6522159957129928,
+        "transform": "norm_512",
+        "uid": "22ecb174-73a8-4ae8-b5c0-6b50bfb0616f"
     },
     {
         "accuracy": 0.3458,

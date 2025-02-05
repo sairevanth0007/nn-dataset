@@ -1,5 +1,41 @@
 [
     {
+        "accuracy": 0.9789,
+        "batch": 32,
+        "duration": 7831973675,
+        "lr": 0.9687675570358321,
+        "momentum": 0.005139035931120306,
+        "transform": "norm_32",
+        "uid": "6ee7aeb1-ebf7-4b75-952d-7beaffd6c62e"
+    },
+    {
+        "accuracy": 0.9428,
+        "batch": 4,
+        "duration": 54012938274,
+        "lr": 0.0005255360212508578,
+        "momentum": 0.9533228954606862,
+        "transform": "norm_64",
+        "uid": "0dc4d341-24fa-40dc-be91-9988cee8350f"
+    },
+    {
+        "accuracy": 0.9095,
+        "batch": 32,
+        "duration": 7350739386,
+        "lr": 0.9116605360014237,
+        "momentum": 0.5166422723094314,
+        "transform": "echo_32",
+        "uid": "28bbfa0b-3bac-46f9-9cf9-7ebec62c7e49"
+    },
+    {
+        "accuracy": 0.8238,
+        "batch": 64,
+        "duration": 3754677244,
+        "lr": 0.0156177628587371,
+        "momentum": 0.39179959057606506,
+        "transform": "echo",
+        "uid": "f5780845-33b5-4c62-a9ea-2ee985cbaa17"
+    },
+    {
         "accuracy": 0.8172,
         "batch": 4,
         "duration": 240689392110,
@@ -7,6 +43,33 @@
         "momentum": 0.14579545673738548,
         "transform": "echo_64",
         "uid": "87596418-bff2-43f8-83c3-ebb1954d4581"
+    },
+    {
+        "accuracy": 0.617,
+        "batch": 256,
+        "duration": 18418682854,
+        "lr": 0.006693339997058306,
+        "momentum": 0.7878837021067624,
+        "transform": "norm_64",
+        "uid": "db0f6bda-229d-425e-8a16-039d86ef8077"
+    },
+    {
+        "accuracy": 0.3299,
+        "batch": 32,
+        "duration": 7422853279,
+        "lr": 0.00011821478302391363,
+        "momentum": 0.35530327785397786,
+        "transform": "echo",
+        "uid": "14dc858e-cb4e-44bd-9600-a61772a52796"
+    },
+    {
+        "accuracy": 0.2712,
+        "batch": 16,
+        "duration": 271836879832,
+        "lr": 0.06091334396329411,
+        "momentum": 0.05943817758690906,
+        "transform": "echo_256",
+        "uid": "c4aed2ff-7f7e-4500-a734-156ad4d546ad"
     },
     {
         "accuracy": 0.2693,

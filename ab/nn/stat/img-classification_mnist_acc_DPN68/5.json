@@ -18,6 +18,15 @@
         "uid": "7c14a28f-7bb7-4afb-a276-e9705f3e222a"
     },
     {
+        "accuracy": 0.8324,
+        "batch": 8,
+        "duration": 140451887089,
+        "lr": 0.2705153802606448,
+        "momentum": 0.8416325743787101,
+        "transform": "echo_128_flip",
+        "uid": "4ed9d926-f4e0-4773-acb5-c0711eee18ff"
+    },
+    {
         "accuracy": 0.8279,
         "batch": 16,
         "duration": 529429693308,
@@ -27,6 +36,15 @@
         "uid": "ee27aaa7-3522-4446-b058-dc0ae1ba0275"
     },
     {
+        "accuracy": 0.7473,
+        "batch": 1,
+        "duration": 529610121465,
+        "lr": 0.29549432447093665,
+        "momentum": 0.35203204377363395,
+        "transform": "norm_32_flip",
+        "uid": "f1cfa5e8-2acc-49f3-954f-87dc43ce5a36"
+    },
+    {
         "accuracy": 0.6675,
         "batch": 2,
         "duration": 2588544607595,
@@ -34,5 +52,41 @@
         "momentum": 0.04103508061549821,
         "transform": "echo_256_flip",
         "uid": "85fd8aee-2829-4d53-9955-0f0510478a06"
+    },
+    {
+        "accuracy": 0.6307,
+        "batch": 2,
+        "duration": 745426391161,
+        "lr": 0.06322377944572431,
+        "momentum": 0.690457096292289,
+        "transform": "echo_299_flip",
+        "uid": "3c1c5c1c-61a1-4c62-8076-a5132f102dd7"
+    },
+    {
+        "accuracy": 0.6291,
+        "batch": 4,
+        "duration": 2921552266618,
+        "lr": 0.0027825188685590093,
+        "momentum": 0.8653349055973006,
+        "transform": "echo_512",
+        "uid": "f10e0796-fccf-4043-b191-2df406e7e340"
+    },
+    {
+        "accuracy": 0.5018,
+        "batch": 2,
+        "duration": 562172927271,
+        "lr": 0.031819383049176406,
+        "momentum": 0.013630176069809874,
+        "transform": "echo_256",
+        "uid": "62c82558-2f89-46ec-9c8a-8c473bfcca25"
+    },
+    {
+        "accuracy": 0.2575,
+        "batch": 32,
+        "duration": 1049777791417,
+        "lr": 9.310513411640167e-05,
+        "momentum": 0.10628679048098633,
+        "transform": "echo_299",
+        "uid": "7b0e207f-4b8f-4dc7-b25f-953dc4832f26"
     }
 ]
