@@ -11,6 +11,8 @@ The primary goal of NN Dataset project is to provide flexibility for dynamically
 ## Installation of the Latest Version of the NN Dataset
 
 ```bash
+pip uninstall nn-dataset -y
+rm -rf db
 pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
