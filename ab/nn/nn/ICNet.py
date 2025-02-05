@@ -78,7 +78,7 @@ class Net(nn.Module):
         self.criteria = nn.CrossEntropyLoss().to(self.device)
         self.optimizer = optim.SGD(
             self.parameters(),
-            lr=prm['ls'],
+            lr=prm['lr'],
             momentum=prm['momentum']
         )
 
