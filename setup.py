@@ -15,30 +15,6 @@ def read_readme():
         return readme_path.read_text(encoding="utf-8")
     return ""
 
-# Function to install PyTorch with CUDA support
-def install_pytorch():
-    try:
-        print("Installing PyTorch with CUDA 12.4 support...")
-        subprocess.check_call(
-            [
-                sys.executable,
-                "-m",
-                "pip",
-                "install",
-                "--extra-index-url",
-                "https://download.pytorch.org/whl/cu124",
-                "torch~=2.5.1",
-            ]
-        )
-        print("PyTorch with CUDA 12.4 installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print("Failed to install PyTorch with CUDA 12.4 support. Exiting.")
-        sys.exit(1)
-
-
-# Ensure PyTorch is installed before proceeding
-install_pytorch()
-
 setup(
     name="nn-dataset",
     version="1.0.1",
