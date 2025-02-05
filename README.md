@@ -1,4 +1,6 @@
 ## <img src='https://abrain.one/img/lemur-nn-icon-64x64.png' width='32px'/> Neural Network Dataset 
+<img src='https://img.shields.io/pypi/v/nn-dataset.svg'/>
+   
 LEMUR - Learning, Evaluation, and Modeling for Unified Research
 
 <img src='https://abrain.one/img/lemur-nn-whit.jpg' width='25%'/>
@@ -9,7 +11,11 @@ The original version of the <a href='https://github.com/ABrain-One/nn-dataset'>L
 The primary goal of NN Dataset project is to provide flexibility for dynamically combining various deep learing tasks, datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gen">NN Gen</a> project.
 
 ## Installation of the Latest Version of the NN Dataset
-
+```bash
+pip install nn-dataset --upgrade
+rm -rf db
+```
+From GitHub:
 ```bash
 pip uninstall nn-dataset -y
 rm -rf db
