@@ -1,8 +1,6 @@
 import torch
 import torch.nn as nn
 
-args = []
-
 
 def supported_hyperparameters():
     return {'lr', 'momentum'}
