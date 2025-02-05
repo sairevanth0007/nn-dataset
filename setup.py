@@ -41,7 +41,7 @@ install_pytorch()
 
 setup(
     name="nn-dataset",
-    version="1.0.0",
+    version="1.0.1",
     description="Neural Network Dataset",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
