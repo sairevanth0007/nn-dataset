@@ -12,7 +12,12 @@ The primary goal of NN Dataset project is to provide flexibility for dynamically
 
 ## Installation of the Latest Version of the NN Dataset
 ```bash
-pip install nn-dataset --upgrade
+pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+rm -rf db
+```
+With plot generation for performance analysis:
+```bash
+pip install nn-dataset[nn-plots] --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 rm -rf db
 ```
 From GitHub:
