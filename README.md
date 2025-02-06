@@ -10,20 +10,23 @@ The original version of the <a href='https://github.com/ABrain-One/nn-dataset'>L
 <h3>Overview 📖</h3>
 The primary goal of NN Dataset project is to provide flexibility for dynamically combining various deep learing tasks, datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gen">NN Gen</a> project.
 
-## Installation of the Latest Version of the NN Dataset
-```bash
-pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
-rm -rf db
-```
-With extracting data into Excel files and generating plots for NN performance analysis:
-```bash
-pip install nn-dataset[stat] --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
-rm -rf db
-```
-From GitHub:
+## Installation or Update of NN Dataset
+Remove old version of the LEMUR Dataset and its database:
 ```bash
 pip uninstall nn-dataset -y
 rm -rf db
+```
+### Installing the stable version via pip
+Basic functionality:
+```bash
+pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+```
+Includes functionality to export data to Excel files and generate plots for analyzing neural network performance:
+```bash
+pip install nn-dataset[stat] --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+```
+### Install from GitHub to get the most recent code and statistics updates:
+```bash
 pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
