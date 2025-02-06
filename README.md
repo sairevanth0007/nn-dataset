@@ -25,7 +25,7 @@ Includes functionality to export data to Excel files and generate plots for anal
 ```bash
 pip install nn-dataset[stat] --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 ```
-### Install from GitHub to get the most recent code and statistics updates:
+### Installing from GitHub to get the most recent code and statistics updates:
 ```bash
 pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
 ```
