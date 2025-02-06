@@ -16,18 +16,17 @@ Remove old version of the LEMUR Dataset and its database:
 pip uninstall nn-dataset -y
 rm -rf db
 ```
-### Installing the stable version
-Basic functionality:
+Installing the stable version:
 ```bash
 pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+```
+Installing from GitHub to get the most recent code and statistics updates:
+```bash
+pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 Adding functionality to export data to Excel files and generate plots for <a href='https://github.com/ABrain-One/nn-stat'>analyzing neural network performance</a>:
 ```bash
 pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
-```
-### Installing from GitHub to get the most recent code and statistics updates:
-```bash
-pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
 ## Environment for NN Dataset Contributors
