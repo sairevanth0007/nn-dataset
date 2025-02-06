@@ -15,9 +15,9 @@ The primary goal of NN Dataset project is to provide flexibility for dynamically
 pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 rm -rf db
 ```
-With plot generation for performance analysis:
+With extracting data into Excel files and generating plots for NN performance analysis:
 ```bash
-pip install nn-dataset[nn-plots] --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+pip install nn-dataset[stat] --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 rm -rf db
 ```
 From GitHub:
