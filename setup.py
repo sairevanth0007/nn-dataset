@@ -17,7 +17,7 @@ def read_readme():
 
 setup(
     name="nn-dataset",
-    version="1.0.2",
+    version="1.0.3",
     description="Neural Network Dataset",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
@@ -33,5 +33,8 @@ setup(
     ],
     python_requires=">=3.10",
     include_package_data=True,
+    extras_require = {
+        'nn-plots': ['nn-plots']
+    }
 )
 
