@@ -1,19 +1,32 @@
 ## <img src='https://abrain.one/img/lemur-nn-icon-64x64.png' width='32px'/> Neural Network Dataset 
+<a href='https://pypi.python.org/pypi/nn-dataset'><img src='https://img.shields.io/pypi/v/nn-dataset.svg'/></a>
+   
 LEMUR - Learning, Evaluation, and Modeling for Unified Research
 
 <img src='https://abrain.one/img/lemur-nn-whit.jpg' width='25%'/>
 
-The original version of LEMUR dataset was created by <strong>Arash Torabi Goodarzi, Roman Kochnev</strong> and <strong>Zofia Antonina Bentyn</strong> at the Computer Vision Laboratory, University of Würzburg, Germany.
+The original version of the <a href='https://github.com/ABrain-One/nn-dataset'>LEMUR dataset</a> was created by <strong>Arash Torabi Goodarzi, Roman Kochnev</strong> and <strong>Zofia Antonina Bentyn</strong> at the Computer Vision Laboratory, University of Würzburg, Germany.
 
 <h3>Overview 📖</h3>
 The primary goal of NN Dataset project is to provide flexibility for dynamically combining various deep learing tasks, datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gen">NN Gen</a> project.
 
-## Installation of the Latest Version of the NN Dataset
-
+## Installation or Update of NN Dataset
+Remove old version of the LEMUR Dataset and its database:
 ```bash
 pip uninstall nn-dataset -y
 rm -rf db
+```
+Installing the stable version:
+```bash
+pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+```
+Installing from GitHub to get the most recent code and statistics updates:
+```bash
 pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
+```
+Adding functionality to export data to Excel files and generate plots for <a href='https://github.com/ABrain-One/nn-stat'>analyzing neural network performance</a>:
+```bash
+pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
 ## Environment for NN Dataset Contributors
@@ -108,10 +121,10 @@ If you find the LEMUR Neural Network Dataset to be useful for your research, ple
 This project is distributed under the following licensing terms:
 <ul><li>for neural network models adopted from other projects
   <ul>
-    <li> Python code under the legacy <a href="Doc/Licenses/LICENSE-MIT-NNs.md">MIT</a> or <a href="Doc/Licenses/LICENSE-BSD-NNs.md">BSD 3-Clause</a> license</li>
-    <li> models with pretrained weights under the legacy <a href="Doc/Licenses/LICENSE-DEEPSEEK-LLM-V2.md">DeepSeek LLM V2</a> license</li>
+    <li> Python code under the legacy <a href="https://github.com/ABrain-One/nn-dataset/blob/main/Doc/Licenses/LICENSE-MIT-NNs">MIT</a> or <a href="https://github.com/ABrain-One/nn-dataset/blob/main/Doc/Licenses/LICENSE-BSD-NNs">BSD 3-Clause</a> license</li>
+    <li> models with pretrained weights under the legacy <a href="https://github.com/ABrain-One/nn-dataset/blob/main/Doc/Licenses/LICENSE-DEEPSEEK-LLM-V2">DeepSeek LLM V2</a> license</li>
   </ul></li>
-<li> all neural network models and their weights not covered by the above licenses, as well as all other files and assets in this project, are subject to the <a href="LICENSE.md">MIT license</a></li> 
+<li> all neural network models and their weights not covered by the above licenses, as well as all other files and assets in this project, are subject to the <a href="https://github.com/ABrain-One/nn-dataset/blob/main/LICENSE">MIT license</a></li> 
 </ul>
 
 #### The idea of Dr. Dmitry Ignatov

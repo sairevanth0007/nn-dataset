@@ -16,14 +16,14 @@ def read_readme():
     return ""
 
 setup(
-    name="nn-dataset",
-    version="1.0.1",
+    name="NN Dataset",
+    version="1.0.3",
     description="Neural Network Dataset",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     author="ABrain One and contributors",
     author_email="AI@ABrain.one",
-    url="https://github.com/ABrain-One/nn-dataset",
+    url="https://ABrain.one",
     packages=find_packages(include=["ab.*"]),
     install_requires=read_requirements(),
     classifiers=[
@@ -33,5 +33,8 @@ setup(
     ],
     python_requires=">=3.10",
     include_package_data=True,
+    extras_require = {
+        'stat': ['nn-stat']
+    }
 )
 
