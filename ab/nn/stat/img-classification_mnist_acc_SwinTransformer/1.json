@@ -12,6 +12,18 @@
         "uid": "ab7d2aaa-d1be-4f97-89c7-0ff8c2d0a542"
     },
     {
+        "accuracy": 0.8976,
+        "attention_dropout": 0.31534747399437646,
+        "batch": 64,
+        "dropout": 0.11141570450642052,
+        "duration": 14833412048,
+        "lr": 0.007613163612619223,
+        "momentum": 0.2943042450669603,
+        "stochastic_depth_prob": 0.6229513828277394,
+        "transform": "norm_flip",
+        "uid": "06864cf9-c90c-49b8-8d2e-5b5297aaadad"
+    },
+    {
         "accuracy": 0.8924,
         "attention_dropout": 0.22805540867236052,
         "batch": 16,
@@ -22,6 +34,42 @@
         "stochastic_depth_prob": 0.2084037171446408,
         "transform": "echo_64_flip",
         "uid": "7c76a821-5ae4-4f0e-a5c8-60cf8dde5586"
+    },
+    {
+        "accuracy": 0.8039,
+        "attention_dropout": 0.24652847764104535,
+        "batch": 32,
+        "dropout": 0.06959593585107271,
+        "duration": 271003230763,
+        "lr": 0.023466825859233,
+        "momentum": 0.7222578512266926,
+        "stochastic_depth_prob": 0.9267956563830732,
+        "transform": "norm_299",
+        "uid": "544a23b2-3107-4d4f-95fb-a0453912ba84"
+    },
+    {
+        "accuracy": 0.7687,
+        "attention_dropout": 0.26155494182338346,
+        "batch": 8,
+        "dropout": 0.28589508389462764,
+        "duration": 751176576359,
+        "lr": 0.011045133408616575,
+        "momentum": 0.5182746529293654,
+        "stochastic_depth_prob": 0.935157125246249,
+        "transform": "echo_512",
+        "uid": "9cd067fc-3835-49e0-a757-b13dc7a9c906"
+    },
+    {
+        "accuracy": 0.18,
+        "attention_dropout": 0.3557848808785321,
+        "batch": 64,
+        "dropout": 0.1482837947831141,
+        "duration": 282448511238,
+        "lr": 9.314528837484895e-05,
+        "momentum": 0.4062811489167477,
+        "stochastic_depth_prob": 0.38132743950222026,
+        "transform": "norm_299_flip",
+        "uid": "6bb4ff6b-a081-4206-a368-24d291942b72"
     },
     {
         "accuracy": 0.1747,

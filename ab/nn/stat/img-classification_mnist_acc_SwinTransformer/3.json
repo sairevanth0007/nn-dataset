@@ -12,6 +12,30 @@
         "uid": "3ce8ac30-0888-41f8-bf2f-75c73ee9f3cb"
     },
     {
+        "accuracy": 0.9498,
+        "attention_dropout": 0.24652847764104535,
+        "batch": 32,
+        "dropout": 0.06959593585107271,
+        "duration": 813360905528,
+        "lr": 0.023466825859233,
+        "momentum": 0.7222578512266926,
+        "stochastic_depth_prob": 0.9267956563830732,
+        "transform": "norm_299",
+        "uid": "5d13cf2b-0c86-49de-b4ee-c0f8bcd88433"
+    },
+    {
+        "accuracy": 0.9442,
+        "attention_dropout": 0.31534747399437646,
+        "batch": 64,
+        "dropout": 0.11141570450642052,
+        "duration": 44469311723,
+        "lr": 0.007613163612619223,
+        "momentum": 0.2943042450669603,
+        "stochastic_depth_prob": 0.6229513828277394,
+        "transform": "norm_flip",
+        "uid": "ad202d03-c5b1-4fbe-a5dd-4cfd4ffc9c4c"
+    },
+    {
         "accuracy": 0.9311,
         "attention_dropout": 0.22805540867236052,
         "batch": 16,
@@ -22,6 +46,30 @@
         "stochastic_depth_prob": 0.2084037171446408,
         "transform": "echo_64_flip",
         "uid": "cb9e5127-c121-4054-af5e-adc160a203db"
+    },
+    {
+        "accuracy": 0.9124,
+        "attention_dropout": 0.26155494182338346,
+        "batch": 8,
+        "dropout": 0.28589508389462764,
+        "duration": 2252273321464,
+        "lr": 0.011045133408616575,
+        "momentum": 0.5182746529293654,
+        "stochastic_depth_prob": 0.935157125246249,
+        "transform": "echo_512",
+        "uid": "bdb84f13-4e1d-4fe8-9a6e-c9ec212196ba"
+    },
+    {
+        "accuracy": 0.2257,
+        "attention_dropout": 0.3557848808785321,
+        "batch": 64,
+        "dropout": 0.1482837947831141,
+        "duration": 847324360516,
+        "lr": 9.314528837484895e-05,
+        "momentum": 0.4062811489167477,
+        "stochastic_depth_prob": 0.38132743950222026,
+        "transform": "norm_299_flip",
+        "uid": "41c5e779-7cf0-49cb-836c-96e27c38d7b6"
     },
     {
         "accuracy": 0.2003,

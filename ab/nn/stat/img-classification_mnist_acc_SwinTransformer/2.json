@@ -12,6 +12,30 @@
         "uid": "50117658-45c1-4b3b-88e2-b1116c84ba51"
     },
     {
+        "accuracy": 0.9302,
+        "attention_dropout": 0.24652847764104535,
+        "batch": 32,
+        "dropout": 0.06959593585107271,
+        "duration": 542170586927,
+        "lr": 0.023466825859233,
+        "momentum": 0.7222578512266926,
+        "stochastic_depth_prob": 0.9267956563830732,
+        "transform": "norm_299",
+        "uid": "c86bb282-737c-41f0-b2ca-b0c4ce4020a7"
+    },
+    {
+        "accuracy": 0.9294,
+        "attention_dropout": 0.31534747399437646,
+        "batch": 64,
+        "dropout": 0.11141570450642052,
+        "duration": 29619084875,
+        "lr": 0.007613163612619223,
+        "momentum": 0.2943042450669603,
+        "stochastic_depth_prob": 0.6229513828277394,
+        "transform": "norm_flip",
+        "uid": "4b4cabe1-e6f9-46bd-a67e-3a6174d65c99"
+    },
+    {
         "accuracy": 0.9241,
         "attention_dropout": 0.22805540867236052,
         "batch": 16,
@@ -22,6 +46,30 @@
         "stochastic_depth_prob": 0.2084037171446408,
         "transform": "echo_64_flip",
         "uid": "7bfb0104-f014-4d5a-b6ba-56f16ac686bc"
+    },
+    {
+        "accuracy": 0.872,
+        "attention_dropout": 0.26155494182338346,
+        "batch": 8,
+        "dropout": 0.28589508389462764,
+        "duration": 1500776117306,
+        "lr": 0.011045133408616575,
+        "momentum": 0.5182746529293654,
+        "stochastic_depth_prob": 0.935157125246249,
+        "transform": "echo_512",
+        "uid": "f127fd20-e6a3-4c44-97a1-ff33d83da4f4"
+    },
+    {
+        "accuracy": 0.2015,
+        "attention_dropout": 0.3557848808785321,
+        "batch": 64,
+        "dropout": 0.1482837947831141,
+        "duration": 564885100838,
+        "lr": 9.314528837484895e-05,
+        "momentum": 0.4062811489167477,
+        "stochastic_depth_prob": 0.38132743950222026,
+        "transform": "norm_299_flip",
+        "uid": "521eb132-8b5e-4df1-8fc3-ccb62e96cd35"
     },
     {
         "accuracy": 0.1824,
