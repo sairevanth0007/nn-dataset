@@ -21,9 +21,9 @@ Basic functionality:
 ```bash
 pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 ```
-Includes functionality to export data to Excel files and generate plots for <a href='https://github.com/ABrain-One/nn-stat'>analyzing neural network performance</a>:
+Adding functionality to export data to Excel files and generate plots for <a href='https://github.com/ABrain-One/nn-stat'>analyzing neural network performance</a>:
 ```bash
-pip install nn-dataset[stat] --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 ### Installing from GitHub to get the most recent code and statistics updates:
 ```bash
