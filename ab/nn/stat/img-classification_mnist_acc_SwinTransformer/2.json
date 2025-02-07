@@ -1,5 +1,17 @@
 [
     {
+        "accuracy": 0.9656,
+        "attention_dropout": 0.3450699649346297,
+        "batch": 8,
+        "dropout": 0.022757454714010972,
+        "duration": 194415042791,
+        "lr": 0.005203651276671252,
+        "momentum": 0.9103620314931405,
+        "stochastic_depth_prob": 0.4362760812179123,
+        "transform": "echo_32",
+        "uid": "6823e6f6-cef0-4ce6-9126-7f02d57c6939"
+    },
+    {
         "accuracy": 0.9482,
         "attention_dropout": 0.5863568978056269,
         "batch": 8,
@@ -10,6 +22,18 @@
         "stochastic_depth_prob": 0.9789712447679378,
         "transform": "norm_64",
         "uid": "50117658-45c1-4b3b-88e2-b1116c84ba51"
+    },
+    {
+        "accuracy": 0.9331,
+        "attention_dropout": 0.5171419314698291,
+        "batch": 32,
+        "dropout": 0.0878868087885683,
+        "duration": 48811784502,
+        "lr": 0.38010455598841664,
+        "momentum": 0.22386239305664668,
+        "stochastic_depth_prob": 0.06489111500540756,
+        "transform": "norm",
+        "uid": "0c08b36d-7434-406b-9dd7-04720aee2208"
     },
     {
         "accuracy": 0.9302,
@@ -58,6 +82,30 @@
         "stochastic_depth_prob": 0.935157125246249,
         "transform": "echo_512",
         "uid": "f127fd20-e6a3-4c44-97a1-ff33d83da4f4"
+    },
+    {
+        "accuracy": 0.8709,
+        "attention_dropout": 0.39216902925362385,
+        "batch": 32,
+        "dropout": 0.14692024660999525,
+        "duration": 1612496014968,
+        "lr": 0.013013562281968568,
+        "momentum": 0.1519091947796546,
+        "stochastic_depth_prob": 0.574915565794689,
+        "transform": "echo_512",
+        "uid": "f387eb6b-12c1-4722-ba5f-8b84b1ce984e"
+    },
+    {
+        "accuracy": 0.3204,
+        "attention_dropout": 0.8752097900344606,
+        "batch": 2,
+        "dropout": 0.01769083337002786,
+        "duration": 1534903894773,
+        "lr": 3.503822859234794e-05,
+        "momentum": 0.5567677218033104,
+        "stochastic_depth_prob": 0.7043953944282598,
+        "transform": "echo_512",
+        "uid": "804a7fd3-4393-4b76-ad4e-816fa7ec8c26"
     },
     {
         "accuracy": 0.2015,

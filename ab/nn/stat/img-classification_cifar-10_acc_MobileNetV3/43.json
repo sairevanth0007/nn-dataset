@@ -10,5 +10,17 @@
         "norm_momentum": 0.5277248666025938,
         "transform": "norm_512",
         "uid": "61cfa1f7-f588-411f-991f-013bc19e096f"
+    },
+    {
+        "accuracy": 0.1409,
+        "batch": 512,
+        "dropout": 0.26719411665399245,
+        "duration": 374894291875,
+        "lr": 0.00010543094789581186,
+        "momentum": 0.9079096490756071,
+        "norm_eps": 0.02619989123088351,
+        "norm_momentum": 0.3526240346258347,
+        "transform": "norm_128",
+        "uid": "8c4ebafb-33c3-4195-8ddb-c03911e60f1d"
     }
 ]

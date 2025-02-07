@@ -1,5 +1,17 @@
 [
     {
+        "accuracy": 0.9607,
+        "attention_dropout": 0.3450699649346297,
+        "batch": 8,
+        "dropout": 0.022757454714010972,
+        "duration": 96944909553,
+        "lr": 0.005203651276671252,
+        "momentum": 0.9103620314931405,
+        "stochastic_depth_prob": 0.4362760812179123,
+        "transform": "echo_32",
+        "uid": "52bff516-6a35-4bd0-9686-b6691e6e5682"
+    },
+    {
         "accuracy": 0.9221,
         "attention_dropout": 0.5863568978056269,
         "batch": 8,
@@ -36,6 +48,18 @@
         "uid": "7c76a821-5ae4-4f0e-a5c8-60cf8dde5586"
     },
     {
+        "accuracy": 0.8799,
+        "attention_dropout": 0.5171419314698291,
+        "batch": 32,
+        "dropout": 0.0878868087885683,
+        "duration": 24795963258,
+        "lr": 0.38010455598841664,
+        "momentum": 0.22386239305664668,
+        "stochastic_depth_prob": 0.06489111500540756,
+        "transform": "norm",
+        "uid": "6d23e781-29ec-4ca6-8be6-624946114aed"
+    },
+    {
         "accuracy": 0.8039,
         "attention_dropout": 0.24652847764104535,
         "batch": 32,
@@ -58,6 +82,30 @@
         "stochastic_depth_prob": 0.935157125246249,
         "transform": "echo_512",
         "uid": "9cd067fc-3835-49e0-a757-b13dc7a9c906"
+    },
+    {
+        "accuracy": 0.7222,
+        "attention_dropout": 0.39216902925362385,
+        "batch": 32,
+        "dropout": 0.14692024660999525,
+        "duration": 806127504157,
+        "lr": 0.013013562281968568,
+        "momentum": 0.1519091947796546,
+        "stochastic_depth_prob": 0.574915565794689,
+        "transform": "echo_512",
+        "uid": "76cf4a20-ca0c-4134-9745-ac60f6e2466a"
+    },
+    {
+        "accuracy": 0.2782,
+        "attention_dropout": 0.8752097900344606,
+        "batch": 2,
+        "dropout": 0.01769083337002786,
+        "duration": 766516976787,
+        "lr": 3.503822859234794e-05,
+        "momentum": 0.5567677218033104,
+        "stochastic_depth_prob": 0.7043953944282598,
+        "transform": "echo_512",
+        "uid": "ee39460c-70a7-4fd2-b7a8-84754518f457"
     },
     {
         "accuracy": 0.18,
