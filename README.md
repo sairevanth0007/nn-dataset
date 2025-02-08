@@ -13,19 +13,23 @@ The primary goal of NN Dataset project is to provide flexibility for dynamically
 ## Installation or Update of NN Dataset
 Remove old version of the LEMUR Dataset and its database:
 ```bash
+source .venv/bin/activate
 pip uninstall nn-dataset -y
 rm -rf db
 ```
 Installing the stable version:
 ```bash
+source .venv/bin/activate
 pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 Installing from GitHub to get the most recent code and statistics updates:
 ```bash
+source .venv/bin/activate
 pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 Adding functionality to export data to Excel files and generate plots for <a href='https://github.com/ABrain-One/nn-stat'>analyzing neural network performance</a>:
 ```bash
+source .venv/bin/activate
 pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
@@ -33,6 +37,7 @@ pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl
 ### Pip package manager
 Create a virtual environment, activate it, and run the following command to install all the project dependencies:
 ```bash
+source .venv/bin/activate
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
@@ -48,18 +53,22 @@ Standard use cases:
 1. Add a new neural network model into the `ab/nn/nn` directory.
 2. Run the automated training process for this model (e.g., a new ComplexNet training pipeline configuration):
 ```bash
+source .venv/bin/activate
 python -m ab.nn.train -c img-classification_cifar-10_acc_ComplexNet
 ```
 or for all image segmentation models using a fixed range of training parameters and transformer:
 ```bash
+source .venv/bin/activate
 python run.py -c img-segmentation -f echo --min_learning_rate 1e-4 -l 1e-2 --min_momentum 0.8 -m 0.99 --min_batch_binary_power 2 -b 6
 ```
 To reproduce the previous result, set the minimum and maximum to the same desired values:
 ```bash
+source .venv/bin/activate
 python run.py -c img-classification_cifar-10_acc_AlexNet --min_learning_rate 0.0061 -l 0.0061 --min_momentum 0.7549 -m 0.7549 --min_batch_binary_power 2 -b 2 -f norm_299
 ```
 To view supported flags:
 ```bash
+source .venv/bin/activate
 python run.py -h
 ```
 
