@@ -68,7 +68,6 @@ python run.py -c img-classification_cifar-10_acc_AlexNet --min_learning_rate 0.0
 ```
 To view supported flags:
 ```bash
-source .venv/bin/activate
 python run.py -h
 ```
 
