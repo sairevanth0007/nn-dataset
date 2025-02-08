@@ -25,8 +25,8 @@ def nn_path(dr):
     """
     Defines path to ab/nn directory.
     """
-    import ab.nn.__init__ as init_file
-    return Path(init_file.__file__).parent.absolute() / dr
+    import ab.nn.util.__init__ as init_file
+    return Path(init_file.__file__).parent.parent.absolute() / dr
 
 
 metric_dir = nn_path('metric')
