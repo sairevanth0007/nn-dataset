@@ -38,6 +38,7 @@ pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl
 Create a virtual environment, activate it, and run the following command to install all the project dependencies:
 ```bash
 source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
