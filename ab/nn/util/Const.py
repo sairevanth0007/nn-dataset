@@ -31,7 +31,8 @@ def nn_path(dr):
 
 metric_dir = nn_path('metric')
 nn_dir = nn_path('nn')
-default_nn_path = nn_dir / 'AlexNet.py'
+default_nn_name = 'AlexNet'
+default_nn_path = nn_dir / f"{default_nn_name}.py"
 transform_dir = nn_path('transform')
 stat_dir = nn_path('stat')
 

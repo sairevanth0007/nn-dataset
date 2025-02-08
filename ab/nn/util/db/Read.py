@@ -32,7 +32,7 @@ def query_cols_rows(q) -> tuple[list, list]:
     return columns, rows
 
 
-def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None) -> tuple[dict[str, int | float | str | dict[str, int | float | str]], ...]:
+def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None, cast_prm=True) -> tuple[dict[str, int | float | str | dict[str, int | float | str]], ...]:
     """
     Get the NN model code and all related statistics from the database.
     
@@ -115,7 +115,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             # Each pr is a tuple (name, value, type)
             pr_name, pr_value, pr_type = pr
             # Convert the stored value to its proper type.
-            prm_dict[pr_name] = getattr(builtins, pr_type)(pr_value)
+            prm_dict[pr_name] = getattr(builtins, pr_type)(pr_value) if cast_prm else pr_value
         row_dict["prm"] = prm_dict
 
         # Remove internal columns not needed in the output.

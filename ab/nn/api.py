@@ -2,7 +2,7 @@ import ab.nn.util.db.Read as DB_Read
 import ab.nn.util.Train as Train
 from pandas import DataFrame
 
-def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None) -> DataFrame:
+def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None, cast_prm=True) -> DataFrame:
     """
     Get the NN model code and all related statistics as a pandas DataFrame.
 
@@ -20,7 +20,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
           'nn', 'nn_code', 'epoch', 'accuracy', 'duration',
           'prm', and 'transform_code'.
     """
-    dt: tuple[dict, ...] = DB_Read.data(only_best_accuracy, task=task, dataset=dataset, metric=metric, nn=nn, epoch=epoch)
+    dt: tuple[dict, ...] = DB_Read.data(only_best_accuracy, task=task, dataset=dataset, metric=metric, nn=nn, epoch=epoch, cast_prm=cast_prm)
     return DataFrame.from_records(dt)
 
 def check_nn(nn_code : str, task : str, dataset : str, metric : str, prm: dict, save_to_db=True) -> tuple[str, float]:

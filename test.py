@@ -2,14 +2,14 @@ import unittest
 from pprint import pprint
 
 import ab.nn.api as api
-from ab.nn.util.Const import default_nn_path
+from ab.nn.util.Const import default_nn_path, default_nn_name
 from ab.nn.util.Util import read_py_file_as_string
 
 
 class Testing(unittest.TestCase):
     def test_data(self):
-        o = api.data()
-        o2 = api.data(task='img-classification')
+        o = api.data(cast_prm=False)
+        o2 = api.data(task='img-classification', nn=default_nn_name, cast_prm=False)
         print(o2)
         self.assertNotEqual(len(o2), 0)
         self.assertGreater(len(o), len(o2))
