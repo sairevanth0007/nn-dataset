@@ -40,14 +40,20 @@ def __project_root_path():
     """
     Defines path to the project root directory.
     """
-    project_root = '.'
-    parent_dr = Path().absolute().parent
-    if parent_dr.name == base_module and (parent_dr.parent / 'README.md').exists():
-        project_root = ['..'] * len(to_nn)
-    return Path(*project_root)
+    project_root = Path().absolute()
+    current_dir = project_root
+    while True:
+        if (current_dir / base_module).exists() and (current_dir / 'README.md').exists():
+            project_root = current_dir
+            break
+        if not current_dir.parent:
+            break
+        current_dir = current_dir.parent.absolute()
+    return project_root
 
 
 ab_root_path = __project_root_path()
+print(f"LEMUR operates within the root directory {ab_root_path}")
 out_dir = ab_root_path / 'out'
 data_dir = ab_root_path / 'data'
 db_dir = ab_root_path / 'db'
