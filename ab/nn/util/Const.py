@@ -46,7 +46,7 @@ def __project_root_path():
         if (current_dir / base_module).exists() and (current_dir / 'README.md').exists():
             project_root = current_dir
             break
-        if not current_dir.parent:
+        if not current_dir.parent or current_dir.parent == current_dir:
             break
         current_dir = current_dir.parent.absolute()
     return project_root
