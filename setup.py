@@ -16,7 +16,7 @@ def read_readme():
     return ""
 
 setup(
-    name="NN-Dataset",
+    name="nn-dataset",
     version="1.0.4",
     description="Neural Network Dataset",
     long_description=read_readme(),
