@@ -26,6 +26,7 @@ setup(
     url="https://ABrain.one",
     packages=find_packages(include=["ab.*"]),
     install_requires=read_requirements(),
+     extras_require = {'stat': ['nn-stat']},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -33,8 +34,5 @@ setup(
     ],
     python_requires=">=3.10",
     include_package_data=True,
-    extras_require = {
-        'stat': ['nn-stat']
-    }
 )
 
