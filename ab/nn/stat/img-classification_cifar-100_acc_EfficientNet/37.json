@@ -8,5 +8,15 @@
         "momentum": 0.8364030728415338,
         "transform": "echo_512",
         "uid": "c598c793-a7f9-4c63-8f86-ab6a204b8e54"
+    },
+    {
+        "accuracy": 0.394,
+        "batch": 4,
+        "dropout": 0.46768320758014836,
+        "duration": 4291260095097,
+        "lr": 0.1385127900979834,
+        "momentum": 0.730333707370253,
+        "transform": "echo_64_flip",
+        "uid": "799eeb02-0046-40ce-b839-2caf9f350b4f"
     }
 ]
