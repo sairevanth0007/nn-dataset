@@ -31,27 +31,11 @@ Adding functionality to export data to Excel files and generate plots for <a hre
 ```bash
 source .venv/bin/activate
 pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
-pip uninstall nn-dataset -y
 ```
 and export/generate:
 ```bash
 source .venv/bin/activate
 python -m ab.stat.export
-```
-
-## Environment for NN Dataset Contributors
-### Pip package manager
-Create a virtual environment, activate it, and run the following command to install all the project dependencies:
-```bash
-source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
-```
-
-### Docker
-All versions of this project are compatible with <a href='https://hub.docker.com/r/abrainone/ai-linux' target='_blank'>AI Linux</a> and can be run inside a Docker image:
-```bash
-docker run -v /a/mm:. abrainone/ai-linux bash -c "PYTHONPATH=/a/mm python -m ab.nn.train"
 ```
 
 ## Usage
@@ -76,6 +60,21 @@ python run.py -c img-classification_cifar-10_acc_AlexNet --min_learning_rate 0.0
 To view supported flags:
 ```bash
 python run.py -h
+```
+
+### Docker
+All versions of this project are compatible with <a href='https://hub.docker.com/r/abrainone/ai-linux' target='_blank'>AI Linux</a> and can be run inside a Docker image:
+```bash
+docker run -v /a/mm:. abrainone/ai-linux bash -c "PYTHONPATH=/a/mm python -m ab.nn.train"
+```
+
+## Environment for NN Dataset Contributors
+### Pip package manager
+Create a virtual environment, activate it, and run the following command to install all the project dependencies:
+```bash
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 
 ## Contribution
