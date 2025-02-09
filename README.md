@@ -10,7 +10,7 @@ The original version of the <a href='https://github.com/ABrain-One/nn-dataset'>L
 <h3>Overview 📖</h3>
 The primary goal of NN Dataset project is to provide flexibility for dynamically combining various deep learing tasks, datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gen">NN Gen</a> project.
 
-## Installation or Update of NN Dataset
+## Installation or Update of the NN Dataset
 Remove old version of the LEMUR Dataset and its database:
 ```bash
 source .venv/bin/activate
