@@ -36,7 +36,7 @@ pip uninstall nn-dataset -y
 and export/generate:
 ```bash
 source .venv/bin/activate
-python -m ab.plot.export
+python -m ab.stat.export
 ```
 
 ## Environment for NN Dataset Contributors
