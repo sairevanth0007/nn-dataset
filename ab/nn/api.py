@@ -23,7 +23,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
     dt: tuple[dict, ...] = DB_Read.data(only_best_accuracy, task=task, dataset=dataset, metric=metric, nn=nn, epoch=epoch, cast_prm=cast_prm)
     return DataFrame.from_records(dt)
 
-def check_nn(nn_code : str, task : str, dataset : str, metric : str, prm: dict, save_to_db=True) -> tuple[str, float]:
+def check_nn(nn_code : str, task : str, dataset : str, metric : str, prm: dict, save_to_db=True) -> tuple[str, float, int]:
     """
     Train the new NN model with the provided hyperparameters (prm) and save it to the database if training is successful.
     for argument description see :ref:`ab.nn.util.db.Write.save_nn()`

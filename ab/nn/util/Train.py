@@ -1,4 +1,5 @@
 import importlib
+import os
 import sys
 import tempfile
 import time as time
@@ -56,7 +57,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
                 model = LSTMNet(1, 256, len(train_set.chars), batch, num_layers=2)
             else:
                 raise ValueError(f"Unsupported text generation model: {nn}")
-        return Train(config, out_shape, minimum_accuracy, batch, nn, task, train_set, test_set, metric,
+        return Train(config, out_shape, minimum_accuracy, batch, f"nn.{nn}", task, train_set, test_set, metric,
                      num_workers, prms).train_n_eval(n_epochs)[0]
     except Exception as e:
         if isinstance(e, OutOfMemoryError):
@@ -80,7 +81,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
 
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, model_name, task,
-                 train_dataset, test_dataset, metric, num_workers, prm: dict, is_code=False, save_to_db=True):
+                 train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: Tuple of names (Task, Dataset, Metric, Model).
@@ -128,13 +129,9 @@ class Train:
         self.device = device
 
         # Load model
-        if is_code:
-            # if model_name is model
-            self.model = model_name(self.in_shape, out_shape, prm, self.device)
-        else:
-            # if model_name is model name
-            model_net = get_attr(f"nn.{model_name}", "Net")
-            self.model = model_net(self.in_shape, out_shape, prm, self.device)
+        # model_net = get_attr(f"nn.{model_name}", "Net")
+        model_net = get_attr(model_name, "Net")
+        self.model = model_net(self.in_shape, out_shape, prm, self.device)
         self.model.to(self.device)
 
     def load_metric_function(self, metric_name):
@@ -220,48 +217,51 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
     return:
         (str, float): Name of the model and the accuracy
     """
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=True) as temp_file:
+    with tempfile.NamedTemporaryFile(mode='w+', suffix='.py', delete=True, dir="ab/nn/tmp") as temp_file:
         temp_file_path = temp_file.name
+        temp_filename = os.path.basename(temp_file.name).replace(".py", "")
         temp_file.write(nn_code)  # write the code to the temp file
-        res = codeEvaluator.evaluate_single_file(temp_file_path)
-    try:
-        pprint(f"score: {res['score']}")
-        model_module = {}  # store the model class
-        exec(nn_code, model_module)  # execute the code to get the model class
-        ModelClass = model_module['Net']  # get the model class
+        try:
+            temp_file.seek(0)
+            res = codeEvaluator.evaluate_single_file(temp_file_path)
+            # import the code dynamically
+            spec = importlib.util.spec_from_file_location(f"ab.nn.tmp.{temp_filename}", temp_file_path)
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[f"ab.nn.tmp.{temp_filename}"] = module
+            spec.loader.exec_module(module) 
 
-        # load dataset
-        out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(task, dataset, prm.get('transform', None))
+            # load dataset
+            out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(task, dataset, prm.get('transform', None))
 
-        # initialize model and trainer
-        trainer = Train(
-            config=(task, dataset, metric, nn_code),
-            out_shape=out_shape,
-            minimum_accuracy=minimum_accuracy,
-            batch=prm['batch'],
-            model_name=ModelClass,
-            task=task,
-            train_dataset=train_set,
-            test_dataset=test_set,
-            metric=metric,
-            num_workers=prm.get('num_workers', 1),
-            prm=prm,
-            is_code=True,
-            save_to_db=save_to_db)
+            # initialize model and trainer
+            trainer = Train(
+                config=(task, dataset, metric, nn_code),
+                out_shape=out_shape,
+                minimum_accuracy=minimum_accuracy,
+                batch=prm['batch'],
+                # model_name=ModelClass,
+                model_name=f"tmp.{temp_filename}",
+                task=task,
+                train_dataset=train_set,
+                test_dataset=test_set,
+                metric=metric,
+                num_workers=prm.get('num_workers', 1),
+                prm=prm,
+                save_to_db=save_to_db)
 
-        epoch = prm['epoch']
-        result, duration = trainer.train_n_eval(epoch)
-        name = None
-        if save_to_db:
-            # if result fits the requirement, save the model to database
-            if good(result, minimum_accuracy, duration):
-                name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm)
-                print(f"Model saved to database with accuracy: {result}")
-            else:
-                print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
+            epoch = prm['epoch']
+            result, duration = trainer.train_n_eval(epoch)
+            name = None
+            if save_to_db:
+                # if result fits the requirement, save the model to database
+                if good(result, minimum_accuracy, duration):
+                    name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm)
+                    print(f"Model saved to database with accuracy: {result}")
+                else:
+                    print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
 
-    except Exception as e:
-        print(f"Error during training: {e}")
-        raise
+        except Exception as e:
+            print(f"Error during training: {e}")
+            raise
 
-    return (name, result)
+        return (name, result, res['score'])
