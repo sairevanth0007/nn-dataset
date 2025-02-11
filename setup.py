@@ -14,10 +14,15 @@ def read_readme():
     if readme_path.exists():
         return readme_path.read_text(encoding="utf-8")
     return ""
-
+    
+def version():
+    with open('version', 'r') as file:
+        v = file.readline()
+    return v
+    
 setup(
     name="nn-dataset",
-    version="1.0.5",
+    version=version(),
     description="Neural Network Dataset",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
