@@ -1,5 +1,5 @@
 ## <img src='https://abrain.one/img/lemur-nn-icon-64x64.png' width='32px'/> Neural Network Dataset 
-<a href='https://pypi.python.org/pypi/nn-dataset'><img src='https://img.shields.io/pypi/v/nn-dataset.svg'/></a>
+nn-dataset <a href='https://pypi.python.org/pypi/nn-dataset'><img src='https://img.shields.io/pypi/v/nn-dataset.svg'/></a> or lmur <a href='https://pypi.python.org/pypi/lmur'><img src='https://img.shields.io/pypi/v/lmur.svg'/></a>
    
 LEMUR - Learning, Evaluation, and Modeling for Unified Research
 
@@ -21,11 +21,6 @@ Installing the stable version:
 ```bash
 source .venv/bin/activate
 pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
-```
-or alternatively
-```bash
-source .venv/bin/activate
-pip install lmr --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 ```
 Installing from GitHub to get the most recent code and statistics updates:
 ```bash
