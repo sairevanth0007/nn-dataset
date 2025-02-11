@@ -16,7 +16,7 @@ def read_readme():
     return ""
     
 def version():
-    with open('version', 'r') as file:
+    with open(Path(__file__).parent / 'version', 'r') as file:
         v = file.readline()
     return v
     
