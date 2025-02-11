@@ -22,6 +22,13 @@ Installing the stable version:
 source .venv/bin/activate
 pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
 ```
+or alternatively
+
+```bash
+source .venv/bin/activate
+pip install lmr --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+```
+
 Installing from GitHub to get the most recent code and statistics updates:
 ```bash
 source .venv/bin/activate
