@@ -15,7 +15,7 @@ def read_readme():
         return readme_path.read_text(encoding="utf-8")
     return ""
     
-def version()
+def version():
     with open('version', 'r') as file:
       v = file.readline()
     return v
