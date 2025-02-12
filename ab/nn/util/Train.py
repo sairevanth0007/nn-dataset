@@ -264,4 +264,4 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
             print(f"Error during training: {e}")
             raise
 
-        return (name, result, res['score'])
+        return name, result, res['score']
