@@ -1,6 +1,6 @@
 ## <img src='https://abrain.one/img/lemur-nn-icon-64x64.png' width='32px'/> Neural Network Dataset 
 <sub><a href='https://pypi.python.org/pypi/nn-dataset'><img src='https://img.shields.io/pypi/v/nn-dataset.svg'/></a><br/>
-pip: <a href='https://pypi.python.org/pypi/nn-dataset'>nn-dataset</a> or <a href='https://pypi.python.org/pypi/lmur'>lmur</a></sub>
+short alias  <a href='https://pypi.python.org/pypi/lmur'>lmur</a></sub>
    
 LEMUR - Learning, Evaluation, and Modeling for Unified Research
 
