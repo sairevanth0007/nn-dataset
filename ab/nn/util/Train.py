@@ -217,7 +217,9 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
     return:
         (str, float): Name of the model and the accuracy
     """
-    with tempfile.NamedTemporaryFile(mode='w+', suffix='.py', delete=True, dir="ab/nn/tmp") as temp_file:
+    spec = importlib.util.find_spec("ab.nn.tmp")
+    dir_path = os.path.dirname(spec.origin)
+    with tempfile.NamedTemporaryFile(mode='w+', suffix='.py', delete=True, dir=dir_path) as temp_file:
         temp_file_path = temp_file.name
         temp_filename = os.path.basename(temp_file.name).replace(".py", "")
         temp_file.write(nn_code)  # write the code to the temp file
