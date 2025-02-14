@@ -1,0 +1,20 @@
+[
+    {
+        "accuracy": 0.9881,
+        "batch": 16,
+        "duration": 269697690310,
+        "lr": 0.08345876704754737,
+        "momentum": 0.3206638492460989,
+        "transform": "echo_32",
+        "uid": "d7447bff-c548-4df5-b4ad-5ffe6c3d5be6"
+    },
+    {
+        "accuracy": 0.98,
+        "batch": 32,
+        "duration": 150133512271,
+        "lr": 0.015857943123351734,
+        "momentum": 0.03406599367521379,
+        "transform": "echo_32_flip",
+        "uid": "e9513b26-aafa-45ea-b730-e5512f7bc9bb"
+    }
+]
