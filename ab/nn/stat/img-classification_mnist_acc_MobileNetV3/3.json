@@ -216,6 +216,18 @@
         "uid": "a98ee67f-c840-4fea-9bd8-9fd7dad6bea9"
     },
     {
+        "accuracy": 0.1492,
+        "batch": 512,
+        "dropout": 0.09026780453627964,
+        "duration": 8690293205,
+        "lr": 0.000293575146441247,
+        "momentum": 0.5922428160037674,
+        "norm_eps": 0.07112456851021942,
+        "norm_momentum": 0.6262279789349304,
+        "transform": "norm_64",
+        "uid": "88dce9b9-f84c-4bb9-88bb-1029fcbb69c3"
+    },
+    {
         "accuracy": 0.1456,
         "batch": 1,
         "dropout": 0.22337242833235754,
