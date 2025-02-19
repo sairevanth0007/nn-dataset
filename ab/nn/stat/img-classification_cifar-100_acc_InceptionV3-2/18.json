@@ -28,5 +28,15 @@
         "momentum": 0.12482567884888252,
         "transform": "soft_pad",
         "uid": "f0119691-4e91-490c-9fc0-ed24beae5e2b"
+    },
+    {
+        "accuracy": 0.1377,
+        "batch": 64,
+        "dropout": 0.1028555230577135,
+        "duration": 1711074640195,
+        "lr": 0.013243275962811862,
+        "momentum": 0.2550296484030997,
+        "transform": "echo_299",
+        "uid": "45a0e09b-70e1-4a5e-81cf-60f574f4b57a"
     }
 ]
