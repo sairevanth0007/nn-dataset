@@ -12,6 +12,18 @@
         "uid": "0a0a86ca-0801-4c11-bea6-17bc3921f7be"
     },
     {
+        "accuracy": 0.4099363057324841,
+        "attention_dropout": 0.2397681472956502,
+        "batch": 128,
+        "dropout": 0.13404745334501478,
+        "duration": 1280103700423,
+        "lr": 0.026656799921245762,
+        "momentum": 0.11723739526591836,
+        "patch_size": 0.6537811413500468,
+        "transform": "norm_299_flip",
+        "uid": "5cea6220-05e0-42f5-bdac-5f35eea19095"
+    },
+    {
         "accuracy": 0.23363057324840764,
         "attention_dropout": 0.6982056181569845,
         "batch": 1024,

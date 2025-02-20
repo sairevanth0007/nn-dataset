@@ -1,5 +1,15 @@
 [
     {
+        "accuracy": 0.6294,
+        "batch": 64,
+        "dropout": 0.4451624223665932,
+        "duration": 285159031558,
+        "lr": 0.8129003593156321,
+        "momentum": 0.6259832193269793,
+        "transform": "echo_64_flip",
+        "uid": "26eead1b-986d-4e84-ba51-2d0f5f9f8296"
+    },
+    {
         "accuracy": 0.502,
         "batch": 2,
         "dropout": 0.25060355280977886,
