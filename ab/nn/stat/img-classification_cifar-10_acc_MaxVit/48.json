@@ -1,5 +1,17 @@
 [
     {
+        "accuracy": 0.6904,
+        "attention_dropout": 0.6825993059335208,
+        "batch": 32,
+        "dropout": 0.17762724872647973,
+        "duration": 2377647442841,
+        "lr": 0.0008546538998614203,
+        "momentum": 0.5682342225884535,
+        "stochastic_depth_prob": 0.09160134503566486,
+        "transform": "echo_32_flip",
+        "uid": "255bc635-54cf-4e95-aff0-1d1077a6ff0d"
+    },
+    {
         "accuracy": 0.6882,
         "attention_dropout": 0.5570800108324728,
         "batch": 2,

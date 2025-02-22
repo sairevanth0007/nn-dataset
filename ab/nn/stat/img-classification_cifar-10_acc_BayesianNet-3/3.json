@@ -88,5 +88,14 @@
         "momentum": 0.6084419289328522,
         "transform": "echo_flip",
         "uid": "65610bd3-0851-4309-8997-4be0a6a366be"
+    },
+    {
+        "accuracy": 0.138,
+        "batch": 128,
+        "duration": 8548032177,
+        "lr": 3.804790125970312e-05,
+        "momentum": 0.8105357722256713,
+        "transform": "norm_32",
+        "uid": "b149f270-6e68-4c96-940e-12abf8f3d39f"
     }
 ]
