@@ -18,7 +18,7 @@ class Net(nn.Module):
         self.glob_num_columns = np.random.randint(0, self.num_columns, size=(1,))
 
         channels = [64 * (2 ** (i if i != 4 else i - 1)) for i in range(5)]
-        dropout_probs = [0.0, 0.1, 0.2, 0.3, 0.4]
+        dropout_probs = [min(0.5, dropout_prob + i * 0.1) for i in range(5)]
 
         self.features = nn.Sequential()
         in_channels = in_shape[1]
