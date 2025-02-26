@@ -12,11 +12,14 @@ from torchvision.ops import boxes as box_ops
 
 
 def supported_hyperparameters():
-    return {'lr', 'momentum', 'score_thresh', 'nms_thresh', 'detections_per_img', 'iou_thresh', 'topk_candidates', 'positive_fraction'}
+    return {'lr', 'momentum', 'score_thresh', 'nms_thresh', 'detections_per_img', 'iou_thresh', 'topk_candidates', 'positive_fraction', 'pretrained'}
 
 
-def create_backbone(trainable_layers=4):
-    backbone = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
+def create_backbone(trainable_layers=4, pretrained=False):
+    if pretrained:
+        backbone = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
+    else:
+        backbone = vgg16(weights=None)
 
     backbone = backbone.features
 
@@ -184,8 +187,13 @@ class Net(nn.Module):
         self.device = device
 
         size = (in_shape[2], in_shape[3])
+        
+        
+        use_pretrained = prm.get('pretrained', False)
+        
+        
+        backbone = create_backbone(trainable_layers=3, pretrained=use_pretrained)
 
-        backbone = create_backbone()
         anchor_generator = create_anchor_generator()
 
         num_classes = out_shape[0]
@@ -199,6 +207,9 @@ class Net(nn.Module):
 
         image_mean = prm.get('image_mean', [0.485, 0.456, 0.406])
         image_std = prm.get('image_std', [0.229, 0.224, 0.225])
+
+
+
 
         self.backbone = backbone
         self.anchor_generator = anchor_generator
@@ -223,7 +234,7 @@ class Net(nn.Module):
         self.proposal_matcher = det_utils.SSDMatcher(iou_thresh)
 
         self.transform = GeneralizedRCNNTransform(
-            min(size), max(size), image_mean, image_std, size_divisible=1, fixed_size=size
+            min(300), max(300), image_mean, image_std, size_divisible=1, fixed_size=size
         )
 
         self.score_thresh = score_thresh

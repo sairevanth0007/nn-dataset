@@ -20,7 +20,7 @@ from ab.nn.util.db.Read import supported_transformers
 
 
 def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, max_momentum,
-                     min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs):
+                     min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs, pretrained):
     task, dataset_name, metric, nn = config
     try:
         # Load model
@@ -34,6 +34,15 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
                 prms[prm] = trial.suggest_float('momentum', min_momentum, max_momentum, log=False)
             elif 'dropout' == prm:  ## Dropoout of high value will prevent the model from learning
                 prms[prm] = trial.suggest_float(prm, 0.0, 0.5, log=False)
+            elif 'pretrained' == prm:
+                # Process pretrained parameter based on command-line value
+                if pretrained == 'auto':
+                    # Let Optuna decide
+                    prms[prm] = trial.suggest_categorical('pretrained', [True, False])
+                elif pretrained == 'true':
+                    prms[prm] = True
+                elif pretrained == 'false':
+                    prms[prm] = False
             else:
                 prms[prm] = trial.suggest_float(prm, 0.0, 1.0, log=False)
         batch = trial.suggest_categorical('batch', [max_batch(x) for x in range(min_batch_binary_power, max_batch_binary_power_local + 1)])
