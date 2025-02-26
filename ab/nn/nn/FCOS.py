@@ -20,7 +20,7 @@ from torchvision.models.detection import _utils as det_utils
 
 def supported_hyperparameters():
     return {'lr', 'momentum', 'center_sampling_radius', 'score_thresh',
-            'nms_thresh', 'detections_per_img', 'topk_candidates'}
+            'nms_thresh', 'detections_per_img', 'topk_candidates', 'pretrained'}
 
 
 class FCOSHead(nn.Module):
@@ -201,7 +201,13 @@ class Net(nn.Module):
         self.detections_per_img = int(200 * prm['detections_per_img']) + 1
         self.topk_candidates = int(2000 * prm['topk_candidates']) + 1
 
-        backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
+        use_pretrained = prm.get('pretrained', False)
+
+
+        if use_pretrained:
+            backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
+        else:
+            backbone = resnet50(weights=None)
         backbone = _resnet_fpn_extractor(
             backbone, trainable_layers=3, returned_layers=[2, 3, 4], extra_blocks=LastLevelP6P7(256, 256)
         )
