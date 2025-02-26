@@ -12,9 +12,8 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
          min_batch_binary_power: int = default_min_batch_power, max_batch_binary_power: int = default_max_batch_power,
          min_learning_rate: float = default_min_lr, max_learning_rate: float = default_max_lr,
          min_momentum: float = default_min_momentum, max_momentum: float = default_max_momentum,
-         transform: str | tuple = None, nn_fail_attempts: int = default_nn_fail_attempts, random_config_order:bool = default_random_config_order,
-         num_workers:int = default_num_workers,
-         pretrained: str = default_pretrained):
+         transform: str | tuple = None, nn_fail_attempts: int = default_nn_fail_attempts, random_config_order: bool = default_random_config_order,
+         num_workers: int = default_num_workers, pretrained: int = default_pretrained):
     """
     Main function for training models using Optuna optimization.
     :param config: Configuration specifying the model training pipelines. The default value for all configurations.
@@ -30,6 +29,7 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
     :param nn_fail_attempts: Number of attempts if the neural network model throws exceptions.
     :param random_config_order: If random shuffling of the config list is required.
     :param num_workers: Number of data loader workers.
+    :param pretrained: Control use of NN pretrained weights: 1 (always use), 0 (never use), or default (let Optuna decide).
     """
 
     validate_prm(min_batch_binary_power, max_batch_binary_power, min_learning_rate, max_learning_rate, min_momentum, max_momentum)
@@ -42,49 +42,49 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
     for idx, sub_config in enumerate(sub_configs, start=1):
         print(f"{idx}. {sub_config}")
     for sub_config in sub_configs:
-            sub_config_ext = sub_config + (n_epochs,)
-            n_optuna_trials_left, n_passed_trials = remaining_trials(sub_config_ext, n_optuna_trials)
-            n_expected_trials = n_optuna_trials_left + n_passed_trials
+        sub_config_ext = sub_config + (n_epochs,)
+        n_optuna_trials_left, n_passed_trials = remaining_trials(sub_config_ext, n_optuna_trials)
+        n_expected_trials = n_optuna_trials_left + n_passed_trials
 
-            conf_str = ', '.join([f"{n}: {v}" for n, v in zip(main_columns_ext, sub_config_ext)])
-            if n_optuna_trials_left == 0:
-                print("All trials have already been passed for the " + conf_str)
-            else:
-                print("\nStarting training for the " + conf_str)
-                fail_iterations = nn_fail_attempts
-                continue_study = True
-                max_batch_binary_power_local = max_batch_binary_power
-                while (continue_study and max_batch_binary_power_local >= min_batch_binary_power and fail_iterations > -1
-                       and remaining_trials(sub_config_ext, n_expected_trials)[0] > 0):
-                    continue_study = False
-                    try:
-                        # Launch Optuna for the current NN model
-                        study = optuna.create_study(study_name=sub_config[-1], direction='maximize')
+        conf_str = ', '.join([f"{n}: {v}" for n, v in zip(main_columns_ext, sub_config_ext)])
+        if n_optuna_trials_left == 0:
+            print("All trials have already been passed for the " + conf_str)
+        else:
+            print("\nStarting training for the " + conf_str)
+            fail_iterations = nn_fail_attempts
+            continue_study = True
+            max_batch_binary_power_local = max_batch_binary_power
+            while (continue_study and max_batch_binary_power_local >= min_batch_binary_power and fail_iterations > -1
+                   and remaining_trials(sub_config_ext, n_expected_trials)[0] > 0):
+                continue_study = False
+                try:
+                    # Launch Optuna for the current NN model
+                    study = optuna.create_study(study_name=sub_config[-1], direction='maximize')
 
-                        # Configure Optuna for the current model
-                        def objective(trial):
-                            nonlocal continue_study, fail_iterations, max_batch_binary_power_local
-                            try:
-                                accuracy = optuna_objective(trial, sub_config, num_workers, min_learning_rate, max_learning_rate, min_momentum, max_momentum,
+                    # Configure Optuna for the current model
+                    def objective(trial):
+                        nonlocal continue_study, fail_iterations, max_batch_binary_power_local
+                        try:
+                            accuracy = optuna_objective(trial, sub_config, num_workers, min_learning_rate, max_learning_rate, min_momentum, max_momentum,
                                                         min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs, pretrained)
-                                fail_iterations = nn_fail_attempts
-                                return accuracy
-                            except Exception as e:
-                                print(f"Optuna: exception in objective function: {e}")
-                                continue_study = True
-                                if isinstance(e, CudaOutOfMemory):
-                                    raise e
-                                if isinstance(e, NNException):
-                                    fail_iterations -= 1
-                                return 0.0
+                            fail_iterations = nn_fail_attempts
+                            return accuracy
+                        except Exception as e:
+                            print(f"Optuna: exception in objective function: {e}")
+                            continue_study = True
+                            if isinstance(e, CudaOutOfMemory):
+                                raise e
+                            if isinstance(e, NNException):
+                                fail_iterations -= 1
+                            return 0.0
 
-                        study.optimize(objective, n_trials=n_optuna_trials_left)
-                    except CudaOutOfMemory as e:
-                        max_batch_binary_power_local = e.batch_size_power() - 1
-                        print(f"Max batch is decreased to {max_batch(max_batch_binary_power_local)} due to a CUDA Out of Memory Exception for model '{sub_config[-1]}'")
-                    finally:
-                        del study
-                        release_memory()
+                    study.optimize(objective, n_trials=n_optuna_trials_left)
+                except CudaOutOfMemory as e:
+                    max_batch_binary_power_local = e.batch_size_power() - 1
+                    print(f"Max batch is decreased to {max_batch(max_batch_binary_power_local)} due to a CUDA Out of Memory Exception for model '{sub_config[-1]}'")
+                finally:
+                    del study
+                    release_memory()
 
 
 if __name__ == "__main__":

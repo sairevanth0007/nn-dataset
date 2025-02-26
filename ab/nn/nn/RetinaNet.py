@@ -260,12 +260,8 @@ class Net(nn.Module):
         self.topk_candidates = int(2000 * prm['topk_candidates']) + 1
 
 
-        use_pretrained = prm.get('pretrained', True)
-
-        if use_pretrained:
-            backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
-        else:
-            backbone = resnet50(weights=None)
+        use_pretrained = prm['pretrained'] > 0.5
+        backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1 if use_pretrained else None)
         backbone = _resnet_fpn_extractor(
             backbone,
             trainable_layers=3,
