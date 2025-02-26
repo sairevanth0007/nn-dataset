@@ -34,8 +34,9 @@ if __name__ == "__main__":
     nn_fail_attempts = a.nn_fail_attempts
     random_config_order = a.random_config_order
     workers = a.workers
+    pretrained = a.pretrained
 
     ''' !!! Please commit correct statistics whenever it's generated !!! '''
     # Run training with Optuna: detects and saves performance metric values
-    train.main(conf, epochs, trials, min_batch_power, max_batch_power, min_lr, max_lr, min_mom, max_mom, transform, nn_fail_attempts, random_config_order, workers)
+    train.main(conf, epochs, trials, min_batch_power, max_batch_power, min_lr, max_lr, min_mom, max_mom, transform, nn_fail_attempts, random_config_order, workers, pretrained)
 
