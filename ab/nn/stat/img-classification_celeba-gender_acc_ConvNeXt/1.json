@@ -58,5 +58,29 @@
         "stochastic_depth_prob": 0.31782290876806696,
         "transform": "norm_512",
         "uid": "ea42dd16-6eaa-4613-af02-a5a3f050019f"
+    },
+    {
+        "accuracy": 0.613515679791604,
+        "batch": 4,
+        "duration": 726478349586,
+        "lr": 0.9352008449803586,
+        "momentum": 0.9594032519246672,
+        "norm_eps": 0.26987403329867143,
+        "norm_std": 0.7925813409796637,
+        "stochastic_depth_prob": 0.6861696050032494,
+        "transform": "norm",
+        "uid": "7291b7a8-874b-4ead-a601-06577a0d6e16"
+    },
+    {
+        "accuracy": 0.613515679791604,
+        "batch": 8,
+        "duration": 1255000785566,
+        "lr": 0.23107286141785885,
+        "momentum": 0.4699485031940217,
+        "norm_eps": 0.06698256621474785,
+        "norm_std": 0.6922327783150701,
+        "stochastic_depth_prob": 0.2763972771313459,
+        "transform": "norm_299",
+        "uid": "f84cb5a1-6508-4cce-98a4-602ddd8ca2d1"
     }
 ]
