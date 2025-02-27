@@ -130,7 +130,7 @@ def args():
                         help="If random shuffling of the config list is required.")
     parser.add_argument('-w', '--workers', type=int, default=default_num_workers,
                         help="Number of data loader workers.")
-    parser.add_argument('--pretrained', type=float, choices=[1, 0], default=default_pretrained,
+    parser.add_argument('--pretrained', type=int, choices=[1, 0], default=default_pretrained,
                       help='Control pretrained weights usage: 1 (always use), 0 (never use), or default (let Optuna decide)')
 
     return parser.parse_args()
