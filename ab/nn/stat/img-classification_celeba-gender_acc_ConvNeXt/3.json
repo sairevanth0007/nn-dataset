@@ -1,5 +1,17 @@
 [
     {
+        "accuracy": 0.9658350866646629,
+        "batch": 4,
+        "duration": 1631188150355,
+        "lr": 0.029063976057016706,
+        "momentum": 0.27946418301845255,
+        "norm_eps": 0.03510212824753434,
+        "norm_std": 0.2692121902976967,
+        "stochastic_depth_prob": 0.8087243447444658,
+        "transform": "echo_128_flip",
+        "uid": "790506ac-be0c-426b-b0d1-251c00ec18e4"
+    },
+    {
         "accuracy": 0.9548141468790702,
         "batch": 8,
         "duration": 1972982465720,
@@ -12,6 +24,18 @@
         "uid": "19d84f3b-ec6a-4789-a293-584930796848"
     },
     {
+        "accuracy": 0.9456968239655346,
+        "batch": 32,
+        "duration": 743953940697,
+        "lr": 0.007406119558191526,
+        "momentum": 0.8632418986481548,
+        "norm_eps": 0.6794905086116555,
+        "norm_std": 0.37588595375566747,
+        "stochastic_depth_prob": 0.7868942026596949,
+        "transform": "norm_128",
+        "uid": "71238521-0d91-402d-9a3d-7d99a8d6323c"
+    },
+    {
         "accuracy": 0.9409377817853922,
         "batch": 1,
         "duration": 13111081728261,
@@ -22,6 +46,18 @@
         "stochastic_depth_prob": 0.5705451281749455,
         "transform": "echo_256_flip",
         "uid": "4218d13a-35f6-4e28-9140-b09b4d0b0aa0"
+    },
+    {
+        "accuracy": 0.9197475202885482,
+        "batch": 4,
+        "duration": 1529806306322,
+        "lr": 0.0015358106001387229,
+        "momentum": 0.17623297506711733,
+        "norm_eps": 0.030930084077126718,
+        "norm_std": 0.0489739246738371,
+        "stochastic_depth_prob": 0.848484422757032,
+        "transform": "echo_64_flip",
+        "uid": "8da4cc0b-1c47-41a5-8561-431e96f3ab9e"
     },
     {
         "accuracy": 0.8860835587616471,
@@ -70,5 +106,17 @@
         "stochastic_depth_prob": 0.2763972771313459,
         "transform": "norm_299",
         "uid": "15bcc4c3-805d-446f-96e5-efcb76591c2c"
+    },
+    {
+        "accuracy": 0.613515679791604,
+        "batch": 8,
+        "duration": 3880227041229,
+        "lr": 0.009739288180717112,
+        "momentum": 0.8567841069312613,
+        "norm_eps": 0.6244756070040111,
+        "norm_std": 0.9433302192045129,
+        "stochastic_depth_prob": 0.22176795627207402,
+        "transform": "norm_299_flip",
+        "uid": "bec8e2e0-e0fa-42e7-83f7-691319c0fb34"
     }
 ]
