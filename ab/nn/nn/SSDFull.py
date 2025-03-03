@@ -16,6 +16,7 @@ def supported_hyperparameters():
 
 
 def create_backbone(trainable_layers=4, pretrained=False):
+<<<<<<< HEAD
     if pretrained:
         backbone = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
     else:
@@ -27,6 +28,9 @@ def create_backbone(trainable_layers=4, pretrained=False):
         return SSDFeatureExtractorVGG(backbone)
 
 
+=======
+    backbone = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES if pretrained else None).features
+>>>>>>> 85506d22992109df2b29a2ab1054c2510c9bed1e
     stage_indices = [0] + [i for i, b in enumerate(backbone) if isinstance(b, nn.MaxPool2d)][:-1]
     num_stages = len(stage_indices)
 
@@ -193,7 +197,7 @@ class Net(nn.Module):
         size = (in_shape[2], in_shape[3])
         
         
-        use_pretrained = prm.get('pretrained', False)
+        use_pretrained = prm['pretrained'] > 0.5
         
         
         backbone = create_backbone(trainable_layers=3, pretrained=use_pretrained)

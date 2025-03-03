@@ -162,18 +162,14 @@ class Net(nn.Module):
         topk_candidates = int(600 * prm.get('topk_candidates')) + 1
         neg_to_pos_ratio = int(6 * prm.get('neg_to_pos_ratio')) + 1
 
-        use_pretrained = prm.get('pretrained', True)
+        use_pretrained = prm['pretrained'] > 0.5
 
 
         image_mean = prm.get('image_mean', [0.5, 0.5, 0.5])
         image_std = prm.get('image_std', [0.5, 0.5, 0.5])
 
         norm_layer = partial(nn.BatchNorm2d, eps=norm_eps, momentum=norm_momentum)
-
-        if use_pretrained:
-            backbone = mobilenet_v3_large(weights=MobileNet_V3_Large_Weights.IMAGENET1K_V1).features
-        else:
-            backbone = mobilenet_v3_large(weights=None).features
+        backbone = mobilenet_v3_large(weights=MobileNet_V3_Large_Weights.IMAGENET1K_V1 if use_pretrained else None).features
 
         anchor_generator = DefaultBoxGenerator(
             [[2, 3] for _ in range(6)],
