@@ -23,6 +23,10 @@ def create_backbone(trainable_layers=4, pretrained=False):
 
     backbone = backbone.features
 
+    if not pretrained:
+        return SSDFeatureExtractorVGG(backbone)
+
+
     stage_indices = [0] + [i for i, b in enumerate(backbone) if isinstance(b, nn.MaxPool2d)][:-1]
     num_stages = len(stage_indices)
 
