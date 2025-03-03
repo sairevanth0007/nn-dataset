@@ -1,5 +1,17 @@
 [
     {
+        "accuracy": 0.9511071034966436,
+        "attention_dropout": 0.7632875520880361,
+        "batch": 8,
+        "dropout": 0.12517596374129752,
+        "duration": 2329871311385,
+        "lr": 0.01021987835662876,
+        "momentum": 0.6877190572458276,
+        "stochastic_depth_prob": 0.8105214628173145,
+        "transform": "norm_256_flip",
+        "uid": "fad48a98-b111-44ce-944b-e8955ced5f4f"
+    },
+    {
         "accuracy": 0.9435928263701032,
         "attention_dropout": 0.7140083691761847,
         "batch": 2,
@@ -22,5 +34,53 @@
         "stochastic_depth_prob": 0.21590760636057849,
         "transform": "echo_256",
         "uid": "da44e2d0-f520-4469-bb00-46b7dd59f73d"
+    },
+    {
+        "accuracy": 0.9150886684700932,
+        "attention_dropout": 0.45109682926112826,
+        "batch": 128,
+        "dropout": 0.16945283936796596,
+        "duration": 147120996243,
+        "lr": 2.820300623438165e-05,
+        "momentum": 0.9063372907731349,
+        "stochastic_depth_prob": 0.2977208813281369,
+        "transform": "norm_32",
+        "uid": "145a613e-8d73-496c-9207-f3e344abec76"
+    },
+    {
+        "accuracy": 0.8849313696022443,
+        "attention_dropout": 0.382481392036245,
+        "batch": 4,
+        "dropout": 0.3453583718710808,
+        "duration": 2367856081031,
+        "lr": 0.00013676535837429398,
+        "momentum": 0.178483129947423,
+        "stochastic_depth_prob": 0.24086038490700012,
+        "transform": "norm",
+        "uid": "1b7a19d9-ef94-4b42-8bd6-9b72b9a6cd77"
+    },
+    {
+        "accuracy": 0.613515679791604,
+        "attention_dropout": 0.786724807028361,
+        "batch": 128,
+        "dropout": 0.12761280087303328,
+        "duration": 729178035816,
+        "lr": 0.2632281146853153,
+        "momentum": 0.6887398212506001,
+        "stochastic_depth_prob": 0.4696505662226652,
+        "transform": "echo_128",
+        "uid": "e3035d75-d907-4dd7-87af-b7233e736078"
+    },
+    {
+        "accuracy": 0.613515679791604,
+        "attention_dropout": 0.45593786640516276,
+        "batch": 16,
+        "dropout": 0.3410062510808395,
+        "duration": 758287405713,
+        "lr": 0.03187503050697682,
+        "momentum": 0.9150397105333338,
+        "stochastic_depth_prob": 0.8902124200102198,
+        "transform": "norm_128",
+        "uid": "f6ce92eb-85af-478c-b519-8b774458f487"
     }
 ]

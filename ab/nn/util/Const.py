@@ -9,11 +9,12 @@ default_min_lr = 1e-5
 default_max_lr = 1.0
 default_min_momentum = 0.0
 default_max_momentum = 1.0
+default_pretrained = None
+default_transform = None
+
 default_nn_fail_attempts = 30
 default_num_workers = 2
 default_random_config_order = False
-default_transform = None
-default_pretrained = 'auto'
 
 max_epoch_seconds = 30 * 60
 

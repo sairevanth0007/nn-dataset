@@ -28,23 +28,17 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
         # Suggest hyperparameters
         prms = {}
         for prm in s_prm:
-            if 'lr' == prm:
-                prms[prm] = trial.suggest_float('lr', min_lr, max_lr, log=True)
-            elif 'momentum' == prm:
-                prms[prm] = trial.suggest_float('momentum', min_momentum, max_momentum, log=False)
-            elif 'dropout' == prm:  ## Dropoout of high value will prevent the model from learning
-                prms[prm] = trial.suggest_float(prm, 0.0, 0.5, log=False)
-            elif 'pretrained' == prm:
-                # Process pretrained parameter based on command-line value
-                if pretrained == 'auto':
-                    # Let Optuna decide
-                    prms[prm] = trial.suggest_categorical('pretrained', [True, False])
-                elif pretrained == 'true':
-                    prms[prm] = True
-                elif pretrained == 'false':
-                    prms[prm] = False
-            else:
-                prms[prm] = trial.suggest_float(prm, 0.0, 1.0, log=False)
+            match prm:
+                case 'lr':
+                    prms[prm] = trial.suggest_float(prm, min_lr, max_lr, log=True)
+                case 'momentum':
+                    prms[prm] = trial.suggest_float(prm, min_momentum, max_momentum)
+                case 'dropout':  ## Dropoout of high value will prevent the model from learning
+                    prms[prm] = trial.suggest_float(prm, 0.0, 0.5)
+                case 'pretrained':
+                    prms[prm] = float(pretrained if pretrained else trial.suggest_categorical(prm, [0, 1]))
+                case _:
+                    prms[prm] = trial.suggest_float(prm, 0.0, 1.0)
         batch = trial.suggest_categorical('batch', [max_batch(x) for x in range(min_batch_binary_power, max_batch_binary_power_local + 1)])
         transform_name = trial.suggest_categorical('transform', transform if transform else supported_transformers())
         prms = merge_prm(prms, {'batch': batch, 'transform': transform_name})
@@ -126,7 +120,7 @@ class Train:
                                                        collate_fn=get_obj_attr(self.test_dataset, 'collate_fn'))
 
         for input_tensor, _ in self.train_loader:
-            self.in_shape = np.array(input_tensor).shape # Model input tensor shape (e.g., (8, 3, 32, 32) for a batch size 8, RGB image 32x32 px).
+            self.in_shape = np.array(input_tensor).shape  # Model input tensor shape (e.g., (8, 3, 32, 32) for a batch size 8, RGB image 32x32 px).
             break
 
         if torch.cuda.is_available():
@@ -158,7 +152,6 @@ class Train:
             raise ValueError(f"Metric '{metric_name}' not found. Ensure a corresponding file and function exist. Ensure the metric module has create_metric()") \
                 from e
 
-
     def train_n_eval(self, num_epochs):
         """ Training and evaluation """
 
@@ -177,9 +170,9 @@ class Train:
             accuracy_to_time = accuracy_to_time_metric(accuracy, self.minimum_accuracy, duration)
             if not good(accuracy, self.minimum_accuracy, duration):
                 raise AccuracyException(accuracy_to_time,
-                    f"Accuracy is too low: {accuracy}."
-                          f" The minimum accepted accuracy for the '{self.config[1]}"
-                    f"' dataset is {self.minimum_accuracy}.")
+                                        f"Accuracy is too low: {accuracy}."
+                                        f" The minimum accepted accuracy for the '{self.config[1]}"
+                                        f"' dataset is {self.minimum_accuracy}.")
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
             if self.save_to_db:
                 save_results(self.config + (epoch,), join(model_stat_dir(self.config), f"{epoch}.json"), prm)
@@ -230,7 +223,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
             spec = importlib.util.spec_from_file_location(f"ab.nn.tmp.{temp_filename}", temp_file_path)
             module = importlib.util.module_from_spec(spec)
             sys.modules[f"ab.nn.tmp.{temp_filename}"] = module
-            spec.loader.exec_module(module) 
+            spec.loader.exec_module(module)
 
             # load dataset
             out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(task, dataset, prm.get('transform', None))
