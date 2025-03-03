@@ -1,5 +1,53 @@
 [
     {
+        "accuracy": 0.9401362588918946,
+        "attention_dropout": 0.034591072035208725,
+        "batch": 16,
+        "dropout": 0.16847605398867083,
+        "duration": 638922271384,
+        "lr": 0.021359987328314792,
+        "momentum": 0.5294112999219232,
+        "patch_size": 0.86061143529662,
+        "transform": "norm_32_flip",
+        "uid": "aa4b3af2-0808-4b42-9b23-392536d03adb"
+    },
+    {
+        "accuracy": 0.9398857829876766,
+        "attention_dropout": 0.7533581227083124,
+        "batch": 32,
+        "dropout": 0.46835848128250307,
+        "duration": 2040696180507,
+        "lr": 0.010332488438651631,
+        "momentum": 0.2600456126416485,
+        "patch_size": 0.7582143147279289,
+        "transform": "norm_256",
+        "uid": "f21beaac-4a86-4990-9539-8479fb331646"
+    },
+    {
+        "accuracy": 0.9336739805630698,
+        "attention_dropout": 0.3717051111933627,
+        "batch": 64,
+        "dropout": 0.346550414722162,
+        "duration": 212059063544,
+        "lr": 0.12735544977298735,
+        "momentum": 0.36710973923435763,
+        "patch_size": 0.4631884054401946,
+        "transform": "echo_64",
+        "uid": "faa39718-d592-4fc9-abae-5cf987aff2e7"
+    },
+    {
+        "accuracy": 0.9179440937781785,
+        "attention_dropout": 0.5938064717597835,
+        "batch": 8,
+        "dropout": 0.4068857880196348,
+        "duration": 1246052175876,
+        "lr": 0.03571260169785333,
+        "momentum": 0.31130439906472174,
+        "patch_size": 0.3622010081175472,
+        "transform": "echo_32_flip",
+        "uid": "c1edc84b-dee0-485d-a2c1-744cf4736be6"
+    },
+    {
         "accuracy": 0.9097785793006713,
         "attention_dropout": 0.8528140142210489,
         "batch": 2,
@@ -22,6 +70,66 @@
         "patch_size": 0.5101372079166744,
         "transform": "echo_256_flip",
         "uid": "54464211-42db-4f2e-9bb7-44ebc9d3f8c0"
+    },
+    {
+        "accuracy": 0.9023143973549744,
+        "attention_dropout": 0.7951217165877374,
+        "batch": 128,
+        "dropout": 0.49572661865676965,
+        "duration": 1875391210936,
+        "lr": 0.000989128477042944,
+        "momentum": 0.12136720989431238,
+        "patch_size": 0.5625839011716207,
+        "transform": "norm_299",
+        "uid": "71a073c9-6285-448f-9b10-ac63c6709a7d"
+    },
+    {
+        "accuracy": 0.8956517383027752,
+        "attention_dropout": 0.8944418635083827,
+        "batch": 256,
+        "dropout": 0.30224014819444367,
+        "duration": 270234624459,
+        "lr": 0.11898657171915948,
+        "momentum": 0.5365409597624445,
+        "patch_size": 0.9048323202278613,
+        "transform": "echo_128_flip",
+        "uid": "bfc4e7aa-eab5-4606-8c91-c0e4800a8286"
+    },
+    {
+        "accuracy": 0.808135457369001,
+        "attention_dropout": 0.5879236143982605,
+        "batch": 16,
+        "dropout": 0.19608323535591538,
+        "duration": 4252991655853,
+        "lr": 1.66679061114498e-05,
+        "momentum": 0.6200241437829951,
+        "patch_size": 0.623758610494889,
+        "transform": "echo_512_flip",
+        "uid": "fbb89201-e6da-4201-a28c-5ad9ca0662fd"
+    },
+    {
+        "accuracy": 0.6951708245666767,
+        "attention_dropout": 0.8622282910282245,
+        "batch": 128,
+        "dropout": 0.009496264371976426,
+        "duration": 326996190353,
+        "lr": 5.252385752671771e-05,
+        "momentum": 0.4482202082615927,
+        "patch_size": 0.26354842782308396,
+        "transform": "norm_128",
+        "uid": "cde35a88-6f4b-433f-9744-9a9188e9ea04"
+    },
+    {
+        "accuracy": 0.6341047991183248,
+        "attention_dropout": 0.8610550152299782,
+        "batch": 1024,
+        "dropout": 0.382034511667493,
+        "duration": 199019750466,
+        "lr": 0.0008074913443986086,
+        "momentum": 0.11422292043578097,
+        "patch_size": 0.43228642187339583,
+        "transform": "norm_64_flip",
+        "uid": "02e34bd1-7642-469d-a21c-01dfdb8b7025"
     },
     {
         "accuracy": 0.613515679791604,
