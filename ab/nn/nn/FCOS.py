@@ -201,7 +201,6 @@ class Net(nn.Module):
         self.detections_per_img = int(200 * prm['detections_per_img']) + 1
         self.topk_candidates = int(2000 * prm['topk_candidates']) + 1
 
-<<<<<<< HEAD
         use_pretrained = prm.get('pretrained', True)
 
         trainable_layers = 3 if use_pretrained else 5
@@ -210,10 +209,10 @@ class Net(nn.Module):
             backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
         else:
             backbone = resnet50(weights=None)
-=======
+
         use_pretrained = prm['pretrained'] > 0.5
         backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1 if use_pretrained else None)
->>>>>>> 85506d22992109df2b29a2ab1054c2510c9bed1e
+
         backbone = _resnet_fpn_extractor(
             backbone, trainable_layers=trainable_layers, returned_layers=[2, 3, 4], extra_blocks=LastLevelP6P7(256, 256)
         )
