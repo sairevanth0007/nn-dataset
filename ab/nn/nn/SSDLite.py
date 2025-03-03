@@ -163,8 +163,6 @@ class Net(nn.Module):
         neg_to_pos_ratio = int(6 * prm.get('neg_to_pos_ratio')) + 1
 
         use_pretrained = prm['pretrained'] > 0.5
-
-
         image_mean = prm.get('image_mean', [0.5, 0.5, 0.5])
         image_std = prm.get('image_std', [0.5, 0.5, 0.5])
 

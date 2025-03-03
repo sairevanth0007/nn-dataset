@@ -1,5 +1,5 @@
 import torch
-from ab.nn.metric.base import BaseMetric
+from ab.nn.metric.base.base import BaseMetric
 
 class Accuracy(BaseMetric):
     def reset(self):

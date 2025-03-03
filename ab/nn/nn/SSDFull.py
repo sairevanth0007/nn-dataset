@@ -16,20 +16,9 @@ def supported_hyperparameters():
 
 
 def create_backbone(trainable_layers=4, pretrained=False):
-
-    if pretrained:
-        backbone = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES)
-    else:
-        backbone = vgg16(weights=None)
-
-    backbone = backbone.features
-
+    backbone = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES if pretrained else None).features
     if not pretrained:
         return SSDFeatureExtractorVGG(backbone)
-
-
-
-    backbone = vgg16(weights=VGG16_Weights.IMAGENET1K_FEATURES if pretrained else None).features
 
     stage_indices = [0] + [i for i, b in enumerate(backbone) if isinstance(b, nn.MaxPool2d)][:-1]
     num_stages = len(stage_indices)
@@ -193,14 +182,8 @@ class Net(nn.Module):
     def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
         self.device = device
-
         size = (in_shape[2], in_shape[3])
-        
-        
-        use_pretrained = prm['pretrained'] > 0.5
-        
-        
-        backbone = create_backbone(trainable_layers=3, pretrained=use_pretrained)
+        backbone = create_backbone(trainable_layers=3, pretrained=prm['pretrained'] > 0.5)
 
         anchor_generator = create_anchor_generator()
 
