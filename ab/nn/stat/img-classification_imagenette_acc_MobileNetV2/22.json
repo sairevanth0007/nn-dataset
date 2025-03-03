@@ -18,5 +18,15 @@
         "momentum": 0.9817491784938713,
         "transform": "norm_256_flip",
         "uid": "ffe5239f-8693-4252-b85d-80a8b4f99612"
+    },
+    {
+        "accuracy": 0.41477707006369424,
+        "batch": 4,
+        "dropout": 0.12211272763932646,
+        "duration": 468984326504,
+        "lr": 0.0019943557580617876,
+        "momentum": 0.37228614139014593,
+        "transform": "norm_128_flip",
+        "uid": "0459f0ea-e25d-4b3f-a961-4a0db37c581a"
     }
 ]

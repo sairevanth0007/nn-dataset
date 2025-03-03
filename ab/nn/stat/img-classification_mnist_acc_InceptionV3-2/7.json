@@ -10,6 +10,16 @@
         "uid": "e131bc62-ac1f-4982-ac29-a5446934bf56"
     },
     {
+        "accuracy": 0.9889,
+        "batch": 16,
+        "dropout": 0.3300677476573032,
+        "duration": 5670762885226,
+        "lr": 0.5291065695982636,
+        "momentum": 0.8029739911417375,
+        "transform": "soft_pad",
+        "uid": "c6fe70af-9721-4979-a535-279c6aa9d8e7"
+    },
+    {
         "accuracy": 0.9843,
         "batch": 2,
         "dropout": 0.4927519621247629,
