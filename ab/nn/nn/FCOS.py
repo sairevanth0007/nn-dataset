@@ -204,7 +204,7 @@ class Net(nn.Module):
         use_pretrained = prm['pretrained'] > 0.5
         backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1 if use_pretrained else None)
         backbone = _resnet_fpn_extractor(
-            backbone, trainable_layers=3, returned_layers=[2, 3, 4], extra_blocks=LastLevelP6P7(256, 256)
+            backbone, trainable_layers=3 if use_pretrained else 5, returned_layers=[2, 3, 4], extra_blocks=LastLevelP6P7(256, 256)
         )
 
         anchor_sizes = ((8,), (16,), (32,), (64,), (128,))

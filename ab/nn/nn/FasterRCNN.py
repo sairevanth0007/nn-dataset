@@ -514,9 +514,8 @@ class Net(nn.Module):
 
         use_pretrained = prm['pretrained'] > 0.5
         backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1 if use_pretrained else None)
-        backbone = _resnet_fpn_extractor(backbone, trainable_layers=3)
-
-
+        trainable_layers = 3 if use_pretrained else 5
+        backbone = _resnet_fpn_extractor(backbone, trainable_layers=trainable_layers)
         rpn_anchor_generator = _default_anchorgen()
         rpn_head = RPNHead(backbone.out_channels, rpn_anchor_generator.num_anchors_per_location()[0])
 

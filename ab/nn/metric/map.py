@@ -1,14 +1,24 @@
 import torch
+from ab.nn.metric.base.base import BaseMetric
 
-class MAPMetric:
+class MAPMetric(BaseMetric):
+    """
+    Mean Average Precision metric for object detection
+    """
     def __init__(self, iou_threshold=0.5):
         """
         Initializes the mAP metric.
         """
         self.iou_threshold = iou_threshold
+        super().__init__()
+    
+    def reset(self):
+        """
+        Resets the accumulated predictions and targets.
+        """
         self.all_predictions = []
         self.all_targets = []
-
+    
     def update(self, predictions, targets):
         """
         Updates the accumulated predictions and targets.
@@ -19,18 +29,16 @@ class MAPMetric:
         """
         self.all_predictions.extend(predictions)
         self.all_targets.extend(targets)
-
-    def reset(self):
-        """
-        Resets the accumulated predictions and targets.
-        """
-        self.all_predictions = []
-        self.all_targets = []
-
-    def get(self):
+    
+    def __call__(self, predictions, targets):
+        """Process a batch and return compatible values for accumulation"""
+        self.update(predictions, targets)
+        # Return dummy values for compatibility with accumulation pattern
+        return 1, 1
+    
+    def result(self):
         """
         Computes and returns the mean Average Precision (mAP).
-        Prints the per-class AP scores.
         """
         all_aps = {}
         for class_id in range(91):  # COCO has 80 classes, but IDs range from 1 to 90
@@ -49,18 +57,13 @@ class MAPMetric:
             ap = self._compute_ap(class_preds, class_targets, self.iou_threshold)
             all_aps[class_id] = ap
 
-        # Print per-class AP scores
-        #print("Per-class AP scores:")
-        #for class_id, ap in all_aps.items():
-        #    print(f"Class {class_id}: {ap:.4f}")
-
         # Compute mean AP
         if len(all_aps) == 0:
             return 0.0  # No valid predictions
 
         mean_ap = float(torch.tensor(list(all_aps.values())).mean())
         return mean_ap
-
+    
     def _compute_ap(self, class_preds, class_targets, iou_threshold):
         """
         Computes Average Precision (AP) for a single class.
@@ -105,7 +108,7 @@ class MAPMetric:
             if mask.any():
                 ap += precision[mask].max() / 11
         return ap
-
+    
     def _box_iou(self, boxes1, boxes2):
         """
         Computes IoU between two sets of boxes.
@@ -125,3 +128,7 @@ class MAPMetric:
         inter = wh[:, :, 0] * wh[:, :, 1]
         union = area1[:, None] + area2 - inter
         return inter / union
+
+# Function to create metric instance
+def create_metric(out_shape=None):
+    return MAPMetric()
