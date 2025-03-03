@@ -151,14 +151,11 @@ class Train:
         """
         try:
             module = importlib.import_module(nn_mod('metric', metric_name))
-            if metric_name == "iou":
-                return module.MIoU(self.out_shape)
-            elif metric_name == "map":
-                return module.MAPMetric()
-            else:
-                return getattr(module, "compute")
+            
+            return module.create_metric(self.out_shape)
+            
         except (ModuleNotFoundError, AttributeError) as e:
-            raise ValueError(f"Metric '{metric_name}' not found. Ensure a corresponding file and function exist.") \
+            raise ValueError(f"Metric '{metric_name}' not found. Ensure a corresponding file and function exist. Ensure the metric module has create_metric()") \
                 from e
 
 
@@ -189,28 +186,22 @@ class Train:
         return accuracy_to_time, duration
 
     def eval(self, test_loader):
-        """ Evaluation """
+        """Evaluation with standardized metric interface"""
         self.model.eval()
-        total_correct, total_samples = 0, 0
-        if hasattr(self.metric_function, "reset"):  # Check for reset()
-            self.metric_function.reset()
+        
+        # Reset the metric at the start of evaluation
+        self.metric_function.reset()
+        
         with torch.no_grad():
             for inputs, labels in test_loader:
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
                 outputs = self.model(inputs)
-
-                if hasattr(self.metric_function, "update"):  # For mIoU
-                    self.metric_function.update(outputs, labels)
-                else:  # For accuracy and others
-                    correct, total = self.metric_function(outputs, labels)
-                    total_correct += correct
-                    total_samples += total
-        # Metric result
-        if hasattr(self.metric_function, "get"):
-            result = self.metric_function.get()
-        else:
-            result = total_correct / total_samples
-        return result
+                
+                # Call the metric - all metrics now use the same interface
+                self.metric_function(outputs, labels)
+        
+        # Get the final result from the metric
+        return self.metric_function.result()
 
 
 def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
