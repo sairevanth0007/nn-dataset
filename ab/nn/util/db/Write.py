@@ -114,7 +114,7 @@ def save_results(config_ext: tuple[str, str, str, str, int], prm: dict):
 
 def save_nn(nn_code: str, task: str, dataset: str, metric: str, epoch: int, prm: dict, prefix = None):
     conn, cursor = sql_conn()
-    nn = code_to_db(cursor, 'nn', code=nn_code)
+    nn = code_to_db(cursor, 'nn', code=nn_code, prefix=prefix)
     save_stat((task, dataset, metric, nn, epoch), prm, cursor)
     close_conn(conn)
     return nn
