@@ -512,9 +512,21 @@ class Net(nn.Module):
         self.width = in_shape[3]
         self.num_classes = out_shape[0]
 
+
+        use_pretrained = prm.get('pretrained', True)
+
+        trainable_layers = 3 if use_pretrained else 5
+        
+        if use_pretrained:
+            backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1)
+        else:
+            backbone = resnet50(weights=None)
+        backbone = _resnet_fpn_extractor(backbone, trainable_layers=trainable_layers)
+
         use_pretrained = prm['pretrained'] > 0.5
         backbone = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1 if use_pretrained else None)
         backbone = _resnet_fpn_extractor(backbone, trainable_layers=3)
+
 
 
         rpn_anchor_generator = _default_anchorgen()
