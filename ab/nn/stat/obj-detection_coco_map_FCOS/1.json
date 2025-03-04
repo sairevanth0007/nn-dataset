@@ -165,6 +165,21 @@
         "uid": "9c2c3dbc-0a70-44b7-b7d4-0613491faac5"
     },
     {
+        "accuracy": 0.0601741299033165,
+        "batch": 16,
+        "center_sampling_radius": 0.07890433377615147,
+        "detections_per_img": 0.99839910673302,
+        "duration": 1636101751575,
+        "lr": 3.234829723933922e-05,
+        "momentum": 0.39336083549449097,
+        "nms_thresh": 0.8491343331907256,
+        "pretrained": 1.0,
+        "score_thresh": 0.2605844168049921,
+        "topk_candidates": 0.07970266950511518,
+        "transform": "soft_pad",
+        "uid": "af6edb7b-e42e-40e0-97e7-4114452e8d56"
+    },
+    {
         "accuracy": 0.05934751778841019,
         "batch": 8,
         "center_sampling_radius": 0.8197108003996951,

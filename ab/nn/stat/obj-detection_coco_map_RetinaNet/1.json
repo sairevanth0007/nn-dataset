@@ -48,6 +48,22 @@
         "uid": "a3b1a38e-fbc7-464d-b7b5-e304c5d88914"
     },
     {
+        "accuracy": 0.023010799661278725,
+        "batch": 16,
+        "bg_iou_thresh": 0.09588823515169653,
+        "detections_per_img": 0.5332615556066949,
+        "duration": 576639670550,
+        "fg_iou_thresh": 0.34299475619747044,
+        "lr": 0.007467846101380435,
+        "momentum": 0.486452184612748,
+        "nms_thresh": 0.42781546709073104,
+        "pretrained": 1.0,
+        "score_thresh": 0.3616102689710057,
+        "topk_candidates": 0.9315853887832921,
+        "transform": "soft_pad",
+        "uid": "bd403cd9-aa3d-4ca6-886b-cea673a46c12"
+    },
+    {
         "accuracy": 0.0216606967151165,
         "batch": 64,
         "bg_iou_thresh": 0.2152793819843758,
@@ -78,6 +94,22 @@
         "topk_candidates": 0.8529111510517692,
         "transform": "soft_pad",
         "uid": "40e43dd9-4de0-4ef1-bbf5-6c673aa136b5"
+    },
+    {
+        "accuracy": 0.01709090918302536,
+        "batch": 8,
+        "bg_iou_thresh": 0.06901728878015234,
+        "detections_per_img": 0.19526512488780168,
+        "duration": 576031204565,
+        "fg_iou_thresh": 0.32745717873462954,
+        "lr": 0.036000853047046893,
+        "momentum": 0.6653590599905502,
+        "nms_thresh": 0.3426741871157897,
+        "pretrained": 1.0,
+        "score_thresh": 0.546749071855064,
+        "topk_candidates": 0.10667004768636124,
+        "transform": "soft_pad",
+        "uid": "cbf2cd1b-825a-4039-a87a-e45e615730e7"
     },
     {
         "accuracy": 0.01255109440535307,
