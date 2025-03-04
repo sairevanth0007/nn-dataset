@@ -268,7 +268,7 @@ class Net(nn.Module):
         self.bn = ComplexBatchNorm2d(10)
         self.conv2 = ComplexConv2d(10, 20, 5, 1)
         self.to(self.device)
-        tmp_input = torch.empty(*in_shape).type(torch.complex64).to(self.device)
+        tmp_input = torch.full(in_shape, fill_value=0.1).type(torch.complex64).to(self.device)
         x = self.forward1(tmp_input)
         self.interim_size = int(x.view(-1).size()[0] / in_shape[0])
         self.fc1 = ComplexLinear(self.interim_size, 500)
