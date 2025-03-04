@@ -84,7 +84,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
 
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, model_name, task,
-                 train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True):
+                 train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True, is_code=False):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: Tuple of names (Task, Dataset, Metric, Model).
@@ -111,6 +111,7 @@ class Train:
         self.metric_name = metric
         self.metric_function = self.load_metric_function(metric)
         self.save_to_db = save_to_db
+        self.is_code = is_code
 
         self.train_loader = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.batch, shuffle=True,
                                                         num_workers=get_obj_attr(self.train_dataset, 'num_workers', default=num_workers),
@@ -175,7 +176,12 @@ class Train:
                                         f"' dataset is {self.minimum_accuracy}.")
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
             if self.save_to_db:
-                save_results(self.config + (epoch,), join(model_stat_dir(self.config), f"{epoch}.json"), prm)
+                save_path = "./temp"
+                if self.is_code: # We don't want the filename contain full codes
+                    pass # We do nothing, for save_stat is handled in train_new() also correctly
+                else: # Legacy save result codes in file
+                    save_path = join(model_stat_dir(self.config), f"{epoch}.json")
+                    save_results(self.config + (epoch,), save_path, prm)
         return accuracy_to_time, duration
 
     def eval(self, test_loader):
@@ -197,7 +203,7 @@ class Train:
         return self.metric_function.result()
 
 
-def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
+def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix = None):
     """
     train the model with the given code and hyperparameters and evaluate it.
 
@@ -242,7 +248,8 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
                 metric=metric,
                 num_workers=prm.get('num_workers', 1),
                 prm=prm,
-                save_to_db=save_to_db)
+                save_to_db=save_to_db,
+                is_code=True)
 
             epoch = prm['epoch']
             result, duration = trainer.train_n_eval(epoch)
@@ -250,7 +257,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True):
             if save_to_db:
                 # if result fits the requirement, save the model to database
                 if good(result, minimum_accuracy, duration):
-                    name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm)
+                    name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm, prefix=prefix)
                     print(f"Model saved to database with accuracy: {result}")
                 else:
                     print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
