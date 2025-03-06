@@ -12,6 +12,7 @@ class Testing(unittest.TestCase):
         o2 = api.data(task='img-classification', nn=default_nn_name, cast_prm=False)
         print(o2)
         self.assertNotEqual(len(o2), 0)
+        print(f"The total number of statistical results is {len(o)}, which includes {len(o2)} image classification experiments for the {default_nn_name} model.")
         self.assertGreater(len(o), len(o2))
 
     def test_check_nn(self):
