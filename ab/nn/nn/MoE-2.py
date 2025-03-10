@@ -7,21 +7,26 @@ from torch import nn
 
 MIN_EXPERT_CAPACITY = 4
 
+
 def supported_hyperparameters():
-    return {'lr', 'adam_betas_1','adam_betas_2', 'adam_eps', 'adam_weight_decay', 'loss_coef', 'eps',
+    return {'lr', 'adam_betas_1', 'adam_betas_2', 'adam_eps', 'adam_weight_decay', 'loss_coef', 'eps',
             'second_threshold_train', 'second_threshold_eval', 'capacity_factor_train', 'capacity_factor_eval'}
+
 
 def default(val, default_val):
     default_val = default_val() if isfunction(default_val) else default_val
     return val if val is not None else default_val
 
+
 def cast_tuple(el):
     return el if isinstance(el, tuple) else (el,)
+
 
 def top1(t):
     values, index = t.topk(k=1, dim=-1)
     values, index = map(lambda x: x.squeeze(dim=-1), (values, index))
     return values, index
+
 
 def cumsum_exclusive(t, dim=-1):
     num_dims = len(t.shape)
@@ -31,27 +36,30 @@ def cumsum_exclusive(t, dim=-1):
     padded_t = F.pad(t, (*pre_padding, 1, 0)).cumsum(dim=dim)
     return padded_t[(..., slice(None, -1), *pre_slice)]
 
+
 def safe_one_hot(indexes, max_length):
     max_index = indexes.max() + 1
     return F.one_hot(indexes, max(max_index + 1, max_length))[..., :max_length]
+
 
 def init_(t):
     dim = t.shape[-1]
     std = 1 / math.sqrt(dim)
     return t.uniform_(-std, std)
 
+
 class GELU_(nn.Module):
     def forward(self, x):
         return 0.5 * x * (1 + torch.tanh(math.sqrt(2 / math.pi) * (x + 0.044715 * torch.pow(x, 3))))
 
-GELU = nn.GELU if hasattr(nn, 'GELU') else GELU_
 
+GELU = nn.GELU if hasattr(nn, 'GELU') else GELU_
 
 
 class Experts(nn.Module):
     def __init__(self, dim, num_experts=16, hidden_dim=None, activation=GELU):
         super().__init__()
-        hidden_dim = default(hidden_dim, dim * 4)
+        hidden_dim = default(hidden_dim, dim * 4)  # Set hidden_dim to 4 * dim by default
         num_experts = cast_tuple(num_experts)
         w1 = init_(torch.zeros(*num_experts, dim, hidden_dim))
         w2 = init_(torch.zeros(*num_experts, hidden_dim, dim))
@@ -64,6 +72,7 @@ class Experts(nn.Module):
         hidden = self.act(hidden)
         out = torch.einsum('...nh,...hd->...nd', hidden, self.w2)
         return out
+
 
 class Top2Gating(nn.Module):
     def __init__(self, dim, num_gates, prm):
@@ -141,26 +150,31 @@ class Top2Gating(nn.Module):
         gate_2 *= mask_2_flat
 
         combine_tensor = (
-            gate_1[..., None, None] * mask_1_flat[..., None, None] * F.one_hot(index_1, num_gates)[..., None] * safe_one_hot(position_in_expert_1.long(), expert_capacity)[..., None, :] +
-            gate_2[..., None, None] * mask_2_flat[..., None, None] * F.one_hot(index_2, num_gates)[..., None] * safe_one_hot(position_in_expert_2.long(), expert_capacity)[..., None, :]
+                gate_1[..., None, None] * mask_1_flat[..., None, None] * F.one_hot(index_1, num_gates)[
+            ..., None] * safe_one_hot(position_in_expert_1.long(), expert_capacity)[..., None, :] +
+                gate_2[..., None, None] * mask_2_flat[..., None, None] * F.one_hot(index_2, num_gates)[
+                    ..., None] * safe_one_hot(position_in_expert_2.long(), expert_capacity)[..., None, :]
         )
 
         dispatch_tensor = combine_tensor.bool().to(combine_tensor)
         return dispatch_tensor, combine_tensor, loss
 
+
 class Net(nn.Module):
-     def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
         super().__init__()
         self.device = device
-        dim = in_shape[2]
-        num_experts = 16
+        dim = in_shape[-1]
+        num_experts = prm.get('num_experts', 16)
         self.num_experts = num_experts
         self.gate = Top2Gating(dim, num_gates=num_experts, prm=prm)
-        self.experts = Experts(dim, hidden_dim = 2 # todo maybe some value like this, not sure
-                               , num_experts=num_experts, activation=GELU)
+        self.experts = Experts(dim, num_experts=num_experts, hidden_dim=prm.get('hidden_dim', dim * 4),
+                               activation=prm.get('activation', GELU))
         self.loss_coef = prm['loss_coef']
+        self.criterion = nn.MSELoss()  # Default loss function (change as needed)
 
     def forward(self, x):
+        x = x.to(self.device)
         dispatch_tensor, combine_tensor, loss = self.gate(x)
         b, n, d, e = *x.shape, self.num_experts
         expert_inputs = torch.einsum('bnd,bnec->ebcd', x, dispatch_tensor)
@@ -173,10 +187,23 @@ class Net(nn.Module):
 
     def train_setup(self, prm):
         self.to(self.device)
-        self.optimizer = torch.optim.Adam(self.parameters(), lr=prm['lr'], betas=(prm['adam_betas_1'],prm['adam_betas_2']),
-                                     eps=prm['adam_eps'], weight_decay=prm['adam_weight_decay'])
-        # todo self.criterion = ???
+        self.optimizer = torch.optim.Adam(self.parameters(), lr=prm['lr'],
+                                          betas=(prm['adam_betas_1'], prm['adam_betas_2']),
+                                          eps=prm['adam_eps'], weight_decay=prm['adam_weight_decay'])
 
     def learn(self, train_data):
-        pass  # todo implementation
+        self.train()
+        for batch in train_data:
+            inputs, targets = batch
+            inputs, targets = inputs.to(self.device), targets.to(self.device)
+
+
+            outputs, loss = self(inputs)
+
+
+            total_loss = self.criterion(outputs, targets) + loss
+
+            self.optimizer.zero_grad()
+            total_loss.backward()
+            self.optimizer.step()
 
