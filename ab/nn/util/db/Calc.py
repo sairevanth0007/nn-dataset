@@ -1,10 +1,10 @@
 import json
-import random
 from os.path import exists
+from pathlib import Path
 
 import ab.nn.util.db.Read as DB_Read
-import ab.nn.util.db.Write as DB_Write
 from ab.nn.util.Util import conf_to_names, order_configs
+
 
 def patterns_to_configs(config_pattern: str | tuple, random_config_order: bool) -> tuple[tuple[str, ...], ...]:
     """
@@ -31,6 +31,7 @@ def save_results(config_ext: tuple[str, str, str, str, int], model_stat_file: st
 
     trials_dict_all = sorted(trials_dict_all, key=lambda x: x['accuracy'], reverse=True)
     # Save trials.json
+    Path(model_stat_file).parent.absolute().mkdir(exist_ok=True)
     with open(model_stat_file, 'w') as f:
         json.dump(trials_dict_all, f, indent=4)
 
