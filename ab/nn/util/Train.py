@@ -229,7 +229,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
     if prefix is None:
         name = None
     else:
-        prefix + "-" + DB_Write.uuid4() # Create temporal name for processing
+        name = prefix + "-" + DB_Write.uuid4() # Create temporal name for processing
     spec = importlib.util.find_spec("ab.nn.tmp")
     dir_path = os.path.dirname(spec.origin)
     with tempfile.NamedTemporaryFile(mode='w+', suffix='.py', delete=True, dir=dir_path) as temp_file:
