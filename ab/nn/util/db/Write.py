@@ -15,14 +15,14 @@ def init_population():
         json_n_code_to_db()
 
 
-def code_to_db(cursor, table_name, code=None, code_file=None, prefix = None):
+def code_to_db(cursor, table_name, code=None, code_file=None, force_name = None):
     # If model does not exist, insert it with a new UUID
     if code_file:
         nm = code_file.stem 
-    elif prefix is None:
+    elif force_name is None:
         nm = uuid4()
     else:
-        nm = prefix + "-" + uuid4() # Save in format `<prefix>-<uuid>`
+        nm = force_name
     if not code:
         with open(code_file, 'r') as file:
             code = file.read()
@@ -112,9 +112,9 @@ def save_results(config_ext: tuple[str, str, str, str, int], prm: dict):
     close_conn(conn)
 
 
-def save_nn(nn_code: str, task: str, dataset: str, metric: str, epoch: int, prm: dict, prefix = None):
+def save_nn(nn_code: str, task: str, dataset: str, metric: str, epoch: int, prm: dict, force_name = None):
     conn, cursor = sql_conn()
-    nn = code_to_db(cursor, 'nn', code=nn_code, prefix=prefix)
+    nn = code_to_db(cursor, 'nn', code=nn_code, force_name=force_name)
     save_stat((task, dataset, metric, nn, epoch), prm, cursor)
     close_conn(conn)
     return nn

@@ -35,4 +35,3 @@ def save_results(config_ext: tuple[str, str, str, str, int], model_stat_file: st
         json.dump(trials_dict_all, f, indent=4)
 
     print(f"Trial (accuracy {prm['accuracy']}) for ({', '.join([str(o) for o in config_ext])}) saved at {model_stat_file}")
-    DB_Write.save_results(config_ext, prm)

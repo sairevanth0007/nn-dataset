@@ -5,6 +5,7 @@ import tempfile
 import time as time
 from os.path import join
 from pprint import pprint
+from typing import Union
 
 import numpy as np
 from torch.cuda import OutOfMemoryError
@@ -84,7 +85,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
 
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, model_name, task,
-                 train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True, is_code=False):
+                 train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True, is_code=False, save_path:Union[str,Path]=None):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: Tuple of names (Task, Dataset, Metric, Model).
@@ -112,6 +113,7 @@ class Train:
         self.metric_function = self.load_metric_function(metric)
         self.save_to_db = save_to_db
         self.is_code = is_code
+        self.save_path = save_path
 
         self.train_loader = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.batch, shuffle=True,
                                                         num_workers=get_obj_attr(self.train_dataset, 'num_workers', default=num_workers),
@@ -176,12 +178,16 @@ class Train:
                                         f"' dataset is {self.minimum_accuracy}.")
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
             if self.save_to_db:
-                save_path = "./temp"
                 if self.is_code: # We don't want the filename contain full codes
-                    pass # We do nothing, for save_stat is handled in train_new() also correctly
+                    if self.save_path is None:
+                        print(f"[WARN]parameter `save_Path` set to null, the staticis will not be saved into a file.")
+                    else:
+                        save_results(self.config + (epoch,), self.save_path, prm)
                 else: # Legacy save result codes in file
-                    save_path = join(model_stat_dir(self.config), f"{epoch}.json")
-                    save_results(self.config + (epoch,), save_path, prm)
+                    if self.save_path is None:
+                        self.save_path = join(model_stat_dir(self.config), f"{epoch}.json")
+                    save_results(self.config + (epoch,), self.save_path, prm)
+                    DB_Write.save_results(self.config + (epoch,), prm) # Separated from Calc.save_results()
         return accuracy_to_time, duration
 
     def eval(self, test_loader):
@@ -203,7 +209,7 @@ class Train:
         return self.metric_function.result()
 
 
-def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix = None):
+def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix = None, save_path = None):
     """
     train the model with the given code and hyperparameters and evaluate it.
 
@@ -216,6 +222,10 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix = Non
     return:
         (str, float): Name of the model and the accuracy
     """
+    if prefix is None:
+        name = None
+    else:
+        prefix + "-" + DB_Write.uuid4() # Create temporal name for processing
     spec = importlib.util.find_spec("ab.nn.tmp")
     dir_path = os.path.dirname(spec.origin)
     with tempfile.NamedTemporaryFile(mode='w+', suffix='.py', delete=True, dir=dir_path) as temp_file:
@@ -249,15 +259,15 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix = Non
                 num_workers=prm.get('num_workers', 1),
                 prm=prm,
                 save_to_db=save_to_db,
-                is_code=True)
+                is_code=True,
+                save_path=save_path)
 
             epoch = prm['epoch']
             result, duration = trainer.train_n_eval(epoch)
-            name = None
             if save_to_db:
                 # if result fits the requirement, save the model to database
                 if good(result, minimum_accuracy, duration):
-                    name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm, prefix=prefix)
+                    name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm, force_name=name)
                     print(f"Model saved to database with accuracy: {result}")
                 else:
                     print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
