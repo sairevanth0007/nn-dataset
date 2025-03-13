@@ -172,6 +172,9 @@ class Train:
             accuracy = self.eval(self.test_loader)
             accuracy = 0.0 if math.isnan(accuracy) or math.isinf(accuracy) else accuracy
             duration = time.time_ns() - start_time
+            ## TODO : Accuracy_to_time_metric is calculated and returned from here, 
+            # BUT in the Database is the accuracy WITHOUT considering time.
+            # Please fix this logic if it's a issue. (Maybe it's meant to have such behaviour?)
             accuracy_to_time = accuracy_to_time_metric(accuracy, self.minimum_accuracy, duration)
             if not good(accuracy, self.minimum_accuracy, duration):
                 raise AccuracyException(accuracy_to_time,
