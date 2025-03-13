@@ -98,6 +98,8 @@ class Train:
         :param test_dataset: Dataset used for evaluating/testing the model (e.g., torch.utils.data.Dataset).
         :param metric: Name of the evaluation metric (e.g., 'acc', 'iou').
         :param prm: Dictionary of hyperparameters and their values (e.g., {'lr': 0.11, 'momentum': 0.2})
+        :param is_code: Whether `config.model` is `nn_code` or `nn`
+        :param save_path: Path to save the statistics, set to `None` to use the default
         """
         self.config = config
         self.train_dataset = train_dataset
@@ -209,7 +211,7 @@ class Train:
         return self.metric_function.result()
 
 
-def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix = None, save_path = None):
+def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union[str,None] = None, save_path = None):
     """
     train the model with the given code and hyperparameters and evaluate it.
 
@@ -219,6 +221,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix = Non
         dataset (str): Name of the dataset
         metric (str): Evaluation metric
         prm (dict): Hyperparameters, e.g., 'lr', 'momentum', 'batch', 'epoch', 'dropout'
+        prefix():
     return:
         (str, float): Name of the model and the accuracy
     """
