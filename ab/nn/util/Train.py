@@ -184,11 +184,11 @@ class Train:
                     if self.save_path is None:
                         print(f"[WARN]parameter `save_Path` set to null, the staticis will not be saved into a file.")
                     else:
-                        save_results(self.config + (epoch,), self.save_path, prm)
+                        save_results(self.config + (epoch,), join(self.save_path, f"{epoch}.json"), prm)
                 else: # Legacy save result codes in file
                     if self.save_path is None:
-                        self.save_path = join(model_stat_dir(self.config), f"{epoch}.json")
-                    save_results(self.config + (epoch,), self.save_path, prm)
+                        self.save_path = model_stat_dir(self.config)
+                    save_results(self.config + (epoch,), join(self.save_path, f"{epoch}.json"), prm)
                     DB_Write.save_results(self.config + (epoch,), prm) # Separated from Calc.save_results()
         return accuracy_to_time, duration
 
@@ -211,7 +211,7 @@ class Train:
         return self.metric_function.result()
 
 
-def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union[str,None] = None, save_path = None):
+def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union[str,None] = None, save_path:Union[str,None] = None):
     """
     train the model with the given code and hyperparameters and evaluate it.
 
@@ -221,7 +221,8 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
         dataset (str): Name of the dataset
         metric (str): Evaluation metric
         prm (dict): Hyperparameters, e.g., 'lr', 'momentum', 'batch', 'epoch', 'dropout'
-        prefix():
+        prefix (str|None): Prefix of the model, set to None if is unknown.
+        save_path (str|None): Path to save the statistics, or None to not save. 
     return:
         (str, float): Name of the model and the accuracy
     """
