@@ -24,6 +24,7 @@ For Windows:
    ```
 
 All subsequent commands are provided for Linux/Mac OS. For Windows, please replace ```source .venv/bin/activate``` with ```.venv\Scripts\activate```.
+It is also assumed that CUDA 12.6 is installed. If you have a different version, please replace 'cu126' with the appropriate version number.
 
 ## Environment for NN Dataset Contributors
 ### Pip package manager
@@ -31,7 +32,7 @@ Create a virtual environment, activate it, and run the following command to inst
 ```bash
 source .venv/bin/activate
 python -m pip install --upgrade pip
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 
 ## Installation or Update of the NN Dataset
@@ -44,17 +45,17 @@ rm -rf db
 Installing the stable version:
 ```bash
 source .venv/bin/activate
-pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 Installing from GitHub to get the most recent code and statistics updates:
 ```bash
 source .venv/bin/activate
-pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
+pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 Adding functionality to export data to Excel files and generate plots for <a href='https://github.com/ABrain-One/nn-stat'>analyzing neural network performance</a>:
 ```bash
 source .venv/bin/activate
-pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 and export/generate:
 ```bash
