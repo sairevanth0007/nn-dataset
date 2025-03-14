@@ -141,7 +141,7 @@ The `nn-dataset` package includes the following key modules:
 If you find the LEMUR Neural Network Dataset to be useful for your research, please consider citing:
 ```bibtex
 @misc{ABrain-One.NN-Dataset,
-  author       = {Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Uzun, Tolgay Atinc and Kathiriya, Yash Kanubhai and Dhameliya, Yashkumar Sanjaybhai and Bentyn, Zofia Antonina and Ignatov, Dmitry and Timofte, Radu},
+  author       = {Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Uzun, Tolgay Atinc and Dhameliya, Yashkumar Sanjaybhai and Kathiriya, Yash Kanubhai and Bentyn, Zofia Antonina and Ignatov, Dmitry and Timofte, Radu},
   title        = {LEMUR Neural Network Dataset: Towards Seamless AutoML},
   howpublished = {\url{https://github.com/ABrain-One/nn-dataset}},
   year         = {2024},
