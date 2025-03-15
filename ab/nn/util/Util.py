@@ -52,7 +52,7 @@ def model_stat_dir(config):
     return stat_dir / config_splitter.join(config)
 
 
-def accuracy_to_time_metric(accuracy, min_accuracy, training_duration):
+def accuracy_to_time_metric(accuracy, min_accuracy, training_duration) -> float:
     """
     Naive accuracy-to-time metric for fixed number of training epochs.
     """
