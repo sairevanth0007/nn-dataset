@@ -11,14 +11,29 @@ The original version of the <a href='https://github.com/ABrain-One/nn-dataset'>L
 <h3>Overview 📖</h3>
 The primary goal of NN Dataset project is to provide flexibility for dynamically combining various deep learing tasks, datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gpt">NNGPT</a> project.
 
-## Create and Activate a Virtual Environment (recommended):
+## Create and Activate a Virtual Environment (recommended)
+For Linux/Mac:
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate   # Linux/Mac
-   .venv\Scripts\activate      # Windows
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+For Windows:
+   ```bash
+   python3 -m venv .venv
+   .venv\Scripts\activate
    ```
 
 All subsequent commands are provided for Linux/Mac OS. For Windows, please replace ```source .venv/bin/activate``` with ```.venv\Scripts\activate```.
+It is also assumed that CUDA 12.6 is installed. If you have a different version, please replace 'cu126' with the appropriate version number.
+
+## Environment for NN Dataset Contributors
+### Pip package manager
+Create a virtual environment, activate it, and run the following command to install all the project dependencies:
+```bash
+source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu126
+```
 
 ## Installation or Update of the NN Dataset
 Remove old version of the LEMUR Dataset and its database:
@@ -30,17 +45,17 @@ rm -rf db
 Installing the stable version:
 ```bash
 source .venv/bin/activate
-pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 Installing from GitHub to get the most recent code and statistics updates:
 ```bash
 source .venv/bin/activate
-pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu124
+pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 Adding functionality to export data to Excel files and generate plots for <a href='https://github.com/ABrain-One/nn-stat'>analyzing neural network performance</a>:
 ```bash
 source .venv/bin/activate
-pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu124
+pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 and export/generate:
 ```bash
@@ -79,15 +94,6 @@ docker run -v /a/mm:. abrainone/ai-linux bash -c "PYTHONPATH=/a/mm python -m ab.
 ```
 
 Some recently added dependencies might be missing in the <b>AI Linux</b>. In this case, you can create a container from the Docker image ```abrainone/ai-linux```, install the missing packages (preferably using ```pip install <package name>```), and then create a new image from the container using ```docker commit <container name> <new image name>```. You can use this new image locally or push it to the registry for deployment on the computer cluster.
-
-## Environment for NN Dataset Contributors
-### Pip package manager
-Create a virtual environment, activate it, and run the following command to install all the project dependencies:
-```bash
-source .venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu124
-```
 
 ## Contribution
 
@@ -135,7 +141,7 @@ The `nn-dataset` package includes the following key modules:
 If you find the LEMUR Neural Network Dataset to be useful for your research, please consider citing:
 ```bibtex
 @misc{ABrain-One.NN-Dataset,
-  author       = {Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Uzun, Tolgay Atinc and Kathiriya, Yash Kanubhai and Dhameliya, Yashkumar Sanjaybhai and Bentyn, Zofia Antonina and Ignatov, Dmitry and Timofte, Radu},
+  author       = {Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Uzun, Tolgay Atinc and Dhameliya, Yashkumar Sanjaybhai and Kathiriya, Yash Kanubhai and Bentyn, Zofia Antonina and Ignatov, Dmitry and Timofte, Radu},
   title        = {LEMUR Neural Network Dataset: Towards Seamless AutoML},
   howpublished = {\url{https://github.com/ABrain-One/nn-dataset}},
   year         = {2024},
