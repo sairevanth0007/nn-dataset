@@ -71,7 +71,7 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
                             return accuracy
                         except Exception as e:
                             print(f"Optuna: exception in objective function for nn {sub_config[-1]}: {e}")
-                            continue_study = True
+                            if fail_iterations > -1: continue_study = True
                             if isinstance(e, CudaOutOfMemory):
                                 raise e
                             fail_iterations -= 1

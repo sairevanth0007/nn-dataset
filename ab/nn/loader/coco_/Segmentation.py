@@ -31,7 +31,7 @@ def get_class_list():
 
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665 , 69.89082075, 70.9150767)
-__minimum_accuracy = 0.11 # todo: Required correct value for minimum accuracy provided by the untrained NN model due to random output generation
+minimum_accuracy = 0.11 # todo: Required correct value for minimum accuracy provided by the untrained NN model due to random output generation
 
 def loader(transform_fn, task):
     path = join(data_dir, 'coco')
@@ -45,7 +45,7 @@ def loader(transform_fn, task):
     if not resize: raise Exception("The transformer must include a resize function for the image segmentation task.")
     train_set = COCOSegDataset(transform=transform, root=path, spilt="train", resize=resize, preprocess=True)
     val_set = COCOSegDataset(transform=transform, root=path, spilt="val", resize=resize, preprocess=True)
-    return (class_n(),), __minimum_accuracy, train_set, val_set
+    return (class_n(),), minimum_accuracy, train_set, val_set
 
 
 class COCOSegDataset(torch.utils.data.Dataset):

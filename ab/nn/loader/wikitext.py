@@ -3,7 +3,7 @@ from torch.utils.data import Dataset
 from datasets import load_dataset
 
 
-__minimum_accuracy = 0.01 # todo: Required correct value for minimum accuracy provided by the untrained classifier due to random output generation.
+minimum_accuracy = 0.01 # todo: Required correct value for minimum accuracy provided by the untrained classifier due to random output generation.
 
 def loader(transform_fn, task):
     dataset_name = "Salesforce/wikitext"
@@ -12,7 +12,7 @@ def loader(transform_fn, task):
     dataset = load_dataset(dataset_name, config)
     data = "\n".join(dataset["train"]["text"]).lower()
     txt_dataset = TextDatasetPreparation(data, seq_length)
-    return None, __minimum_accuracy, txt_dataset, txt_dataset
+    return None, minimum_accuracy, txt_dataset, txt_dataset
 
 class TextDatasetPreparation(Dataset):
     """

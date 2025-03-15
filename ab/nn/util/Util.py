@@ -54,7 +54,9 @@ def model_stat_dir(config):
 
 def accuracy_to_time_metric(accuracy, min_accuracy, training_duration) -> float:
     """
-    Naive accuracy-to-time metric for fixed number of training epochs.
+    Naive 'accuracy to time' metric for fixed number of training epochs.
+    This metric is essential for detecting the fastest accuracy improvements during neural network training.
+
     """
     d = max(0.0, (accuracy - min_accuracy)) / (training_duration / 1e11)
     print(f"accuracy_to_time_metric {d}")

@@ -18,7 +18,7 @@ from ab.nn.util.Const import data_dir
 # Standard module-level constants
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665, 69.89082075, 70.9150767)
-__minimum_accuracy = 0.005  # Minimum accuracy for object detection
+minimum_accuracy = 0.005  # Minimum accuracy for object detection
 
 # COCO URLs
 coco_ann_url = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
@@ -246,4 +246,4 @@ def loader(transform_fn, task):
     train_dataset = COCODetectionDataset(transform=transform, root=path, split="train", class_list=MIN_CLASS_LIST, preprocess=True)
     val_dataset = COCODetectionDataset(transform=transform, root=path, split="val", class_list=MIN_CLASS_LIST, preprocess=True)
     
-    return (class_n(),), __minimum_accuracy, train_dataset, val_dataset
+    return (class_n(),), minimum_accuracy, train_dataset, val_dataset

@@ -9,7 +9,7 @@ __norm_dev = (0.3081,)
 
 # MNIST class-related constants
 __class_quantity = 10
-__minimum_accuracy = 1.0 / __class_quantity
+minimum_accuracy = 1.0 / __class_quantity
 
 def loader(transform_fn, task):
     """
@@ -24,4 +24,4 @@ def loader(transform_fn, task):
     train_set = torchvision.datasets.MNIST(root=data_dir, train=True, transform=transform, download=True)
     test_set = torchvision.datasets.MNIST(root=data_dir, train=False, transform=transform, download=True)
 
-    return (__class_quantity,), __minimum_accuracy, train_set, test_set
+    return (__class_quantity,), minimum_accuracy, train_set, test_set

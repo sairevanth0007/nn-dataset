@@ -8,10 +8,10 @@ __norm_dev = (0.229, 0.224, 0.225)
 # for all (__first_class_quantity,) + ((__class_quantity,) * 40)
 # __first_class_quantity = 5
 # __output_quantity = 40
-# __minimum_accuracy = 1.0 / (__class_quantity ** __output_quantity)
+# minimum_accuracy = 1.0 / (__class_quantity ** __output_quantity)
 
 __class_quantity = 2
-__minimum_accuracy = 1.0 / __class_quantity
+minimum_accuracy = 1.0 / __class_quantity
 
 def get_gender(attr):
     return attr[20]
@@ -23,7 +23,7 @@ def loader(transform_fn, task):
                                             target_type='attr', target_transform=get_gender, download=True)
     test_set = torchvision.datasets.CelebA(root=data_dir, split='test', transform=transform,
                                            target_type='attr', target_transform=get_gender, download=True)
-    return (__class_quantity,), __minimum_accuracy, train_set, test_set
+    return (__class_quantity,), minimum_accuracy, train_set, test_set
 
 
 # 00 - 5_o_Clock_Shadow

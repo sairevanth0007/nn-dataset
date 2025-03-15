@@ -4,7 +4,6 @@ import sys
 import tempfile
 import time as time
 from os.path import join
-from pprint import pprint
 from typing import Union
 
 import numpy as np
@@ -14,7 +13,7 @@ import ab.nn.util.CodeEval as codeEvaluator
 import ab.nn.util.db.Write as DB_Write
 from ab.nn.util.Classes import DataRoll
 from ab.nn.util.Exception import *
-from ab.nn.util.Loader import Loader
+from ab.nn.util.Loader import load_dataset
 from ab.nn.util.Util import *
 from ab.nn.util.db.Calc import save_results
 from ab.nn.util.db.Read import supported_transformers
@@ -48,7 +47,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
             prm_str += f", {k}: {v}"
         print(f"Initialize training with {prm_str[2:]}")
         # Load dataset
-        out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(task, dataset_name, transform_name)
+        out_shape, minimum_accuracy, train_set, test_set = load_dataset(task, dataset_name, transform_name)
 
         # Initialize model and trainer
         if task == 'txt-generation':
@@ -247,7 +246,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
             spec.loader.exec_module(module)
 
             # load dataset
-            out_shape, minimum_accuracy, train_set, test_set = Loader.load_dataset(task, dataset, prm.get('transform', None))
+            out_shape, minimum_accuracy, train_set, test_set = load_dataset(task, dataset, prm.get('transform', None))
 
             # initialize model and trainer
             trainer = Train(
@@ -280,5 +279,4 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
         except Exception as e:
             print(f"Error during training: {e}")
             raise
-
-        return name, result, res['score']
+        return name, result, res['score'] / 100.0
