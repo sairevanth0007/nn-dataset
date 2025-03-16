@@ -61,23 +61,24 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
             else:
                 raise ValueError(f"Unsupported text generation model: {nn}")
         return Train(config, out_shape, minimum_accuracy, batch, f"nn.{nn}", task, train_set, test_set, metric,
-                     num_workers, prms).train_n_eval(n_epochs)[0]
+                     num_workers, prms).train_n_eval(n_epochs)
     except Exception as e:
+        accuracy_duration = (0.0, 1)
         if isinstance(e, OutOfMemoryError):
             if max_batch_binary_power_local <= min_batch_binary_power:
-                return 0.0
+                return accuracy_duration
             else:
                 raise CudaOutOfMemory(batch)
         elif isinstance(e, AccuracyException):
             print(e.message)
-            return e.accuracy
+            return e.accuracy, e.duration
         elif isinstance(e, LearnTimeException):
             print(f"Estimated training time: {format_time(e.estimated_training_time)}, but limit {format_time(e.max_learn_seconds)}.")
-            return (1 - (e.estimated_training_time / e.max_learn_seconds)) / 10
+            return (e.max_learn_seconds / e.estimated_training_time ) / 1e5, e.duration
         else:
             print(f"error '{nn}': failed to train. Error: {e}")
             if fail_iterations < 0:
-                return 0.0
+                return accuracy_duration
             else:
                 raise NNException()
 
@@ -174,7 +175,7 @@ class Train:
             # The accuracy-to-time metric is not stored in the database as it can change over time and can be quickly calculated from saved values.
             accuracy_to_time = accuracy_to_time_metric(accuracy, self.minimum_accuracy, duration)
             if not good(accuracy, self.minimum_accuracy, duration):
-                raise AccuracyException(accuracy_to_time,
+                raise AccuracyException(accuracy, duration,
                                         f"Accuracy is too low: {accuracy}."
                                         f" The minimum accepted accuracy for the '{self.config[1]}"
                                         f"' dataset is {self.minimum_accuracy}.")

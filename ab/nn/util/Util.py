@@ -21,6 +21,10 @@ def get_attr(mod, f):
     return get_obj_attr(__import__(nn_mod(mod), fromlist=[f]), f)
 
 
+def min_accuracy(dataset):
+    return get_attr(f"loader.{dataset}", 'minimum_accuracy')
+
+
 def order_configs(configs, random_config_order):
     configs = list(configs)
     if random_config_order:
@@ -34,7 +38,7 @@ def conf_to_names(c: str) -> tuple[str, ...]:
     return tuple(c.split(config_splitter))
 
 
-def is_full_config(l: list[str] | tuple[str,...]):
+def is_full_config(l: list[str] | tuple[str, ...]):
     return 4 == len(l) and (nn_dir / (l[-1] + '.py')).exists()
 
 
@@ -133,6 +137,6 @@ def args():
     parser.add_argument('-w', '--workers', type=int, default=default_num_workers,
                         help="Number of data loader workers.")
     parser.add_argument('--pretrained', type=int, choices=[1, 0], default=default_pretrained,
-                      help='Control pretrained weights usage: 1 (always use), 0 (never use), or default (let Optuna decide)')
+                        help='Control pretrained weights usage: 1 (always use), 0 (never use), or default (let Optuna decide)')
 
     return parser.parse_args()

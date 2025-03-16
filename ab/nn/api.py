@@ -39,4 +39,4 @@ def accuracy_to_time_metric(accuracy: float, training_duration: int, dataset: st
     """
         Accuracy to time metric (for fixed number of training epochs) is essential for detecting the fastest accuracy improvements during neural network training.
         """
-    return Util.accuracy_to_time_metric(accuracy, Util.get_attr(f"loader.{dataset}", 'minimum_accuracy'), training_duration)
+    return Util.accuracy_to_time_metric(accuracy, Util.min_accuracy(dataset), training_duration)

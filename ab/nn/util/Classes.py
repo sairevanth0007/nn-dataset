@@ -17,7 +17,8 @@ class DataRoll(tqdm):
 
     def __next__(self):
         if self.n > 5:
-            estimated_time = self.total * ((time.time() - self.init_time) / self.n)
+            duration = max(1e-1, time.time() - self.init_time)
+            estimated_time = self.total * duration  / self.n
             if estimated_time > max_epoch_seconds:
-                raise LearnTimeException(estimated_time, max_epoch_seconds)
+                raise LearnTimeException(estimated_time, max_epoch_seconds, duration)
         return self.it.__next__()
