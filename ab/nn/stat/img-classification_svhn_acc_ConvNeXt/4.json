@@ -12,6 +12,30 @@
         "uid": "21f40e82-c9ef-48c4-9ca1-c9473261df55"
     },
     {
+        "accuracy": 0.8021281499692686,
+        "batch": 8,
+        "duration": 654841945844,
+        "lr": 0.0014709295329115707,
+        "momentum": 0.616475020966939,
+        "norm_eps": 0.5207699153923256,
+        "norm_std": 0.056400595777549634,
+        "stochastic_depth_prob": 0.9063595785375398,
+        "transform": "norm_128",
+        "uid": "fa2f7b21-9466-432d-a963-b1131d9d0012"
+    },
+    {
+        "accuracy": 0.7439689612784266,
+        "batch": 4,
+        "duration": 1031488921163,
+        "lr": 0.011299361960878754,
+        "momentum": 0.026940116545605464,
+        "norm_eps": 0.31078811466929757,
+        "norm_std": 0.735797965321823,
+        "stochastic_depth_prob": 0.0061032049870696214,
+        "transform": "norm_32",
+        "uid": "d23d878a-740e-453f-b2b3-2110596f994f"
+    },
+    {
         "accuracy": 0.7347879532882606,
         "batch": 1,
         "duration": 6247808126389,
@@ -22,5 +46,89 @@
         "stochastic_depth_prob": 0.2353546874212452,
         "transform": "norm_32",
         "uid": "191190ad-bfd4-43ce-9667-6876f2df07ab"
+    },
+    {
+        "accuracy": 0.4866318377381684,
+        "batch": 32,
+        "duration": 156214054685,
+        "lr": 0.003981243735203263,
+        "momentum": 0.23933695526670173,
+        "norm_eps": 0.0013619131805775453,
+        "norm_std": 0.09282873820858462,
+        "stochastic_depth_prob": 0.8714138305485153,
+        "transform": "norm_64_flip",
+        "uid": "5718d6fd-8ce0-440c-9670-0f94a6dc35dc"
+    },
+    {
+        "accuracy": 0.4037338660110633,
+        "batch": 32,
+        "duration": 131477414970,
+        "lr": 0.0006938030057687562,
+        "momentum": 0.6207487769579977,
+        "norm_eps": 0.2855137041505218,
+        "norm_std": 0.7263368203170854,
+        "stochastic_depth_prob": 0.4135980614736763,
+        "transform": "norm_32",
+        "uid": "af82933e-22f0-4cfc-8147-ce0ae68379f0"
+    },
+    {
+        "accuracy": 0.1958743085433313,
+        "batch": 2,
+        "duration": 3231200584367,
+        "lr": 0.08863315225318293,
+        "momentum": 0.30214459541903405,
+        "norm_eps": 0.5110134359668136,
+        "norm_std": 0.6521840490425351,
+        "stochastic_depth_prob": 0.8398520205393559,
+        "transform": "echo_299_flip",
+        "uid": "04f1b787-6009-46d8-abb3-6361696049c8"
+    },
+    {
+        "accuracy": 0.17947141979102643,
+        "batch": 256,
+        "duration": 32125837723,
+        "lr": 0.0017769865992586127,
+        "momentum": 0.10056453846145097,
+        "norm_eps": 0.5394495726357859,
+        "norm_std": 0.43773070829847727,
+        "stochastic_depth_prob": 0.015047785823408266,
+        "transform": "echo_32",
+        "uid": "bb081c97-7808-4bea-af60-8528c5f1a544"
+    },
+    {
+        "accuracy": 0.15938076213890595,
+        "batch": 16,
+        "duration": 540344666604,
+        "lr": 0.0032742588137078706,
+        "momentum": 0.8821006954083085,
+        "norm_eps": 0.3342192586177123,
+        "norm_std": 0.24991246955451396,
+        "stochastic_depth_prob": 0.7567787338094482,
+        "transform": "echo_128_flip",
+        "uid": "6c0f5cd0-347d-40c1-922d-06db6ab81b39"
+    },
+    {
+        "accuracy": 0.15361862323294406,
+        "batch": 2048,
+        "duration": 27566654610,
+        "lr": 0.0006330938124620328,
+        "momentum": 0.48827586555430824,
+        "norm_eps": 0.6013277676327361,
+        "norm_std": 0.092362065581306,
+        "stochastic_depth_prob": 0.5907368458068251,
+        "transform": "norm_32_flip",
+        "uid": "a2dc634e-73d3-4341-a6c6-bffe56071a77"
+    },
+    {
+        "accuracy": 0.13733097725875845,
+        "batch": 2048,
+        "duration": 25088918371,
+        "lr": 8.605702446586166e-05,
+        "momentum": 0.4769995217189392,
+        "norm_eps": 0.026344407639661283,
+        "norm_std": 0.26315949717947207,
+        "stochastic_depth_prob": 0.6992678776611486,
+        "transform": "echo_32",
+        "uid": "50f79c99-3fd8-46d8-b4c6-2d9a31bf26ef"
     }
 ]

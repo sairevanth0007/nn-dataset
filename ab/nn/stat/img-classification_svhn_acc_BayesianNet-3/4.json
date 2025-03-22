@@ -18,6 +18,33 @@
         "uid": "871dbe56-8342-432c-a927-30004ce1626c"
     },
     {
+        "accuracy": 0.8027427781192379,
+        "batch": 1,
+        "duration": 1107364527026,
+        "lr": 0.0010928370892671708,
+        "momentum": 0.31045596214139914,
+        "transform": "norm_32",
+        "uid": "29168a5c-0baa-464d-b7d0-03a56392c118"
+    },
+    {
+        "accuracy": 0.7887984019668101,
+        "batch": 32,
+        "duration": 44661503999,
+        "lr": 0.17497079875274346,
+        "momentum": 0.4376329054443039,
+        "transform": "norm",
+        "uid": "88cafff0-5706-42d3-92f1-68e8c7a9eb7e"
+    },
+    {
+        "accuracy": 0.651160110633067,
+        "batch": 2,
+        "duration": 556800416607,
+        "lr": 1.3969486020504827e-05,
+        "momentum": 0.9755579398751192,
+        "transform": "norm",
+        "uid": "7c62c98a-d570-4ac2-87cb-f8cc5c0f9ba9"
+    },
+    {
         "accuracy": 0.6481637984019668,
         "batch": 2048,
         "duration": 40564623877,
@@ -25,5 +52,41 @@
         "momentum": 0.6640562013154917,
         "transform": "norm",
         "uid": "f90bfe08-05bc-47ff-990e-f3fe3c7a79fd"
+    },
+    {
+        "accuracy": 0.1958743085433313,
+        "batch": 512,
+        "duration": 11956793984,
+        "lr": 0.8417820993333464,
+        "momentum": 0.717432022393969,
+        "transform": "echo_32",
+        "uid": "7a8339a0-738f-4e41-ae34-fe59abf52499"
+    },
+    {
+        "accuracy": 0.1958358942839582,
+        "batch": 256,
+        "duration": 14452914237,
+        "lr": 0.007810597939317661,
+        "momentum": 0.1664447583579688,
+        "transform": "echo_flip",
+        "uid": "0de0d656-9f42-438e-bbea-717464ee12fb"
+    },
+    {
+        "accuracy": 0.193799938537185,
+        "batch": 32,
+        "duration": 44371657796,
+        "lr": 4.463587627635031e-05,
+        "momentum": 0.7899029196273807,
+        "transform": "echo_32",
+        "uid": "7d65e909-03f3-4873-a2e8-68a89f0d4508"
+    },
+    {
+        "accuracy": 0.15941917639827904,
+        "batch": 8,
+        "duration": 147514270066,
+        "lr": 0.44604518720441766,
+        "momentum": 0.5315731978191134,
+        "transform": "norm",
+        "uid": "c47e3f07-a1db-4813-a5be-dda843855164"
     }
 ]
