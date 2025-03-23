@@ -10,5 +10,17 @@
         "stochastic_depth_prob": 0.637195216686022,
         "transform": "echo_256",
         "uid": "e63e6460-a72c-4415-b0f7-9a142b0c267a"
+    },
+    {
+        "accuracy": 0.0793972602739726,
+        "attention_dropout": 0.6606791824564473,
+        "batch": 256,
+        "dropout": 0.40537029866775126,
+        "duration": 569308595948,
+        "lr": 0.013239154885838272,
+        "momentum": 0.47276054569228276,
+        "stochastic_depth_prob": 0.12340464578191146,
+        "transform": "norm_32_flip",
+        "uid": "eb974a66-e168-41e0-a7fd-02af56418f13"
     }
 ]
