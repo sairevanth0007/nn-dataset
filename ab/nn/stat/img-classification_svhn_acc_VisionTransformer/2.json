@@ -12,6 +12,18 @@
         "uid": "b70f7fbf-9118-4609-9358-7c6819d5ff8b"
     },
     {
+        "accuracy": 0.5009219422249539,
+        "attention_dropout": 0.46742180002776046,
+        "batch": 8,
+        "dropout": 0.3210132248987212,
+        "duration": 1710779208590,
+        "lr": 0.0029846072463590133,
+        "momentum": 0.9236441374853012,
+        "patch_size": 0.6899925489172682,
+        "transform": "norm_512",
+        "uid": "c1b5bd33-e0e4-45c3-b9f8-03badfee76db"
+    },
+    {
         "accuracy": 0.2535341118623233,
         "attention_dropout": 0.4426150059924032,
         "batch": 1,
@@ -22,6 +34,18 @@
         "patch_size": 0.33406387891621026,
         "transform": "norm_128",
         "uid": "19e5de92-9bc3-4bad-91af-982558cdb8b4"
+    },
+    {
+        "accuracy": 0.22894898586355256,
+        "attention_dropout": 0.28286722692684474,
+        "batch": 256,
+        "dropout": 0.07756978884481447,
+        "duration": 500857516323,
+        "lr": 0.0009810717335996303,
+        "momentum": 0.4328125690289284,
+        "patch_size": 0.4437290509056022,
+        "transform": "soft_pad",
+        "uid": "d46b9805-863d-4704-9f9b-e41ad5b11b6b"
     },
     {
         "accuracy": 0.2180777504609711,
@@ -70,5 +94,29 @@
         "patch_size": 0.8723601520039941,
         "transform": "norm_32",
         "uid": "af740c1b-d793-44ff-aab0-0678fba8d0e4"
+    },
+    {
+        "accuracy": 0.1958743085433313,
+        "attention_dropout": 0.8470832819598718,
+        "batch": 128,
+        "dropout": 0.4654456018985215,
+        "duration": 353628987387,
+        "lr": 0.004261891179370981,
+        "momentum": 0.2251537122701619,
+        "patch_size": 0.7305356557028184,
+        "transform": "echo_512_flip",
+        "uid": "3005d3d4-8674-40de-8cfe-02e8f391f6be"
+    },
+    {
+        "accuracy": 0.1958743085433313,
+        "attention_dropout": 0.9398588192898623,
+        "batch": 16,
+        "dropout": 0.4079528468972095,
+        "duration": 918387511670,
+        "lr": 0.00030945804720576873,
+        "momentum": 0.24838376435967335,
+        "patch_size": 0.05229857931478543,
+        "transform": "echo_512",
+        "uid": "b8d44168-c0d0-4b28-aa91-3c03aaa0bb70"
     }
 ]
