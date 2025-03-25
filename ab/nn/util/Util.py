@@ -115,7 +115,7 @@ def save_model_as_onnx(model, model_name, dummy_input):
         if isinstance(layer, (torch.nn.AdaptiveAvgPool2d, torch.nn.AdaptiveMaxPool2d)):
             if layer.output_size not in [(1, 1), 1, None]:
                 hasAdaptivePoolingLayer = True
-    onnx_file_path = f"../Onnx_exports/{model_name}.onnx"
+    onnx_file_path = f"./Onnx_exports/{model_name}.onnx"
 
     if hasAdaptivePoolingLayer:
         torch.onnx.export(
