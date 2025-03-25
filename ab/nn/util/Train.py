@@ -7,6 +7,7 @@ from os.path import join
 from typing import Union
 
 import numpy as np
+from optuna.terminator.improvement.emmr import torch
 from torch.cuda import OutOfMemoryError
 
 import ab.nn.util.CodeEval as codeEvaluator
@@ -212,7 +213,7 @@ class Train:
         return self.metric_function.result()
 
 
-def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union[str,None] = None, save_path:Union[str,None] = None):
+def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union[str,None] = None, save_path:Union[str,None] = None, save_model=False):
     """
     train the model with the given code and hyperparameters and evaluate it.
 
@@ -280,4 +281,8 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
         except Exception as e:
             print(f"Error during training: {e}")
             raise
+
+        if save_model:
+            save_model_as_onnx(trainer.model, name, torch.randn(trainer.in_shape))
+
         return name, result, res['score'] / 100.0

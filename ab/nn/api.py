@@ -26,13 +26,13 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
     return DataFrame.from_records(dt)
 
 
-def check_nn(nn_code: str, task: str, dataset: str, metric: str, prm: dict, save_to_db=True, prefix=None, save_path=None) -> tuple[str, float, float]:
+def check_nn(nn_code: str, task: str, dataset: str, metric: str, prm: dict, save_to_db=True, prefix=None, save_path=None, save_model=False) -> tuple[str, float, float]:
     """
     Train the new NN model with the provided hyperparameters (prm) and save it to the database if training is successful.
     for argument description see :ref:`ab.nn.util.db.Write.save_nn()`
     :return: Automatically generated name of NN model and its accuracy.
     """
-    return Train.train_new(nn_code, task, dataset, metric, prm, save_to_db=save_to_db, prefix=prefix, save_path=save_path)
+    return Train.train_new(nn_code, task, dataset, metric, prm, save_to_db=save_to_db, prefix=prefix, save_path=save_path, save_model=save_model)
 
 
 def accuracy_to_time_metric(accuracy: float, training_duration: int, dataset: str) -> float:
