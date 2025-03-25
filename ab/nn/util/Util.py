@@ -108,7 +108,7 @@ def read_py_file_as_string(file_path):
         return None
 
 
-def save_model_as_onnx(model, model_name, dummy_input):
+def export_model_to_onnx(model, model_name, dummy_input):
     assert isinstance(model, torch.nn.Module)
     hasAdaptivePoolingLayer = False
     for name, layer in model.named_modules():

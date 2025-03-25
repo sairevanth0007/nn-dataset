@@ -7,7 +7,6 @@ from os.path import join
 from typing import Union
 
 import numpy as np
-from optuna.terminator.improvement.emmr import torch
 from torch.cuda import OutOfMemoryError
 
 import ab.nn.util.CodeEval as codeEvaluator
@@ -213,7 +212,7 @@ class Train:
         return self.metric_function.result()
 
 
-def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union[str,None] = None, save_path:Union[str,None] = None, save_model=False):
+def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union[str,None] = None, save_path:Union[str,None] = None, export_onnx=False):
     """
     train the model with the given code and hyperparameters and evaluate it.
 
@@ -224,7 +223,8 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
         metric (str): Evaluation metric
         prm (dict): Hyperparameters, e.g., 'lr', 'momentum', 'batch', 'epoch', 'dropout'
         prefix (str|None): Prefix of the model, set to None if is unknown.
-        save_path (str|None): Path to save the statistics, or None to not save. 
+        save_path (str|None): Path to save the statistics, or None to not save.
+        export_onnx (bool): Export model and its weights into ONNX file.
     return:
         (str, float): Name of the model and the accuracy
     """
@@ -282,7 +282,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
             print(f"Error during training: {e}")
             raise
 
-        if save_model:
-            save_model_as_onnx(trainer.model, name, torch.randn(trainer.in_shape))
+        if export_onnx:
+            export_model_to_onnx(trainer.model, name, torch.randn(trainer.in_shape))
 
         return name, result, res['score'] / 100.0
