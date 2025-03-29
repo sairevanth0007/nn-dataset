@@ -9,7 +9,7 @@ LEMUR - Learning, Evaluation, and Modeling for Unified Research
 The original version of the <a href='https://github.com/ABrain-One/nn-dataset'>LEMUR dataset</a> was created by <strong>Arash Torabi Goodarzi, Roman Kochnev</strong> and <strong>Zofia Antonina Bentyn</strong> at the Computer Vision Laboratory, University of Würzburg, Germany.
 
 <h3>Overview 📖</h3>
-The primary goal of NN Dataset project is to provide flexibility for dynamically combining various deep learing tasks, datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gpt">NNGPT</a> project.
+The primary goal of NN Dataset project is to provide flexibility for dynamically combining various deep learing tasks, datasets, metrics, and neural network models. It is designed to facilitate the verification of neural network performance under various combinations of training hyperparameters and data transformation algorithms, by automatically generating performance statistics. It is primarily developed to support the <a href="https://github.com/ABrain-One/nn-gpt">NNGPT</a> project. NN models with postfixes containing several dashes and letters/digits (regex: ^.+(-[\w\d]{4,}){4,}$) provided in this dataset are modified by large language models from the NNGPT project.
 
 ## Create and Activate a Virtual Environment (recommended)
 For Linux/Mac:
