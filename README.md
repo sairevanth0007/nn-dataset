@@ -117,23 +117,25 @@ python run.py -c img-classification_cifar-10_acc_ComplexNet -t 100 -e 5
 
 ### Available Modules
 
-The `nn-dataset` package includes the following key modules:
+The `nn-dataset` package includes the following key modules within the **ab.nn** package:
 
-1. **Dataset**:
-   - Predefined neural network architectures such as `AlexNet`, `ResNet`, `VGG`, and more.
-   - Located in `ab.nn.nn`.
+1. **nn**:
+   - Predefined neural network architectures, including models like `AlexNet`, `ResNet`, `VGG`, and more.
 
-2. **Loaders**:
-   - Data loaders for datasets such as CIFAR-10 and COCO.
-   - Located in `ab.nn.loader`.
+2. **loader**:
+   - Data loading utilities for popular datasets such as CIFAR-10, COCO, and others.
 
-3. **Metrics**:
-   - Common evaluation metrics like accuracy and IoU.
-   - Located in `ab.nn.metric`.
+3. **metric**:
+   - Evaluation metrics supported for model assessment, such as accuracy, Intersection over Union (IoU), and others.
 
-4. **Utilities**:
-   - Helper functions for training and statistical analysis.
-   - Located in `ab.nn.util`.
+4. **transform**:
+   - A collection of data transformation algorithms for dataset preprocessing and augmentation.
+
+5. **stat**:
+   - Statistics for different neural network model training pipelines.
+
+6. **util**:
+   - Utility functions designed to assist with training, model evaluation, and statistical analysis.
 
 
 ## Citation
@@ -159,4 +161,4 @@ This project is distributed under the following licensing terms:
 <li> all neural network models and their weights not covered by the above licenses, as well as all other files and assets in this project, are subject to the <a href="https://github.com/ABrain-One/nn-dataset/blob/main/LICENSE">MIT license</a></li> 
 </ul>
 
-#### The idea of Dr. Dmitry Ignatov
+#### The idea and leadership of Dr. Ignatov
