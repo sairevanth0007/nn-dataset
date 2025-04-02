@@ -1,6 +1,8 @@
 import ab.nn.util.db.Read as DB_Read
 import ab.nn.util.Train as Train
 import ab.nn.util.Util as Util
+import ab.nn.util.Const as Const
+from ab.nn.util.Const import max_epoch_seconds
 from pandas import DataFrame
 
 
@@ -26,12 +28,14 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
     return DataFrame.from_records(dt)
 
 
-def check_nn(nn_code: str, task: str, dataset: str, metric: str, prm: dict, save_to_db=True, prefix=None, save_path=None, export_onnx=False) -> tuple[str, float, float]:
+def check_nn(nn_code: str, task: str, dataset: str, metric: str, prm: dict, save_to_db=True, prefix=None, save_path=None, export_onnx=False, epoch_duration_limit_sec=max_epoch_seconds) -> tuple[str, float, float]:
     """
     Train the new NN model with the provided hyperparameters (prm) and save it to the database if training is successful.
     for argument description see :ref:`ab.nn.util.db.Write.save_nn()`
     :return: Automatically generated name of NN model and its accuracy.
     """
+    if epoch_duration_limit_sec != max_epoch_seconds:
+        Const.max_epoch_seconds = epoch_duration_limit_sec
     return Train.train_new(nn_code, task, dataset, metric, prm, save_to_db=save_to_db, prefix=prefix, save_path=save_path, export_onnx=export_onnx)
 
 

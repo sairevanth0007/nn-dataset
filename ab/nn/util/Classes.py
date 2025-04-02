@@ -2,7 +2,7 @@ import time as time
 
 from tqdm import tqdm
 
-from ab.nn.util.Const import max_epoch_seconds
+import ab.nn.util.Const as Const
 from ab.nn.util.Exception import *
 
 
@@ -19,6 +19,6 @@ class DataRoll(tqdm):
         if self.n > 5:
             duration = max(1e-1, time.time() - self.init_time)
             estimated_time = self.total * duration  / self.n
-            if estimated_time > max_epoch_seconds:
-                raise LearnTimeException(estimated_time, max_epoch_seconds, duration)
+            if estimated_time > Const.max_epoch_seconds:
+                raise LearnTimeException(estimated_time, Const.max_epoch_seconds, duration)
         return self.it.__next__()
