@@ -267,6 +267,6 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
     finally:
         remove(temp_file_path)
     if export_onnx:
-        export_model_to_onnx(trainer.model, name, torch.randn(trainer.in_shape))
+        export_model_to_onnx(trainer.model, name, torch.randn(trainer.in_shape).to(torch_device()))
 
     return name, result, res['score']
