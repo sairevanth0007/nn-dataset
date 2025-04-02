@@ -179,7 +179,7 @@ def calculate_score(pylint_issues, complexity_report, dynamic_success, missing_d
 
     if score < 0:
         score = 0
-    return score
+    return score / 100.0
 
 # Evaluate Code Quality for a Single File
 def evaluate_code_quality(file_path):

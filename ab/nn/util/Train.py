@@ -272,4 +272,4 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
         if export_onnx:
             export_model_to_onnx(trainer.model, name, torch.randn(trainer.in_shape))
 
-        return name, result, res['score'] / 100.0
+        return name, result, res['score']
