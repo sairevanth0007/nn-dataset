@@ -5,6 +5,8 @@ import importlib.util
 import inspect
 import random
 import torch
+from os import makedirs
+from os.path import exists
 
 from ab.nn.util.Const import *
 
@@ -13,16 +15,39 @@ def nn_mod(*nms):
     return ".".join(to_nn + nms)
 
 
+def crate_file(file_dir, file_name, content=''):
+    file_path = file_dir / file_name
+    if not exists(file_path):
+        makedirs(file_dir, exist_ok=True)
+        with open(file_path, 'w') as file:
+            file.write(content)
+    return file_path
+
+
 def get_obj_attr(obj, f_name, default=None):
     return getattr(obj, f_name) if hasattr(obj, f_name) else default
 
 
+def torch_device():
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
+    return device
+
+
 def get_attr(mod, f):
-    return get_obj_attr(__import__(nn_mod(mod), fromlist=[f]), f)
+    return get_obj_attr(__import__(mod, fromlist=[f]), f)
+
+
+def get_ab_nn_attr(mod, f):
+    return get_attr(nn_mod(mod), f)
 
 
 def min_accuracy(dataset):
-    return get_attr(f"loader.{dataset}", 'minimum_accuracy')
+    return get_ab_nn_attr(f"loader.{dataset}", 'minimum_accuracy')
 
 
 def order_configs(configs, random_config_order):

@@ -1,9 +1,8 @@
 import importlib
-import os
 import sys
 import tempfile
 import time as time
-from os.path import join
+from os.path import join, dirname, basename
 from typing import Union
 
 import numpy as np
@@ -24,7 +23,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
     task, dataset_name, metric, nn = config
     try:
         # Load model
-        s_prm: set = get_attr(f"nn.{nn}", "supported_hyperparameters")()
+        s_prm: set = get_ab_nn_attr(f"nn.{nn}", "supported_hyperparameters")()
         # Suggest hyperparameters
         prms = {}
         for prm in s_prm:
@@ -60,7 +59,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
                 model = LSTMNet(1, 256, len(train_set.chars), batch, num_layers=2)
             else:
                 raise ValueError(f"Unsupported text generation model: {nn}")
-        return Train(config, out_shape, minimum_accuracy, batch, f"nn.{nn}", task, train_set, test_set, metric,
+        return Train(config, out_shape, minimum_accuracy, batch, nn_mod('nn', nn), task, train_set, test_set, metric,
                      num_workers, prms).train_n_eval(n_epochs)
     except Exception as e:
         accuracy_duration = (0.0, 1)
@@ -84,7 +83,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
 
 
 class Train:
-    def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, model_name, task,
+    def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, nn_module, task,
                  train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True, is_code=False, save_path:Union[str,Path]=None):
         """
         Universal class for training CV, Text Generation and other models.
@@ -92,7 +91,7 @@ class Train:
         :param out_shape: Shape of output tensor of the model (e.g., number of classes for classification tasks).
         :param batch: Batch size used for both training and evaluation.
         :param minimum_accuracy: Expected average value for accuracy provided by the untrained NN model due to random output generation. This value is essential for excluding NN models without accuracy gains.
-        :param model_name: Neural network model name (e.g., 'ResNet').
+        :param nn_module: Neural network model name (e.g., 'ab.nn.nn.ResNet', 'out.tmp.').
         :param task: e.g., 'img-segmentation' to specify the task type.
         :param train_dataset: Dataset used for training the model (e.g., torch.utils.data.Dataset).
         :param test_dataset: Dataset used for evaluating/testing the model (e.g., torch.utils.data.Dataset).
@@ -127,18 +126,10 @@ class Train:
         for input_tensor, _ in self.train_loader:
             self.in_shape = np.array(input_tensor).shape  # Model input tensor shape (e.g., (8, 3, 32, 32) for a batch size 8, RGB image 32x32 px).
             break
-
-        if torch.cuda.is_available():
-            device = torch.device("cuda")
-        elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
-            device = torch.device("mps")
-        else:
-            device = torch.device("cpu")
-        self.device = device
+        self.device = torch_device()
 
         # Load model
-        # model_net = get_attr(f"nn.{model_name}", "Net")
-        model_net = get_attr(model_name, "Net")
+        model_net = get_attr(nn_module, 'Net')
         self.model = model_net(self.in_shape, out_shape, prm, self.device)
         self.model.to(self.device)
 
@@ -232,19 +223,23 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
         name = None
     else:
         name = prefix + "-" + DB_Write.uuid4() # Create temporal name for processing
-    spec = importlib.util.find_spec("ab.nn.tmp")
-    dir_path = os.path.dirname(spec.origin)
+    tmp_modul = ".".join((out, 'nn', 'tmp'))
+    crate_file(ab_root_path / tmp_modul.replace('.', '/'), '__init__.py')
+    spec = importlib.util.find_spec(tmp_modul)
+    dir_path = dirname(spec.origin)
     with tempfile.NamedTemporaryFile(mode='w+', suffix='.py', delete=True, dir=dir_path) as temp_file:
         temp_file_path = temp_file.name
-        temp_filename = os.path.basename(temp_file.name).replace(".py", "")
+        temp_filename = basename(temp_file.name).replace(".py", "")
         temp_file.write(nn_code)  # write the code to the temp file
         try:
             temp_file.seek(0)
             res = codeEvaluator.evaluate_single_file(temp_file_path)
             # import the code dynamically
-            spec = importlib.util.spec_from_file_location(f"ab.nn.tmp.{temp_filename}", temp_file_path)
+
+            nn_module = ".".join((tmp_modul, temp_filename))
+            spec = importlib.util.spec_from_file_location(nn_module, temp_file_path)
             module = importlib.util.module_from_spec(spec)
-            sys.modules[f"ab.nn.tmp.{temp_filename}"] = module
+            sys.modules[nn_module] = module
             spec.loader.exec_module(module)
 
             # load dataset
@@ -256,8 +251,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
                 out_shape=out_shape,
                 minimum_accuracy=minimum_accuracy,
                 batch=prm['batch'],
-                # model_name=ModelClass,
-                model_name=f"tmp.{temp_filename}",
+                nn_module=nn_module,
                 task=task,
                 train_dataset=train_set,
                 test_dataset=test_set,
