@@ -117,26 +117,13 @@ python run.py -c img-classification_cifar-10_acc_ComplexNet -t 100 -e 5
 
 ### Available Modules
 
-The `nn-dataset` package includes the following key modules within the **ab.nn** package:
-
-1. **nn**:
-   - Predefined neural network architectures, including models like `AlexNet`, `ResNet`, `VGG`, and more.
-
-2. **loader**:
-   - Data loading utilities for popular datasets such as CIFAR-10, COCO, and others.
-
-3. **metric**:
-   - Evaluation metrics supported for model assessment, such as accuracy, Intersection over Union (IoU), and others.
-
-4. **transform**:
-   - A collection of data transformation algorithms for dataset preprocessing and augmentation.
-
-5. **stat**:
-   - Statistics for different neural network model training pipelines.
-
-6. **util**:
-   - Utility functions designed to assist with training, model evaluation, and statistical analysis.
-
+The `NN Dataset` includes the following key modules within the **<a href='https://github.com/ABrain-One/nn-dataset/tree/main/ab/nn'>ab.nn</a>** package:
+- **<a href='https://github.com/ABrain-One/nn-dataset/tree/main/ab/nn/nn'>nn</a>**: Predefined neural network architectures, including models like `AlexNet`, `ResNet`, `VGG`, and more.
+- **<a href='https://github.com/ABrain-One/nn-dataset/tree/main/ab/nn/loader'>loader</a>**: Data loading utilities for popular datasets such as CIFAR-10, COCO, and others.
+- **<a href='https://github.com/ABrain-One/nn-dataset/tree/main/ab/nn/metric'>metric</a>**: Evaluation metrics supported for model assessment, such as accuracy, Intersection over Union (IoU), and others.
+- **<a href='https://github.com/ABrain-One/nn-dataset/tree/main/ab/nn/transform'>transform</a>**: A collection of data transformation algorithms for dataset preprocessing and augmentation.
+- **<a href='https://github.com/ABrain-One/nn-dataset/tree/main/ab/nn/stat'>stat</a>**: Statistics for different neural network model training pipelines.
+- **<a href='https://github.com/ABrain-One/nn-dataset/tree/main/ab/nn/util'>util</a>**: Utility functions designed to assist with training, model evaluation, and statistical analysis.
 
 ## Citation
 
