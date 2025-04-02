@@ -234,13 +234,6 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
         try:
             temp_file.seek(0)
             res = codeEvaluator.evaluate_single_file(temp_file_path)
-            # import the code dynamically
-
-            nn_module = ".".join((tmp_modul, temp_filename))
-            spec = importlib.util.spec_from_file_location(nn_module, temp_file_path)
-            module = importlib.util.module_from_spec(spec)
-            sys.modules[nn_module] = module
-            spec.loader.exec_module(module)
 
             # load dataset
             out_shape, minimum_accuracy, train_set, test_set = load_dataset(task, dataset, prm.get('transform', None))
@@ -251,7 +244,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
                 out_shape=out_shape,
                 minimum_accuracy=minimum_accuracy,
                 batch=prm['batch'],
-                nn_module=nn_module,
+                nn_module=".".join((tmp_modul, temp_filename)),
                 task=task,
                 train_dataset=train_set,
                 test_dataset=test_set,
