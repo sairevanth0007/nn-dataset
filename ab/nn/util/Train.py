@@ -2,7 +2,8 @@ import importlib
 import sys
 import tempfile
 import time as time
-from os.path import join, dirname, basename
+from os import remove
+from os.path import join, basename
 from typing import Union
 
 import numpy as np
@@ -73,7 +74,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
             return e.accuracy, e.duration
         elif isinstance(e, LearnTimeException):
             print(f"Estimated training time: {format_time(e.estimated_training_time)}, but limit {format_time(e.max_learn_seconds)}.")
-            return (e.max_learn_seconds / e.estimated_training_time ) / 1e5, e.duration
+            return (e.max_learn_seconds / e.estimated_training_time) / 1e5, e.duration
         else:
             print(f"error '{nn}': failed to train. Error: {e}")
             if fail_iterations < 0:
@@ -84,7 +85,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
 
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, nn_module, task,
-                 train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True, is_code=False, save_path:Union[str,Path]=None):
+                 train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True, is_code=False, save_path: Union[str, Path] = None):
         """
         Universal class for training CV, Text Generation and other models.
         :param config: Tuple of names (Task, Dataset, Metric, Model).
@@ -141,9 +142,9 @@ class Train:
         """
         try:
             module = importlib.import_module(nn_mod('metric', metric_name))
-            
+
             return module.create_metric(self.out_shape)
-            
+
         except (ModuleNotFoundError, AttributeError) as e:
             raise ValueError(f"Metric '{metric_name}' not found. Ensure a corresponding file and function exist. Ensure the metric module has create_metric()") \
                 from e
@@ -172,38 +173,38 @@ class Train:
                                         f"' dataset is {self.minimum_accuracy}.")
             prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
             if self.save_to_db:
-                if self.is_code: # We don't want the filename contain full codes
+                if self.is_code:  # We don't want the filename contain full codes
                     if self.save_path is None:
                         print(f"[WARN]parameter `save_Path` set to null, the staticis will not be saved into a file.")
                     else:
                         save_results(self.config + (epoch,), join(self.save_path, f"{epoch}.json"), prm)
-                else: # Legacy save result codes in file
+                else:  # Legacy save result codes in file
                     if self.save_path is None:
                         self.save_path = model_stat_dir(self.config)
                     save_results(self.config + (epoch,), join(self.save_path, f"{epoch}.json"), prm)
-                    DB_Write.save_results(self.config + (epoch,), prm) # Separated from Calc.save_results()
+                    DB_Write.save_results(self.config + (epoch,), prm)  # Separated from Calc.save_results()
         return accuracy_to_time, duration
 
     def eval(self, test_loader):
         """Evaluation with standardized metric interface"""
         self.model.eval()
-        
+
         # Reset the metric at the start of evaluation
         self.metric_function.reset()
-        
+
         with torch.no_grad():
             for inputs, labels in test_loader:
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
                 outputs = self.model(inputs)
-                
+
                 # Call the metric - all metrics now use the same interface
                 self.metric_function(outputs, labels)
-        
+
         # Get the final result from the metric
         return self.metric_function.result()
 
 
-def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union[str,None] = None, save_path:Union[str,None] = None, export_onnx=False):
+def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Union[str, None] = None, save_path: Union[str, None] = None, export_onnx=False):
     """
     train the model with the given code and hyperparameters and evaluate it.
 
@@ -222,54 +223,50 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix:Union
     if prefix is None:
         name = None
     else:
-        name = prefix + "-" + DB_Write.uuid4() # Create temporal name for processing
+        name = prefix + "-" + DB_Write.uuid4()  # Create temporal name for processing
     tmp_modul = ".".join((out, 'nn', 'tmp'))
-    crate_file(ab_root_path / tmp_modul.replace('.', '/'), '__init__.py')
-    spec = importlib.util.find_spec(tmp_modul)
-    dir_path = dirname(spec.origin)
-    with tempfile.NamedTemporaryFile(mode='w+', suffix='.py', delete=True, dir=dir_path) as temp_file:
-        temp_file_path = temp_file.name
-        temp_filename = basename(temp_file.name).replace(".py", "")
-        temp_file.write(nn_code)  # write the code to the temp file
-        try:
-            temp_file.seek(0)
-            res = codeEvaluator.evaluate_single_file(temp_file_path)
+    tmp_file_name = 'code'
+    tmp_modul_name  = ".".join((tmp_modul, tmp_file_name))
+    tmp_dir = ab_root_path / tmp_modul.replace('.', '/')
+    crate_file(tmp_dir, '__init__.py')
+    temp_file_path = tmp_dir / f"{tmp_file_name}.py"
+    try:
+        with open(temp_file_path, 'w') as f:
+            f.write(nn_code)  # write the code to the temp file
+        res = codeEvaluator.evaluate_single_file(temp_file_path)
+        # load dataset
+        out_shape, minimum_accuracy, train_set, test_set = load_dataset(task, dataset, prm.get('transform', None))
+        # initialize model and trainer
+        trainer = Train(
+            config=(task, dataset, metric, nn_code),
+            out_shape=out_shape,
+            minimum_accuracy=minimum_accuracy,
+            batch=prm['batch'],
+            nn_module=tmp_modul_name,
+            task=task,
+            train_dataset=train_set,
+            test_dataset=test_set,
+            metric=metric,
+            num_workers=prm.get('num_workers', 1),
+            prm=prm,
+            save_to_db=save_to_db,
+            is_code=True,
+            save_path=save_path)
+        epoch = prm['epoch']
+        result, duration = trainer.train_n_eval(epoch)
+        if save_to_db:
+            # if result fits the requirement, save the model to database
+            if good(result, minimum_accuracy, duration):
+                name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm, force_name=name)
+                print(f"Model saved to database with accuracy: {result}")
+            else:
+                print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
+    except Exception as e:
+        print(f"Error during training: {e}")
+        raise
+    finally:
+        remove(temp_file_path)
+    if export_onnx:
+        export_model_to_onnx(trainer.model, name, torch.randn(trainer.in_shape))
 
-            # load dataset
-            out_shape, minimum_accuracy, train_set, test_set = load_dataset(task, dataset, prm.get('transform', None))
-
-            # initialize model and trainer
-            trainer = Train(
-                config=(task, dataset, metric, nn_code),
-                out_shape=out_shape,
-                minimum_accuracy=minimum_accuracy,
-                batch=prm['batch'],
-                nn_module=".".join((tmp_modul, temp_filename)),
-                task=task,
-                train_dataset=train_set,
-                test_dataset=test_set,
-                metric=metric,
-                num_workers=prm.get('num_workers', 1),
-                prm=prm,
-                save_to_db=save_to_db,
-                is_code=True,
-                save_path=save_path)
-
-            epoch = prm['epoch']
-            result, duration = trainer.train_n_eval(epoch)
-            if save_to_db:
-                # if result fits the requirement, save the model to database
-                if good(result, minimum_accuracy, duration):
-                    name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm, force_name=name)
-                    print(f"Model saved to database with accuracy: {result}")
-                else:
-                    print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
-
-        except Exception as e:
-            print(f"Error during training: {e}")
-            raise
-
-        if export_onnx:
-            export_model_to_onnx(trainer.model, name, torch.randn(trainer.in_shape))
-
-        return name, result, res['score']
+    return name, result, res['score']
