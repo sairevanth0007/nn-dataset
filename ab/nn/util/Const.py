@@ -56,7 +56,7 @@ def __project_root_path():
 
 
 ab_root_path = __project_root_path()
-print(f"LEMUR uses the root directory {ab_root_path}")
+print(f"LEMUR root {ab_root_path}")
 out = 'out'
 out_dir = ab_root_path / out
 data_dir = ab_root_path / 'data'

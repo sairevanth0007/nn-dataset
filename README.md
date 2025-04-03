@@ -23,14 +23,12 @@ For Windows:
    .venv\Scripts\activate
    ```
 
-All subsequent commands are provided for Linux/Mac OS. For Windows, please replace ```source .venv/bin/activate``` with ```.venv\Scripts\activate```.
 It is also assumed that CUDA 12.6 is installed. If you have a different version, please replace 'cu126' with the appropriate version number.
 
 ## Environment for NN Dataset Contributors
 ### Pip package manager
 Create a virtual environment, activate it, and run the following command to install all the project dependencies:
 ```bash
-source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu126
 ```
@@ -38,28 +36,23 @@ pip install -r requirements.txt --extra-index-url https://download.pytorch.org/w
 ## Installation or Update of the NN Dataset
 Remove old version of the LEMUR Dataset and its database:
 ```bash
-source .venv/bin/activate
 pip uninstall nn-dataset -y
 rm -rf db
 ```
 Installing the stable version:
 ```bash
-source .venv/bin/activate
 pip install nn-dataset --upgrade --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 Installing from GitHub to get the most recent code and statistics updates:
 ```bash
-source .venv/bin/activate
 pip install git+https://github.com/ABrain-One/nn-dataset --upgrade --force --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 Adding functionality to export data to Excel files and generate plots for <a href='https://github.com/ABrain-One/nn-stat'>analyzing neural network performance</a>:
 ```bash
-source .venv/bin/activate
 pip install nn-stat --upgrade --extra-index-url https://download.pytorch.org/whl/cu126
 ```
 and export/generate:
 ```bash
-source .venv/bin/activate
 python -m ab.stat.export
 ```
 
@@ -69,17 +62,14 @@ Standard use cases:
 1. Add a new neural network model into the `ab/nn/nn` directory.
 2. Run the automated training process for this model (e.g., a new ComplexNet training pipeline configuration):
 ```bash
-source .venv/bin/activate
 python -m ab.nn.train -c img-classification_cifar-10_acc_ComplexNet
 ```
 or for all image segmentation models using a fixed range of training parameters and transformer:
 ```bash
-source .venv/bin/activate
 python run.py -c img-segmentation -f echo --min_learning_rate 1e-4 -l 1e-2 --min_momentum 0.8 -m 0.99 --min_batch_binary_power 2 -b 6
 ```
 To reproduce the previous result, set the minimum and maximum to the same desired values:
 ```bash
-source .venv/bin/activate
 python run.py -c img-classification_cifar-10_acc_AlexNet --min_learning_rate 0.0061 -l 0.0061 --min_momentum 0.7549 -m 0.7549 --min_batch_binary_power 2 -b 2 -f norm_299
 ```
 To view supported flags:
