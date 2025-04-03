@@ -1,9 +1,8 @@
 import importlib
 import sys
-import tempfile
 import time as time
 from os import remove
-from os.path import join, basename
+from os.path import join
 from typing import Union
 
 import numpy as np
@@ -82,7 +81,14 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
             else:
                 raise NNException()
 
-
+def train_loader_f(train_dataset, batch, num_workers):
+    return torch.utils.data.DataLoader(train_dataset, batch_size=batch, shuffle=True,
+                                                        num_workers=get_obj_attr(train_dataset, 'num_workers', default=num_workers),
+                                                        collate_fn=get_obj_attr(train_dataset, 'collate_fn'))
+def test_loader_f(test_dataset, batch, num_workers):
+    return torch.utils.data.DataLoader(test_dataset, batch_size=batch, shuffle=False,
+                                                       num_workers=get_obj_attr(test_dataset, 'num_workers', default=num_workers),
+                                                       collate_fn=get_obj_attr(test_dataset, 'collate_fn'))
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, nn_module, task,
                  train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True, is_code=False, save_path: Union[str, Path] = None):
@@ -117,12 +123,9 @@ class Train:
         self.is_code = is_code
         self.save_path = save_path
 
-        self.train_loader = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.batch, shuffle=True,
-                                                        num_workers=get_obj_attr(self.train_dataset, 'num_workers', default=num_workers),
-                                                        collate_fn=get_obj_attr(self.train_dataset, 'collate_fn'))
-        self.test_loader = torch.utils.data.DataLoader(self.test_dataset, batch_size=self.batch, shuffle=False,
-                                                       num_workers=get_obj_attr(self.train_dataset, 'num_workers', default=num_workers),
-                                                       collate_fn=get_obj_attr(self.test_dataset, 'collate_fn'))
+        self.train_loader = train_loader_f(self.train_dataset, self.batch, num_workers)
+        self.test_loader = test_loader_f(self.test_dataset, self.batch, num_workers)
+
 
         for input_tensor, _ in self.train_loader:
             self.in_shape = np.array(input_tensor).shape  # Model input tensor shape (e.g., (8, 3, 32, 32) for a batch size 8, RGB image 32x32 px).
@@ -220,25 +223,25 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
     return:
         (str, float): Name of the model and the accuracy
     """
-    if prefix is None:
-        name = None
-    else:
-        name = prefix + "-" + DB_Write.uuid4()  # Create temporal name for processing
+    model_name = DB_Write.uuid4()
+    if prefix:
+        model_name = prefix + "-" + model_name  # Create temporal name for processing
+
     tmp_modul = ".".join((out, 'nn', 'tmp'))
-    tmp_file_name = 'code'
-    tmp_modul_name  = ".".join((tmp_modul, tmp_file_name))
+    tmp_modul_name  = ".".join((tmp_modul, model_name))
     tmp_dir = ab_root_path / tmp_modul.replace('.', '/')
     crate_file(tmp_dir, '__init__.py')
-    temp_file_path = tmp_dir / f"{tmp_file_name}.py"
+    temp_file_path = tmp_dir / f"{model_name}.py"
     try:
         with open(temp_file_path, 'w') as f:
             f.write(nn_code)  # write the code to the temp file
         res = codeEvaluator.evaluate_single_file(temp_file_path)
         # load dataset
-        out_shape, minimum_accuracy, train_set, test_set = load_dataset(task, dataset, prm.get('transform', None))
+        out_shape, minimum_accuracy, train_set, test_set = load_dataset(task, dataset, prm['transform'])
+        num_workers = prm.get('num_workers', 1)
         # initialize model and trainer
         trainer = Train(
-            config=(task, dataset, metric, nn_code),
+            config=(task, dataset, metric, model_name),
             out_shape=out_shape,
             minimum_accuracy=minimum_accuracy,
             batch=prm['batch'],
@@ -247,7 +250,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
             train_dataset=train_set,
             test_dataset=test_set,
             metric=metric,
-            num_workers=prm.get('num_workers', 1),
+            num_workers=num_workers,
             prm=prm,
             save_to_db=save_to_db,
             is_code=True,
@@ -257,7 +260,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
         if save_to_db:
             # if result fits the requirement, save the model to database
             if good(result, minimum_accuracy, duration):
-                name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm, force_name=name)
+                model_name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm, force_name=model_name)
                 print(f"Model saved to database with accuracy: {result}")
             else:
                 print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
@@ -267,6 +270,8 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
     finally:
         remove(temp_file_path)
     if export_onnx:
-        export_model_to_onnx(trainer.model, name, torch.randn(trainer.in_shape).to(torch_device()))
-
-    return name, result, res['score']
+        for input_tensor, _ in train_loader_f(train_set, 1, num_workers):
+            t = input_tensor.to(torch_device())
+            export_model_to_onnx(trainer.model, t)
+            break
+    return model_name, result, res['score']

@@ -63,6 +63,9 @@ data_dir = ab_root_path / 'data'
 db_dir = ab_root_path / 'db'
 db_file = db_dir / 'ab.nn.db'
 
+onnx_dir = out_dir / 'onnx'
+onnx_file = onnx_dir / 'nn.onnx'
+
 main_tables = ('stat',)
 main_columns = ('task', 'dataset', 'metric', 'nn')
 main_columns_ext = main_columns + ('epoch',)

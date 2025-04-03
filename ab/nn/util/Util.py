@@ -133,36 +133,34 @@ def read_py_file_as_string(file_path):
         return None
 
 
-def export_model_to_onnx(model, model_name, dummy_input):
+def export_model_to_onnx(model, dummy_input):
+    model.eval()
     assert isinstance(model, torch.nn.Module)
     hasAdaptivePoolingLayer = False
     for name, layer in model.named_modules():
         if isinstance(layer, (torch.nn.AdaptiveAvgPool2d, torch.nn.AdaptiveMaxPool2d)):
             if layer.output_size not in [(1, 1), 1, None]:
                 hasAdaptivePoolingLayer = True
-    onnx_file_path = ab_root_path / 'onnx' / f"{model_name}.onnx"
-
-    if hasAdaptivePoolingLayer:
-        torch.onnx.export(
-            model,
-            dummy_input,
-            onnx_file_path,
-            input_names=["input"],
-            output_names=["output"]
-        )
-    else:
-        torch.onnx.export(
-            model,
-            dummy_input,
-            onnx_file_path,
-            input_names=["input"],
-            output_names=["output"],
-            dynamic_axes={
-                "input": {0: "batch_size", 2: "height", 3: "width"},
-                "output": {0: "batch_size"}
-            }
-        )
-    print(f"Exported {model_name} to ONNX format at {onnx_file_path}")
+    makedirs(onnx_dir, exist_ok=True)
+    with torch.no_grad():
+        if hasAdaptivePoolingLayer:
+            torch.onnx.export(
+                model,
+                dummy_input,
+                onnx_file,
+                input_names=["input"],
+                output_names=["output"])
+        else:
+            torch.onnx.export(
+                model,
+                dummy_input,
+                onnx_file,
+                input_names=["input"],
+                output_names=["output"],
+                dynamic_axes={
+                    "input": {0: "batch_size", 2: "height", 3: "width"},
+                    "output": {0: "batch_size"}})
+    print(f"Exported neural network to ONNX format at {onnx_file}")
 
 
 def args():
