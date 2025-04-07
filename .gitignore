@@ -1,0 +1,72 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env/
+.envrc
+.venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Pytest cache
+.pytest_cache/
+
+# MyPy cache
+.mypy_cache/
+
+# VSCode settings
+.vscode/
+
+# MacOS system files
+.DS_Store
+
+# Logs
+*.log
+
+# Python egg files
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+develop-eggs/
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+
+# Environment variables
+.env
+*.env
+
+# Kubernetes configs (if generated)
+*.yaml
+
+# Data files
+*.csv
+*.tsv
+*.h5
+*.pth
+*.pt
+*.npy
+
+# Ignore model checkpoints
+checkpoints/
+*.ckpt
+
+# Ignore test outputs or temp files
+tmp/
+temp/
+
+# ignore Dataset Coco
+data/
