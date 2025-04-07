@@ -18,7 +18,7 @@ class BLEU(BaseMetric):
         Resets the internal evaluation result to its initial state.
         """
         self.scores = []
-    
+
     def update(self, preds, labels):
         """
         Updates the internal evaluation result for a batch.
@@ -30,28 +30,29 @@ class BLEU(BaseMetric):
         pred_tokens = pred_tokens.cpu().tolist()
         labels = labels.cpu().tolist()
         
-        # For each predicted caption and its reference,
-        # compute the BLEU score.
-        # (Here we treat each reference caption as a single reference;
-        # in practice, you might have multiple reference captions.)
+        # For each predicted caption and its reference, compute the BLEU score.
         for pred, ref in zip(pred_tokens, labels):
             score = sentence_bleu([ref], pred, smoothing_function=self.smooth)
             self.scores.append(score)
-    
+
     def __call__(self, outputs, targets):
         """
-        Processes a batch and returns dummy values for compatibility with the accumulation pattern.
+        Processes a batch, updates internal scores, and returns the current average BLEU score.
         """
         self.update(outputs, targets)
-        return 1, 1
-    
+        return self.result()
+
     def result(self):
         """
         Computes and returns the average BLEU score.
         """
         if not self.scores:
             return 0.0
-        return sum(self.scores) / len(self.scores)
+        result_val = sum(self.scores) / len(self.scores)
+        if result_val is None:
+            return 0.0
+        return result_val
+
 
 def create_metric(out_shape=None):
     return BLEU(out_shape)
