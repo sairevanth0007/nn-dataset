@@ -33,7 +33,7 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
                     prms[prm] = trial.suggest_float(prm, min_lr, max_lr, log=True)
                 case 'momentum':
                     prms[prm] = trial.suggest_float(prm, min_momentum, max_momentum)
-                case 'dropout':  ## Dropoout of high value will prevent the model from learning
+                case 'dropout':
                     prms[prm] = trial.suggest_float(prm, min_dropout, max_dropout)
                 case 'pretrained':
                     prms[prm] = float(pretrained if pretrained else trial.suggest_categorical(prm, [0, 1]))
