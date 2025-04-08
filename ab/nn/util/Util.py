@@ -107,9 +107,11 @@ def format_time(sec):
 
 
 def release_memory():
-    gc.collect()
-    if torch.cuda.is_available(): torch.cuda.empty_cache()
-
+    try:
+        gc.collect()
+        if torch.cuda.is_available(): torch.cuda.empty_cache()
+    except Exception as e:
+        print(f"Exception during memory release: {e}")
 
 def read_py_file_as_string(file_path):
     """
