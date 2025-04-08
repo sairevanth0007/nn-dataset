@@ -113,6 +113,7 @@ def release_memory():
     except Exception as e:
         print(f"Exception during memory release: {e}")
 
+
 def read_py_file_as_string(file_path):
     """
     read_py_file_as_string。
@@ -133,6 +134,13 @@ def read_py_file_as_string(file_path):
     except Exception as e:
         print(f"error when reading file: {e}")
         return None
+
+
+def str_not_none(prefix, value):
+    if value:
+        return prefix + str(value)
+    else:
+        return ''
 
 
 def export_model_to_onnx(model, dummy_input):
