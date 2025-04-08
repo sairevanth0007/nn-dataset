@@ -6,7 +6,7 @@ from ab.nn.util.Const import max_epoch_seconds
 from pandas import DataFrame
 
 
-def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None, cast_prm=True) -> DataFrame:
+def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None, cast_prm=True, max_rows=None) -> DataFrame:
     """
     Get the NN model code and all related statistics as a pandas DataFrame.
 
@@ -17,6 +17,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
           (task, dataset, metric, nn, epoch) only the row with the highest accuracy is returned.
           If False, all matching rows are returned.
       - task, dataset, metric, nn, epoch: Optional filters to restrict the results.
+      - max_rows (int): Specifies the maximum number of results.
 
     Returns:
       - A pandas DataFrame where each row is a dictionary containing:
@@ -24,7 +25,7 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
           'nn', 'nn_code', 'epoch', 'accuracy', 'duration',
           'prm', and 'transform_code'.
     """
-    dt: tuple[dict, ...] = DB_Read.data(only_best_accuracy, task=task, dataset=dataset, metric=metric, nn=nn, epoch=epoch, cast_prm=cast_prm)
+    dt: tuple[dict, ...] = DB_Read.data(only_best_accuracy, task=task, dataset=dataset, metric=metric, nn=nn, epoch=epoch, cast_prm=cast_prm, max_rows=max_rows)
     return DataFrame.from_records(dt)
 
 

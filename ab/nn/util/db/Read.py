@@ -1,5 +1,5 @@
 from ab.nn.util.Const import main_columns, main_columns_ext
-from ab.nn.util.Util import is_full_config
+from ab.nn.util.Util import is_full_config, str_not_none
 from ab.nn.util.db.Init import sql_conn, close_conn
 from ab.nn.util.db.Write import init_population
 import builtins
@@ -31,8 +31,7 @@ def query_cols_rows(q) -> tuple[list, list]:
     columns = [row[0] for row in rows]
     return columns, rows
 
-
-def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None, cast_prm=True) -> tuple[dict[str, int | float | str | dict[str, int | float | str]], ...]:
+def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None, cast_prm=True, max_rows=None) -> tuple[dict[str, int | float | str | dict[str, int | float | str]], ...]:
     """
     Get the NN model code and all related statistics from the database.
     
@@ -69,7 +68,8 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             LEFT JOIN metric m ON s.metric = m.name
             LEFT JOIN transform t ON s.transform = t.name
             {where_clause}
-            ORDER BY s.task, s.dataset, s.metric, s.nn, s.epoch;
+            ORDER BY s.task, s.dataset, s.metric, s.nn, s.epoch
+            {str_not_none('LIMIT ', max_rows)};
         """, params)
     else:
         # Query that returns, for each group (task, dataset, metric, nn, epoch),
@@ -99,7 +99,8 @@ def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None
             LEFT JOIN nn n ON f.nn = n.name
             LEFT JOIN metric m ON f.metric = m.name
             LEFT JOIN transform t ON f.transform = t.name
-            ORDER BY f.task, f.dataset, f.metric, f.nn, f.epoch;
+            ORDER BY f.task, f.dataset, f.metric, f.nn, f.epoch
+            {str_not_none('LIMIT ', max_rows)};
         """, params)
 
     results = []
