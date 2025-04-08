@@ -18,7 +18,7 @@ from ab.nn.util.db.Calc import save_results
 from ab.nn.util.db.Read import supported_transformers
 
 
-def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, max_momentum,
+def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, max_momentum, min_dropout, max_dropout,
                      min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs, pretrained):
     task, dataset_name, metric, nn = config
     try:
@@ -30,10 +30,11 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
             match prm:
                 case 'lr':
                     prms[prm] = trial.suggest_float(prm, min_lr, max_lr, log=True)
+                    prms[prm] = trial.suggest_float(prm, min_lr, max_lr, log=True)
                 case 'momentum':
                     prms[prm] = trial.suggest_float(prm, min_momentum, max_momentum)
                 case 'dropout':  ## Dropoout of high value will prevent the model from learning
-                    prms[prm] = trial.suggest_float(prm, 0.0, 0.5)
+                    prms[prm] = trial.suggest_float(prm, min_dropout, max_dropout)
                 case 'pretrained':
                     prms[prm] = float(pretrained if pretrained else trial.suggest_categorical(prm, [0, 1]))
                 case _:
@@ -47,18 +48,18 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
         print(f"Initialize training with {prm_str[2:]}")
         # Load dataset
         out_shape, minimum_accuracy, train_set, test_set = load_dataset(task, dataset_name, transform_name)
-
-        # Initialize model and trainer
-        if task == 'txt-generation':
-            # Dynamically import RNN or LSTM model
-            if nn.lower() == 'rnn':
-                from ab.nn.nn.RNN import Net as RNNNet
-                model = RNNNet(1, 256, len(train_set.chars), batch)
-            elif nn.lower() == 'lstm':
-                from ab.nn.nn.LSTM import Net as LSTMNet
-                model = LSTMNet(1, 256, len(train_set.chars), batch, num_layers=2)
-            else:
-                raise ValueError(f"Unsupported text generation model: {nn}")
+        #
+        # # Initialize model and trainer
+        # if task == 'txt-generation':
+        #     # Dynamically import RNN or LSTM model
+        #     if nn.lower() == 'rnn':
+        #         from ab.nn.nn.RNN import Net as RNNNet
+        #         model = RNNNet(1, 256, len(train_set.chars), batch)
+        #     elif nn.lower() == 'lstm':
+        #         from ab.nn.nn.LSTM import Net as LSTMNet
+        #         model = LSTMNet(1, 256, len(train_set.chars), batch, num_layers=2)
+        #     else:
+        #         raise ValueError(f"Unsupported text generation model: {nn}")
         return Train(config, out_shape, minimum_accuracy, batch, nn_mod('nn', nn), task, train_set, test_set, metric,
                      num_workers, prms).train_n_eval(n_epochs)
     except Exception as e:
@@ -102,7 +103,7 @@ class Train:
         :param task: e.g., 'img-segmentation' to specify the task type.
         :param train_dataset: Dataset used for training the model (e.g., torch.utils.data.Dataset).
         :param test_dataset: Dataset used for evaluating/testing the model (e.g., torch.utils.data.Dataset).
-        :param metric: Name of the evaluation metric (e.g., 'acc', 'iou').
+        ':param' metric: Name of the evaluation metric (e.g., 'acc', 'iou').
         :param prm: Dictionary of hyperparameters and their values (e.g., {'lr': 0.11, 'momentum': 0.2})
         :param is_code: Whether `config.model` is `nn_code` or `nn`
         :param save_path: Path to save the statistics, set to `None` to use the default

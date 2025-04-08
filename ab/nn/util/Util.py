@@ -96,10 +96,11 @@ def good(result, minimum_accuracy, duration):
     return result > minimum_accuracy * 1.2
 
 
-def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max):
+def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max, dropout_min, dropout_max):
     if batch_min > batch_max: raise Exception(f"min_batch_binary_power {batch_min} > max_batch_binary_power {batch_max}")
     if lr_min > lr_max: raise Exception(f"min_learning_rate {lr_min} > max_learning_rate {lr_max}")
     if momentum_min > momentum_max: raise Exception(f"min_momentum {momentum_min} > max_momentum {momentum_max}")
+    if dropout_min > dropout_max: raise Exception(f"min_momentum {dropout_min} > max_momentum {dropout_max}")
 
 
 def format_time(sec):
@@ -183,6 +184,12 @@ def args():
                         help="Minimum value of momentum.")
     parser.add_argument('-m', '--max_momentum', type=float, default=default_max_momentum,
                         help="Maximum value of momentum.")
+
+    parser.add_argument('--min_dropout', type=float, default=default_min_dropout,
+                        help="Minimum value of dropout.")
+    parser.add_argument('-d', '--max_dropout', type=float, default=default_max_dropout,
+                        help="Maximum value of dropout.")
+
     parser.add_argument('-f', '--transform', type=str, default=default_transform,
                         help="The transformation algorithm name. If None (default), all available algorithms are used by Optuna.")
     parser.add_argument('-a', '--nn_fail_attempts', type=int, default=default_nn_fail_attempts,
