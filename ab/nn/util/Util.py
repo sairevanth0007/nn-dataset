@@ -17,9 +17,9 @@ def nn_mod(*nms):
 
 def crate_file(file_dir, file_name, content=''):
     file_path = file_dir / file_name
-    remove(file_path)
     if not exists(file_path):
         makedirs(file_dir, exist_ok=True)
+    else: remove(file_path)
     with open(file_path, 'w') as file:
         file.write(content)
     return file_path
