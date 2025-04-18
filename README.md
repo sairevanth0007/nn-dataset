@@ -34,7 +34,7 @@ pip install -r requirements.txt --extra-index-url https://download.pytorch.org/w
 ```
 
 ## Installation or Update of the NN Dataset
-Remove old version of the LEMUR Dataset and its database:
+Remove an old version of the LEMUR Dataset and its database:
 ```bash
 pip uninstall nn-dataset -y
 rm -rf db
