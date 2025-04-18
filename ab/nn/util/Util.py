@@ -5,7 +5,7 @@ import importlib.util
 import inspect
 import random
 import torch
-from os import makedirs
+from os import makedirs, remove
 from os.path import exists
 
 from ab.nn.util.Const import *
@@ -17,10 +17,11 @@ def nn_mod(*nms):
 
 def crate_file(file_dir, file_name, content=''):
     file_path = file_dir / file_name
+    remove(file_path)
     if not exists(file_path):
         makedirs(file_dir, exist_ok=True)
-        with open(file_path, 'w') as file:
-            file.write(content)
+    with open(file_path, 'w') as file:
+        file.write(content)
     return file_path
 
 
