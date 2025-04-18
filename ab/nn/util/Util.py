@@ -21,7 +21,7 @@ def crate_file(file_dir, file_name, content=''):
         makedirs(file_dir, exist_ok=True)
     else: remove(file_path)
     with open(file_path, 'w') as file:
-        file.write(content)
+        file.write(content if content else '')
     return file_path
 
 
