@@ -117,13 +117,13 @@ The `NN Dataset` includes the following key modules within the **<a href='https:
 
 ## Citation
 
-If you find the LEMUR Neural Network Dataset to be useful for your research, please consider citing:
+If you find the LEMUR Neural Network Dataset to be useful for your research, please consider citing our <a target='_blank' href='https://arxiv.org/pdf/2504.10552'>article</a>:
 ```bibtex
-@misc{ABrain-One.NN-Dataset,
-  author       = {Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Uzun, Tolgay Atinc and Dhameliya, Yashkumar Sanjaybhai and Kathiriya, Yash Kanubhai and Bentyn, Zofia Antonina and Ignatov, Dmitry and Timofte, Radu},
-  title        = {LEMUR Neural Network Dataset: Towards Seamless AutoML},
-  howpublished = {\url{https://github.com/ABrain-One/nn-dataset}},
-  year         = {2024},
+@article{ABrain.NN-Dataset,
+  title={LEMUR Neural Network Dataset: Towards Seamless AutoML},
+  author={Goodarzi, Arash Torabi and Kochnev, Roman and Khalid, Waleed and Qin, Furui and Uzun, Tolgay Atinc and Dhameliya, Yashkumar Sanjaybhai and Kathiriya, Yash Kanubhai and Bentyn, Zofia Antonina and Ignatov, Dmitry and Timofte, Radu},
+  journal={arXiv preprint arXiv:2504.10552},
+  year={2025}
 }
 ```
 
