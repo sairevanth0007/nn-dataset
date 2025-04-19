@@ -233,6 +233,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
     tmp_dir = ab_root_path / tmp_modul.replace('.', '/')
     crate_file(tmp_dir, '__init__.py')
     temp_file_path = tmp_dir / f"{model_name}.py"
+    trainer = None
     try:
         with open(temp_file_path, 'w') as f:
             f.write(nn_code)  # write the code to the temp file
@@ -265,14 +266,17 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
                 print(f"Model saved to database with accuracy: {result}")
             else:
                 print(f"Model accuracy {result} is below the minimum threshold {minimum_accuracy}. Not saved.")
+        if export_onnx:
+            for input_tensor, _ in train_loader_f(train_set, 1, num_workers):
+                t = input_tensor.to(torch_device())
+                export_model_to_onnx(trainer.model, t)
+                break
     except Exception as e:
         print(f"Error during training: {e}")
         raise
     finally:
         remove(temp_file_path)
-    if export_onnx:
-        for input_tensor, _ in train_loader_f(train_set, 1, num_workers):
-            t = input_tensor.to(torch_device())
-            export_model_to_onnx(trainer.model, t)
-            break
+        del train_set
+        del test_set
+        if trainer: del trainer.model
     return model_name, result, res['score']
