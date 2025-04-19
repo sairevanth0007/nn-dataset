@@ -4,8 +4,10 @@ import ab.nn.util.Util as Util
 import ab.nn.util.Const as Const
 from ab.nn.util.Const import max_epoch_seconds
 from pandas import DataFrame
+import functools
 
 
+@functools.lru_cache(maxsize=5)
 def data(only_best_accuracy=False, task=None, dataset=None, metric=None, nn=None, epoch=None, cast_prm=True, max_rows=None) -> DataFrame:
     """
     Get the NN model code and all related statistics as a pandas DataFrame.
