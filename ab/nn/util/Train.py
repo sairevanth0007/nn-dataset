@@ -231,7 +231,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
     tmp_modul = ".".join((out, 'nn', 'tmp'))
     tmp_modul_name  = ".".join((tmp_modul, model_name))
     tmp_dir = ab_root_path / tmp_modul.replace('.', '/')
-    crate_file(tmp_dir, '__init__.py')
+    create_file(tmp_dir, '__init__.py')
     temp_file_path = tmp_dir / f"{model_name}.py"
     trainer = None
     try:

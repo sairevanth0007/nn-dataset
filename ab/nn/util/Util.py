@@ -15,7 +15,7 @@ def nn_mod(*nms):
     return ".".join(to_nn + nms)
 
 
-def crate_file(file_dir, file_name, content=''):
+def create_file(file_dir, file_name, content=''):
     file_path = file_dir / file_name
     if not exists(file_path):
         makedirs(file_dir, exist_ok=True)
