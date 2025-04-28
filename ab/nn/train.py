@@ -12,6 +12,7 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
          min_batch_binary_power: int = default_min_batch_power, max_batch_binary_power: int = default_max_batch_power,
          min_learning_rate: float = default_min_lr, max_learning_rate: float = default_max_lr,
          min_momentum: float = default_min_momentum, max_momentum: float = default_max_momentum,
+         min_dropout: float = default_min_dropout, max_dropout: float = default_max_dropout,
          transform: str | tuple = None, nn_fail_attempts: int = default_nn_fail_attempts, random_config_order: bool = default_random_config_order,
          num_workers: int = default_num_workers, pretrained: int = default_pretrained):
     """
@@ -25,6 +26,8 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
     :param max_learning_rate: Maximum value of learning rate.
     :param min_momentum: Minimum value of momentum.
     :param max_momentum: Maximum value of momentum.
+    :param min_dropout: Minimum value of dropout.
+    :param max_dropout: Maximum value of dropout.
     :param transform: Transformation algorithm name. If None (default), all available algorithms are used by Optuna.
     :param nn_fail_attempts: Number of attempts if the neural network model throws exceptions.
     :param random_config_order: If random shuffling of the config list is required.
@@ -32,7 +35,7 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
     :param pretrained: Control use of NN pretrained weights: 1 (always use), 0 (never use), or default (let Optuna decide).
     """
 
-    validate_prm(min_batch_binary_power, max_batch_binary_power, min_learning_rate, max_learning_rate, min_momentum, max_momentum)
+    validate_prm(min_batch_binary_power, max_batch_binary_power, min_learning_rate, max_learning_rate, min_momentum, max_momentum, min_dropout, max_dropout)
 
     # Determine configurations based on the provided config
     sub_configs = patterns_to_configs(config, random_config_order)
@@ -66,8 +69,9 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
                     def objective(trial):
                         nonlocal continue_study, fail_iterations, max_batch_binary_power_local
                         try:
-                            accuracy, duration = optuna_objective(trial, sub_config, num_workers, min_learning_rate, max_learning_rate, min_momentum, max_momentum,
-                                                        min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs, pretrained)
+                            accuracy, duration = optuna_objective(trial, sub_config, num_workers, min_learning_rate, max_learning_rate,
+                                                                  min_momentum, max_momentum, min_dropout, max_dropout,
+                                                                  min_batch_binary_power, max_batch_binary_power_local, transform, fail_iterations, n_epochs, pretrained)
                             if good(accuracy, min_accuracy(dataset), duration):
                                 fail_iterations = nn_fail_attempts
                             return accuracy
