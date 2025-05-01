@@ -51,13 +51,24 @@ def populate_code_table(table_name, cursor, name=None):
     # print(f"{table_name} added/updated in the `{table_name}` table: {[f.stem for f in code_files]}")
 
 
+# def populate_prm_table(table_name, cursor, prm, uid):
+#     """
+#     Populate the parameter table with variable number of parameters of different types.
+#     """
+#     for nm, value in prm.items():
+#         cursor.execute(f"INSERT INTO {table_name} (uid, name, value, type) VALUES (?, ?, ?, ?)",
+#                        (uid, nm, str(value), type(value).__name__))
+
 def populate_prm_table(table_name, cursor, prm, uid):
     """
-    Populate the parameter table with variable number of parameters of different types.
+    Insert every hyper-parameter in its native Python type.
+    The target table layout is (uid TEXT, name TEXT, value).
     """
     for nm, value in prm.items():
-        cursor.execute(f"INSERT INTO {table_name} (uid, name, value, type) VALUES (?, ?, ?, ?)",
-                       (uid, nm, str(value), type(value).__name__))
+        cursor.execute(
+            f"INSERT INTO {table_name} (uid, name, value) VALUES (?, ?, ?)",
+            (uid, nm, value),
+        )
 
 
 def save_stat(config_ext: tuple[str, str, str, str, int], prm, cursor):
