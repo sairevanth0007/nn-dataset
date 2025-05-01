@@ -36,7 +36,7 @@ def create_param_table(name, cursor):
         CREATE TABLE IF NOT EXISTS {name} (
             uid   TEXT NOT NULL,
             name  TEXT NOT NULL,
-            value             -- dynamic type, no column 'type'
+            value TEXT NOT NULL  -- explicitly specify TEXT type for clarity
         )
     """)
 
