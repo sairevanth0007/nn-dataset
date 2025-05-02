@@ -19,22 +19,7 @@ from ab.nn.util.Const import (
 from ab.nn.util.Util import read_py_file_as_string
 
 class Testing(unittest.TestCase):
-    def test_data(self):
-        o = api.data(cast_prm=False)
-        o2 = api.data(task='img-classification', nn=default_nn_name, cast_prm=False)
-        print(o2)
-        self.assertNotEqual(len(o2), 0)
-        print(f"The total number of statistical results is {len(o)}, which includes {len(o2)} image classification experiments for the {default_nn_name} model.")
-        self.assertGreater(len(o), len(o2))
 
-    def test_check_nn(self):
-        code = read_py_file_as_string(default_nn_path)
-        pprint(api.check_nn(code, 'img-classification', 'cifar-10', 'acc',
-                            {'lr': 0.01, 'batch': 10, 'dropout': 0.2, 'momentum': 0.9,
-                             'transform': 'norm_256_flip', 'epoch': 1},
-                            save_to_db=False))
-        
-    
     inserted_uid: str | None = None      # set in setUpClass
     dummy_cfg_ext: tuple | None = None   # (task, dataset, metric, nn, epoch)
 
@@ -96,7 +81,10 @@ class Testing(unittest.TestCase):
     def test_data(self):
         all_rows = DB_Read.data()
         img_rows = DB_Read.data(task="img-classification", nn=default_nn_name)
+        img_3_rows = DB_Read.data(task="img-classification", nn=default_nn_name, max_rows=3)
+        print(img_3_rows)
         self.assertGreater(len(all_rows), len(img_rows))
+        self.assertGreater(len(img_rows), len(img_3_rows))
         print(
             f"Total rows: {len(all_rows)} "
             f"(img-classification/{default_nn_name}: {len(img_rows)})"

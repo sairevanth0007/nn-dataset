@@ -22,21 +22,12 @@ def create_code_table(name, cursor):
         name TEXT PRIMARY KEY,
         code TEXT NOT NULL)""")
 
-
-# def create_param_table(name, cursor):
-#     cursor.execute(f"""
-#     CREATE TABLE IF NOT EXISTS {name} (
-#         uid TEXT NOT NULL,
-#         name TEXT NOT NULL,
-#         value TEXT NOT NULL,
-#         type TEXT NOT NULL)""")
-    
 def create_param_table(name, cursor):
     cursor.execute(f"""
         CREATE TABLE IF NOT EXISTS {name} (
             uid   TEXT NOT NULL,
             name  TEXT NOT NULL,
-            value TEXT NOT NULL  -- explicitly specify TEXT type for clarity
+            value OBJECT NOT NULL
         )
     """)
 
