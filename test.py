@@ -96,6 +96,23 @@ class Testing(unittest.TestCase):
     def test_check_nn(self):
         code = read_py_file_as_string(default_nn_path)
 
+        result = api.check_nn(
+            code,
+            "img-classification",
+            "cifar-10",
+            "acc",
+            {
+                "lr": 0.01,
+                "batch": 64,
+                "dropout": 0.2,
+                "momentum": 0.9,
+                "transform": "norm_64_flip",
+                "epoch": 1,
+            },
+            save_to_db=False,
+        )
+        print(f'Training results: {result}')
+
         with patch("ab.nn.util.Train.train_new") as mock_train:
             mock_train.return_value = ("mock-nn", 0.0, 0.0)
             result = api.check_nn(
