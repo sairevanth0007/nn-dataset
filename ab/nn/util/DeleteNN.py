@@ -1,6 +1,6 @@
 import sys, shutil
 from os import remove, scandir
-from ab.nn.util.Const import model_script, stat_dir
+from ab.nn.util.Const import model_script, stat_dir, db_dir
 
 
 def main(nn_name):
@@ -10,8 +10,9 @@ def main(nn_name):
     with scandir(stat_dir) as it:
         for entry in it:
             if entry.name.endswith(f'_{nn_name}'):
-                print(f'Stat deleted: {entry.path}')
                 shutil.rmtree(entry.path, ignore_errors=True)
+                print(f'Stat deleted: {entry.path}')
+    shutil.rmtree(db_dir, ignore_errors=True)
 
 
 if __name__ == "__main__":
