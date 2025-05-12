@@ -82,7 +82,6 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
             else:
                 raise NNException()
 
-
 def train_loader_f(train_dataset, batch, num_workers):
     return torch.utils.data.DataLoader(train_dataset, batch_size=batch, shuffle=True,
                                        num_workers=get_obj_attr(train_dataset, 'num_workers', default=num_workers),
@@ -93,6 +92,7 @@ def test_loader_f(test_dataset, batch, num_workers):
     return torch.utils.data.DataLoader(test_dataset, batch_size=batch, shuffle=False,
                                        num_workers=get_obj_attr(test_dataset, 'num_workers', default=num_workers),
                                        collate_fn=get_obj_attr(test_dataset, 'collate_fn'))
+
 
 
 class Train:
@@ -297,3 +297,4 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
             pass
 
     return model_name, result, res['score']
+
