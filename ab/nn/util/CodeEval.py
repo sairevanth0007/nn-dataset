@@ -10,6 +10,7 @@ from os import makedirs
 import torch
 from radon.complexity import cc_visit
 from ab.nn.util.Const import nn_dir, out_dir, default_nn_path
+from ab.nn.util.Util import torch_device
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -114,14 +115,15 @@ def dynamic_evaluation(file_path, class_name='Net'):
             'dropout': 0.5
         }
 
+        # Set up the device
+        device = torch_device()
+
         # Instantiate the model
-        model = ModelClass(in_shape=in_shape, out_shape=out_shape, prm=prm)
+        model = ModelClass(in_shape, out_shape, prm, device)
         logging.info("Model instantiation succeeded.")
 
-        # Set up the device
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         model.to(device)
-        model.train_setup(device, prm)
+        model.train_setup(prm)
         logging.info(f"The training environment is set up successfully, using the following device: {device}.")
 
         # Create simulated data
@@ -177,7 +179,7 @@ def calculate_score(pylint_issues, complexity_report, dynamic_success, missing_d
 
     if score < 0:
         score = 0
-    return score
+    return score / 100.0
 
 # Evaluate Code Quality for a Single File
 def evaluate_code_quality(file_path):

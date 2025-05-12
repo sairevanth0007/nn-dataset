@@ -84,12 +84,17 @@ def optuna_objective(trial, config, num_workers, min_lr, max_lr, min_momentum, m
 
 def train_loader_f(train_dataset, batch, num_workers):
     return torch.utils.data.DataLoader(train_dataset, batch_size=batch, shuffle=True,
-                                                        num_workers=get_obj_attr(train_dataset, 'num_workers', default=num_workers),
-                                                        collate_fn=get_obj_attr(train_dataset, 'collate_fn'))
+                                       num_workers=get_obj_attr(train_dataset, 'num_workers', default=num_workers),
+                                       collate_fn=get_obj_attr(train_dataset, 'collate_fn'))
+
+
 def test_loader_f(test_dataset, batch, num_workers):
     return torch.utils.data.DataLoader(test_dataset, batch_size=batch, shuffle=False,
-                                                       num_workers=get_obj_attr(test_dataset, 'num_workers', default=num_workers),
-                                                       collate_fn=get_obj_attr(test_dataset, 'collate_fn'))
+                                       num_workers=get_obj_attr(test_dataset, 'num_workers', default=num_workers),
+                                       collate_fn=get_obj_attr(test_dataset, 'collate_fn'))
+
+
+
 class Train:
     def __init__(self, config: tuple[str, str, str, str], out_shape: tuple, minimum_accuracy: float, batch: int, nn_module, task,
                  train_dataset, test_dataset, metric, num_workers, prm: dict, save_to_db=True, is_code=False, save_path: Union[str, Path] = None):
@@ -126,7 +131,6 @@ class Train:
 
         self.train_loader = train_loader_f(self.train_dataset, self.batch, num_workers)
         self.test_loader = test_loader_f(self.test_dataset, self.batch, num_workers)
-
 
         for input_tensor, _ in self.train_loader:
             self.in_shape = np.array(input_tensor).shape  # Model input tensor shape (e.g., (8, 3, 32, 32) for a batch size 8, RGB image 32x32 px).
@@ -229,7 +233,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
         model_name = prefix + "-" + model_name  # Create temporal name for processing
 
     tmp_modul = ".".join((out, 'nn', 'tmp'))
-    tmp_modul_name  = ".".join((tmp_modul, model_name))
+    tmp_modul_name = ".".join((tmp_modul, model_name))
     tmp_dir = ab_root_path / tmp_modul.replace('.', '/')
     create_file(tmp_dir, '__init__.py')
     temp_file_path = tmp_dir / f"{model_name}.py"
@@ -276,7 +280,21 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
         raise
     finally:
         remove(temp_file_path)
-        del train_set
-        del test_set
-        if trainer: del trainer.model
+
+        try:
+            del train_set
+        except NameError:
+            pass
+
+        try:
+            del test_set
+        except NameError:
+            pass
+
+        try:
+            if trainer: del trainer.model
+        except NameError:
+            pass
+
     return model_name, result, res['score']
+

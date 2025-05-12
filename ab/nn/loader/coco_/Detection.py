@@ -1,20 +1,16 @@
-import os
-from os import makedirs, mkdir
-from os.path import join, exists
-from typing import Sequence
-from tqdm import tqdm
+from os import makedirs
+from os.path import join, exists, dirname
+
+import requests
 import torch
-from torch.utils.data import Dataset
 from PIL import Image
 from pycocotools.coco import COCO
-import os
-import requests
+from torch.utils.data import Dataset
 from torchvision.datasets.utils import download_and_extract_archive
-from torch.nn.utils.rnn import pad_sequence
-import torch
-from typing import List, Dict, Tuple, Any
+from tqdm import tqdm
 
 from ab.nn.util.Const import data_dir
+
 # Standard module-level constants
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665, 69.89082075, 70.9150767)
@@ -60,30 +56,30 @@ class COCODetectionDataset(Dataset):
         self.class_list = class_list or MIN_CLASS_LIST
        
         
-        ann_file = os.path.join(root, 'annotations', f'instances_{split}2017.json')
-        if not os.path.exists(os.path.join(root, 'annotations')):
+        ann_file = join(root, 'annotations', f'instances_{split}2017.json')
+        if not exists(join(root, 'annotations')):
             print('Annotation file doesn\'t exist! Downloading')
-            os.makedirs(root, exist_ok=True)
+            makedirs(root, exist_ok=True)
             download_and_extract_archive(coco_ann_url, root, filename='annotations_trainval2017.zip')
             print('Annotation file preparation complete')
         self.coco = COCO(ann_file)
         self.ids = list(sorted(self.coco.imgs.keys()))
-        self.img_dir = os.path.join(root, f'{split}2017')
+        self.img_dir = join(root, f'{split}2017')
         
         self.preprocess = preprocess
         if self.preprocess:
             self.__preprocess__() 
         first_image_info = self.coco.loadImgs(self.ids[0])[0]
-        first_file_path = os.path.join(self.img_dir, first_image_info['file_name'])
-        if not os.path.exists(first_file_path):
+        first_file_path = join(self.img_dir, first_image_info['file_name'])
+        if not exists(first_file_path):
             print(f'Image dataset doesn\'t exist! Downloading {split} split...')
             download_and_extract_archive(coco_img_url.format(split), root, filename=f'{split}2017.zip')
             print('Image dataset preparation complete')
 
     def __preprocess__(self):
-        list_file = os.path.join(self.root, 'preprocessed', f"{self.split}2017_filtered_class{'-'.join(map(str, self.class_list))}.list")
-        os.makedirs(os.path.join(self.root, 'preprocessed'), exist_ok=True)
-        if os.path.exists(list_file):
+        list_file = join(self.root, 'preprocessed', f"{self.split}2017_filtered_class{'-'.join(map(str, self.class_list))}.list")
+        makedirs(join(self.root, 'preprocessed'), exist_ok=True)
+        if exists(list_file):
             with open(list_file, 'r') as f:
                 lines = f.readlines()
                 filtered_ids = [int(line.strip()) for line in lines]
@@ -107,7 +103,7 @@ class COCODetectionDataset(Dataset):
     def __getitem__(self, idx):
         img_id = self.ids[idx]
         img_info = self.coco.loadImgs(img_id)[0]
-        file_path = os.path.join(self.img_dir, img_info['file_name'])
+        file_path = join(self.img_dir, img_info['file_name'])
         try:
             with Image.open(file_path) as img_file:
                 image = img_file.convert('RGB')
@@ -120,7 +116,7 @@ class COCODetectionDataset(Dataset):
                 self.no_missing_img = True
             response = requests.get(img_info['coco_url'])
             if response.status_code == 200:
-                os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                makedirs(dirname(file_path), exist_ok=True)
                 with open(file_path, 'wb') as f:
                     f.write(response.content)
                 with Image.open(file_path) as img_file:

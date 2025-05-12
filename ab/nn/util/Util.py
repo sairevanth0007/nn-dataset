@@ -5,6 +5,8 @@ import importlib.util
 import inspect
 import random
 import torch
+from os import makedirs, remove
+from os.path import exists
 
 from ab.nn.util.Const import *
 
@@ -13,16 +15,40 @@ def nn_mod(*nms):
     return ".".join(to_nn + nms)
 
 
+def create_file(file_dir, file_name, content=''):
+    file_path = file_dir / file_name
+    if not exists(file_path):
+        makedirs(file_dir, exist_ok=True)
+    else: remove(file_path)
+    with open(file_path, 'w') as file:
+        file.write(content if content else '')
+    return file_path
+
+
 def get_obj_attr(obj, f_name, default=None):
     return getattr(obj, f_name) if hasattr(obj, f_name) else default
 
 
+def torch_device():
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+    elif torch.backends.mps.is_available() and torch.backends.mps.is_built():
+        device = torch.device("mps")
+    else:
+        device = torch.device("cpu")
+    return device
+
+
 def get_attr(mod, f):
-    return get_obj_attr(__import__(nn_mod(mod), fromlist=[f]), f)
+    return get_obj_attr(__import__(mod, fromlist=[f]), f)
+
+
+def get_ab_nn_attr(mod, f):
+    return get_attr(nn_mod(mod), f)
 
 
 def min_accuracy(dataset):
-    return get_attr(f"loader.{dataset}", 'minimum_accuracy')
+    return get_ab_nn_attr(f"loader.{dataset}", 'minimum_accuracy')
 
 
 def order_configs(configs, random_config_order):
@@ -71,10 +97,11 @@ def good(result, minimum_accuracy, duration):
     return result > minimum_accuracy * 1.2
 
 
-def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max):
+def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max, dropout_min, dropout_max):
     if batch_min > batch_max: raise Exception(f"min_batch_binary_power {batch_min} > max_batch_binary_power {batch_max}")
     if lr_min > lr_max: raise Exception(f"min_learning_rate {lr_min} > max_learning_rate {lr_max}")
     if momentum_min > momentum_max: raise Exception(f"min_momentum {momentum_min} > max_momentum {momentum_max}")
+    if dropout_min > dropout_max: raise Exception(f"min_momentum {dropout_min} > max_momentum {dropout_max}")
 
 
 def format_time(sec):
@@ -82,8 +109,11 @@ def format_time(sec):
 
 
 def release_memory():
-    gc.collect()
-    if torch.cuda.is_available(): torch.cuda.empty_cache()
+    try:
+        gc.collect()
+        if torch.cuda.is_available(): torch.cuda.empty_cache()
+    except Exception as e:
+        print(f"Exception during memory release: {e}")
 
 
 def read_py_file_as_string(file_path):
@@ -108,6 +138,43 @@ def read_py_file_as_string(file_path):
         return None
 
 
+def str_not_none(prefix, value):
+    if value:
+        return prefix + str(value)
+    else:
+        return ''
+
+
+def export_model_to_onnx(model, dummy_input):
+    model.eval()
+    assert isinstance(model, torch.nn.Module)
+    hasAdaptivePoolingLayer = False
+    for name, layer in model.named_modules():
+        if isinstance(layer, (torch.nn.AdaptiveAvgPool2d, torch.nn.AdaptiveMaxPool2d)):
+            if layer.output_size not in [(1, 1), 1, None]:
+                hasAdaptivePoolingLayer = True
+    makedirs(onnx_dir, exist_ok=True)
+    with torch.no_grad():
+        if hasAdaptivePoolingLayer:
+            torch.onnx.export(
+                model,
+                dummy_input,
+                onnx_file,
+                input_names=["input"],
+                output_names=["output"])
+        else:
+            torch.onnx.export(
+                model,
+                dummy_input,
+                onnx_file,
+                input_names=["input"],
+                output_names=["output"],
+                dynamic_axes={
+                    "input": {0: "batch_size", 2: "height", 3: "width"},
+                    "output": {0: "batch_size"}})
+    print(f"Exported neural network to ONNX format at {onnx_file}")
+
+
 def args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-c', '--config', type=str, default=default_config,
@@ -128,6 +195,12 @@ def args():
                         help="Minimum value of momentum.")
     parser.add_argument('-m', '--max_momentum', type=float, default=default_max_momentum,
                         help="Maximum value of momentum.")
+
+    parser.add_argument('--min_dropout', type=float, default=default_min_dropout,
+                        help="Minimum value of dropout.")
+    parser.add_argument('-d', '--max_dropout', type=float, default=default_max_dropout,
+                        help="Maximum value of dropout.")
+
     parser.add_argument('-f', '--transform', type=str, default=default_transform,
                         help="The transformation algorithm name. If None (default), all available algorithms are used by Optuna.")
     parser.add_argument('-a', '--nn_fail_attempts', type=int, default=default_nn_fail_attempts,

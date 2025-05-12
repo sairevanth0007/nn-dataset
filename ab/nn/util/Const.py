@@ -2,7 +2,7 @@ from pathlib import Path
 
 default_config = ''
 default_epochs = 1
-default_trials = -1 # one more trial
+default_trials = -1  # one more trial
 default_min_batch_power = 0
 default_max_batch_power = 12
 default_min_lr = 1e-5
@@ -23,6 +23,7 @@ to_nn = (base_module, 'nn')
 
 config_splitter = '_'
 
+
 def nn_path(dr):
     """
     Defines path to ab/nn directory.
@@ -33,8 +34,14 @@ def nn_path(dr):
 
 metric_dir = nn_path('metric')
 nn_dir = nn_path('nn')
+
+
+def model_script(name):
+    return nn_dir / f'{name}.py'
+
+
 default_nn_name = 'AlexNet'
-default_nn_path = nn_dir / f"{default_nn_name}.py"
+default_nn_path = model_script(default_nn_name)
 transform_dir = nn_path('transform')
 stat_dir = nn_path('stat')
 
@@ -56,11 +63,15 @@ def __project_root_path():
 
 
 ab_root_path = __project_root_path()
-print(f"LEMUR uses the root directory {ab_root_path}")
-out_dir = ab_root_path / 'out'
+print(f"LEMUR root {ab_root_path}")
+out = 'out'
+out_dir = ab_root_path / out
 data_dir = ab_root_path / 'data'
 db_dir = ab_root_path / 'db'
 db_file = db_dir / 'ab.nn.db'
+
+onnx_dir = out_dir / 'onnx'
+onnx_file = onnx_dir / 'nn.onnx'
 
 main_tables = ('stat',)
 main_columns = ('task', 'dataset', 'metric', 'nn')

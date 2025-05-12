@@ -45,3 +45,4 @@ if __name__ == "__main__":
     # Run training with Optuna: detects and saves performance metric values
     # train.main(conf, epochs, trials, min_batch_power, max_batch_power, min_lr, max_lr, min_mom, max_mom, transform, nn_fail_attempts, random_config_order, workers, pretrained)
     train.main(conf, epochs, trials, min_batch_power, max_batch_power, min_lr, max_lr, min_mom, max_mom, min_drop, max_drop, transform, nn_fail_attempts, random_config_order, workers, pretrained)
+

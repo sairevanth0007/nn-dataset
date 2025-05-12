@@ -1,8 +1,8 @@
-from ab.nn.util.Util import get_attr
+from ab.nn.util.Util import get_ab_nn_attr
 
 def get_obj(name, o_type):
     """ Dynamically load a function/field by name if provided from the object of type 'o_type'"""
-    return get_attr(f"{o_type}.{name}", o_type)
+    return get_ab_nn_attr(f"{o_type}.{name}", o_type)
 
 
 def load_dataset(task, dataset_name, transform_name):

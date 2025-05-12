@@ -7,6 +7,7 @@ from ab.nn.util.Const import param_tables, db_file, db_dir, main_tables, code_ta
 
 def sql_conn():
     conn = sqlite3.connect(db_file)
+    conn.row_factory = sqlite3.Row  # Enable row access
     return conn, conn.cursor()
 
 
@@ -21,14 +22,15 @@ def create_code_table(name, cursor):
         name TEXT PRIMARY KEY,
         code TEXT NOT NULL)""")
 
-
 def create_param_table(name, cursor):
     cursor.execute(f"""
-    CREATE TABLE IF NOT EXISTS {name} (
-        uid TEXT NOT NULL,
-        name TEXT NOT NULL,
-        value TEXT NOT NULL,
-        type TEXT NOT NULL)""")
+        CREATE TABLE IF NOT EXISTS {name} (
+            uid   TEXT NOT NULL,
+            name  TEXT NOT NULL,
+            value OBJECT NOT NULL
+        )
+    """)
+
 
 
 def init_db():
@@ -45,6 +47,8 @@ def init_db():
     # Create all tables with parameters
     for nm in param_tables:
         create_param_table(nm, cursor)
+        # NEW: index for fast uid look-ups
+        cursor.execute(f"CREATE INDEX IF NOT EXISTS idx_{nm}_uid ON {nm}(uid);")
 
     # Create main stat tables
     for nm in main_tables:
