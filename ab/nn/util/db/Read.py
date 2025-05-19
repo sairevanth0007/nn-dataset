@@ -21,7 +21,7 @@ def query_rows(*q):
     cursor.execute(*q)
     rows = cursor.fetchall()
     close_conn(conn)
-    return rows
+    return [tuple([s for s in r]) for r in rows]
 
 
 def query_cols_rows(q) -> tuple[list, list]:

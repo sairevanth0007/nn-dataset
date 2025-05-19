@@ -19,7 +19,7 @@ def main(config: str | tuple | list = default_config, n_epochs: int = default_ep
     Main function for training models using Optuna optimization.
     :param config: Configuration specifying the model training pipelines. The default value for all configurations.
     :param n_epochs: Number of training epochs.
-    :param n_optuna_trials: Total number of Optuna trials the model should have. If negative, its absolute value represents the number of additional trials.
+    :param n_optuna_trials: The total number of Optuna trials the model should have. If negative, its absolute value represents the number of additional trials.
     :param min_batch_binary_power: Minimum power of two for batch size. E.g., with a value of 0, batch size equals 2**0 = 1.
     :param max_batch_binary_power: Maximum power of two for batch size. E.g., with a value of 12, batch size equals 2**12 = 4096.
     :param min_learning_rate: Minimum value of learning rate.

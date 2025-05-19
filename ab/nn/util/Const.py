@@ -9,6 +9,8 @@ default_min_lr = 1e-5
 default_max_lr = 1.0
 default_min_momentum = 0.0
 default_max_momentum = 1.0
+default_min_dropout = 0.0
+default_max_dropout = 0.5
 default_pretrained = None
 default_transform = None
 
