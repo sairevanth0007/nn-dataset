@@ -1,121 +1,121 @@
 import torch
 import torch.nn as nn
-import torchvision
 
 def supported_hyperparameters():
-    return {'lr', 'dropout'}
-
-class VisualEncoder(nn.Module):
-    def __init__(self):
-        super().__init__()
-        backbone = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V2)
-        self.cnn = nn.Sequential(*list(backbone.children())[:-2])
-        self.projection = nn.Sequential(
-            nn.AdaptiveAvgPool2d((1, 1)),
-            nn.Flatten(),
-            nn.Linear(2048, 512)
-        )
-        
-    def forward(self, x):
-        features = self.cnn(x)
-        return self.projection(features)
-
-class Decoder(nn.Module):
-    def __init__(self, vocab_size, embed_size=512, hidden_size=512, dropout=0.3):
-        super().__init__()
-        self.embed = nn.Embedding(vocab_size, embed_size)
-        self.lstm = nn.LSTMCell(embed_size + hidden_size, hidden_size)
-        self.fc = nn.Linear(hidden_size, vocab_size)
-        self.dropout = nn.Dropout(dropout)
-        self.hidden_size = hidden_size
-
-    def forward(self, features, captions=None):
-        batch_size = features.size(0)
-        h = torch.zeros(batch_size, self.hidden_size, device=features.device)
-        c = torch.zeros(batch_size, self.hidden_size, device=features.device)
-        
-        if captions is not None:
-            # Handle both single and multiple captions
-            if captions.dim() == 3:
-                captions = captions[:, 0, :]  # Use first caption
-            
-            # Ensure we predict for sequence length = input length - 1
-            seq_len = captions.size(1)
-            outputs = torch.zeros(batch_size, seq_len, self.fc.out_features, 
-                               device=features.device)
-            
-            for t in range(seq_len):
-                embeddings = self.dropout(self.embed(captions[:, t]))
-                lstm_input = torch.cat([embeddings, features], dim=1)
-                h, c = self.lstm(lstm_input, (h, c))
-                outputs[:, t] = self.fc(h)
-            return outputs
-        else:
-            return self.generate(features, h, c)
-
-    def generate(self, features, h, c, max_len=20):
-        outputs = []
-        # using ones() which infers the shape correctly
-        inputs = torch.ones(features.size(0), dtype=torch.long, device=features.device)
-
-        for _ in range(max_len):
-            embeddings = self.dropout(self.embed(inputs))
-            lstm_input = torch.cat([embeddings, features], dim=1)
-            h, c = self.lstm(lstm_input, (h, c))
-            outputs.append(self.fc(h).argmax(1))
-            inputs = outputs[-1]
-        return torch.stack(outputs, dim=1)
+    return {'lr', 'momentum'}  # ✅ removed 'hidden_size'
 
 class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm, device):
-        super().__init__()
-        self.encoder = VisualEncoder()
-        self.decoder = Decoder(out_shape[0], dropout=float(prm.get('dropout', 0.3)))
-        self.device = device
-        self.to(device)
+    idx2word = None
+    eos_index = None
 
-    def forward(self, images, captions=None):
-        features = self.encoder(images.to(self.device))
-        return self.decoder(features, captions.to(self.device) if captions is not None else None)
+    def __init__(self, in_shape: tuple, out_shape: tuple, prm: dict, device: torch.device) -> None:
+        super().__init__()
+        self.device = device
+        self.hidden_size = 512  # ✅ hardcoded
+        self.vocab_size = out_shape[0]
+        self.cnn = ResNetEncoder(in_shape)
+        self.rnn = LSTMDecoder(self.vocab_size, hidden_size=self.hidden_size, num_layers=2)
+
+    def forward(self, images, captions=None, hidden_state=None):
+        features = self.cnn(images).squeeze(1)
+        batch_size = features.size(0)
+
+        hidden = features.unsqueeze(0).repeat(2, 1, 1)
+        cell = torch.zeros(2, batch_size, self.hidden_size, device=self.device)
+        hidden_state = (hidden, cell)
+
+        if captions is not None:
+            inputs = captions[:, :-1]
+            targets = captions[:, 1:]
+            outputs, _ = self.rnn(features, inputs, hidden_state)
+            return outputs, targets
+        else:
+            max_len = 20
+            sos_idx = {v: k for k, v in self.__class__.idx2word.items()}.get('<SOS>', 1) if self.__class__.idx2word else 1
+            inputs = torch.full((batch_size,), sos_idx, dtype=torch.long, device=self.device)
+            captions = []
+
+            for _ in range(max_len):
+                input_embedded = self.rnn.embedding(inputs).unsqueeze(1)
+                output, hidden_state = self.rnn.lstm(input_embedded, hidden_state)
+                logits = self.rnn.fc(output.squeeze(1))
+                predicted = logits.argmax(1)
+                captions.append(predicted.unsqueeze(1))
+                inputs = predicted
+
+            return torch.cat(captions, dim=1)
 
     def train_setup(self, prm):
-        self.optimizer = torch.optim.AdamW(self.parameters(),
-                                  lr=prm['lr'], weight_decay=1e-5)
-        # Define n_total_steps, e.g., as a parameter or a fixed value
-        n_total_steps = prm.get('n_total_steps', 100)  # Set default or pass in prm
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-            self.optimizer, T_max=n_total_steps, eta_min=prm['lr'] * 0.01
-        )
+        self.to(self.device)
+        self.criteria = (nn.CrossEntropyLoss().to(self.device),)
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=prm['lr'], momentum=prm['momentum'])
 
-        self.criterion = nn.CrossEntropyLoss(ignore_index=0)
-
-    def learn(self, train_loader):
-        self.train()
-        total_loss = 0
-        for images, captions in train_loader:
+    def learn(self, train_data):
+        for images, captions in train_data:
             images = images.to(self.device)
             captions = captions.to(self.device)
-            
-            # Ensure consistent dimensions
-            if captions.dim() == 3:
-                captions = captions[:, 0, :]  # Use first caption
-            
-            # Input: all tokens except last, Target: all tokens except first
-            outputs = self(images, captions[:, :-1])  # Predict next tokens
-            targets = captions[:, 1:]  # Shifted by one
-            
-            # Final verification
-            assert outputs.size(0) == targets.size(0), "Batch size mismatch"
-            assert outputs.size(1) == targets.size(1), f"Seq len mismatch: {outputs.size(1)} vs {targets.size(1)}"
-            
-            loss = self.criterion(
-                outputs.reshape(-1, outputs.size(-1)),
-                targets.reshape(-1)
+            captions = captions[:, 0, :]  # First caption only
+
+            self.optimizer.zero_grad()
+            outputs, targets = self.forward(images, captions)
+            loss = self.criteria[0](
+                outputs.contiguous().view(-1, outputs.shape[2]),
+                targets.contiguous().view(-1)
             )
             loss.backward()
-            nn.utils.clip_grad_norm_(self.parameters(), 0.5)
+            nn.utils.clip_grad_norm_(self.parameters(), 3)
             self.optimizer.step()
-            self.scheduler.step()
-            total_loss += loss.item()
-            
-        return total_loss / len(train_loader)
+
+        # After training loop, print predictions
+        if self.__class__.idx2word is not None:
+            print("\nSample generated captions (first 5):", flush=True)
+            with torch.no_grad():
+                generated = self.forward(images)
+                if isinstance(generated, tuple):
+                    generated = generated[0]
+                for i in range(min(5, generated.size(0))):
+                    pred_ids = generated[i].tolist()
+                    gt_ids = captions[i][1:].tolist()
+                    pred_caption = ' '.join(self.__class__.idx2word.get(w, '?') for w in pred_ids if w != 0 and w != self.__class__.eos_index)
+                    gt_caption = ' '.join(self.__class__.idx2word.get(w, '?') for w in gt_ids if w != 0 and w != self.__class__.eos_index)
+                    print(f"Predicted: {pred_caption}")
+                    print(f"GT      : {gt_caption}")
+
+
+    def eval_mode_generate_captions(self, images):
+        return self.forward(images)
+
+class ResNetEncoder(nn.Module):
+    def __init__(self, in_shape: tuple):
+        super().__init__()
+        self.resnet = nn.Sequential(
+            nn.Conv2d(in_shape[1], 64, kernel_size=7, stride=2, padding=3, bias=False),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=3, stride=2, padding=1),
+            nn.AdaptiveAvgPool2d((1, 1))
+        )
+        self.fc = nn.Linear(64, 512)
+
+    def forward(self, x):
+        x = self.resnet(x)
+        x = torch.flatten(x, 1)
+        return self.fc(x).unsqueeze(1)
+
+class LSTMDecoder(nn.Module):
+    def __init__(self, vocab_size: int, hidden_size: int, num_layers: int = 1):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, 512)
+        self.lstm = nn.LSTM(512, hidden_size, num_layers=num_layers, batch_first=True)
+        self.fc = nn.Linear(hidden_size, vocab_size)
+
+    def forward(self, features, captions, hidden_state):
+        embedded = self.embedding(captions)
+        x, hidden_state = self.lstm(embedded, hidden_state)
+        return self.fc(x), hidden_state
+
+    def init_zero_hidden(self, batch: int, device: torch.device):
+        return (
+            torch.zeros(2, batch, 512, device=device),
+            torch.zeros(2, batch, 512, device=device)
+        )

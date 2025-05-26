@@ -1,121 +1,52 @@
 import torch
-import torch.nn as nn
-import torchvision
+from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 
-def supported_hyperparameters():
-    return {'lr', 'dropout'}
+class BLEUMetric:
+    def __init__(self, out_shape=None):
+        self.smooth = SmoothingFunction().method1
+        self.reset()
 
-class VisualEncoder(nn.Module):
-    def __init__(self):
-        super().__init__()
-        backbone = torchvision.models.resnet50(weights=torchvision.models.ResNet50_Weights.IMAGENET1K_V2)
-        self.cnn = nn.Sequential(*list(backbone.children())[:-2])
-        self.projection = nn.Sequential(
-            nn.AdaptiveAvgPool2d((1, 1)),
-            nn.Flatten(),
-            nn.Linear(2048, 512)
-        )
-        
-    def forward(self, x):
-        features = self.cnn(x)
-        return self.projection(features)
+    def reset(self):
+        self.scores1 = []  # BLEU-1
+        self.scores2 = []  # BLEU-2
+        self.scores3 = []  # BLEU-3
+        self.scores4 = []  # BLEU-4
 
-class Decoder(nn.Module):
-    def __init__(self, vocab_size, embed_size=512, hidden_size=512, dropout=0.3):
-        super().__init__()
-        self.embed = nn.Embedding(vocab_size, embed_size)
-        self.lstm = nn.LSTMCell(embed_size + hidden_size, hidden_size)
-        self.fc = nn.Linear(hidden_size, vocab_size)
-        self.dropout = nn.Dropout(dropout)
-        self.hidden_size = hidden_size
-
-    def forward(self, features, captions=None):
-        batch_size = features.size(0)
-        h = torch.zeros(batch_size, self.hidden_size, device=features.device)
-        c = torch.zeros(batch_size, self.hidden_size, device=features.device)
-        
-        if captions is not None:
-            # Handle both single and multiple captions
-            if captions.dim() == 3:
-                captions = captions[:, 0, :]  # Use first caption
-            
-            # Ensure we predict for sequence length = input length - 1
-            seq_len = captions.size(1)
-            outputs = torch.zeros(batch_size, seq_len, self.fc.out_features, 
-                               device=features.device)
-            
-            for t in range(seq_len):
-                embeddings = self.dropout(self.embed(captions[:, t]))
-                lstm_input = torch.cat([embeddings, features], dim=1)
-                h, c = self.lstm(lstm_input, (h, c))
-                outputs[:, t] = self.fc(h)
-            return outputs
+    def __call__(self, preds, labels):
+        # Accepts logits [batch, seq, vocab] or token ids [batch, seq]
+        if preds.dim() == 3:
+            pred_ids = torch.argmax(preds, -1).cpu().tolist()
+        elif preds.dim() == 2:
+            pred_ids = preds.cpu().tolist()
         else:
-            return self.generate(features, h, c)
+            raise ValueError(f"Preds shape not supported for BLEUMetric: {preds.shape}")
+        # All references for each sample
+        if labels.dim() == 3:
+            targets = labels.cpu().tolist()
+        else:
+            targets = [[t] for t in labels.cpu().tolist()]
+        for p, refs in zip(pred_ids, targets):
+            hyp = [w for w in p if w != 0]
+            filtered_refs = [[w for w in r if w != 0] for r in refs]
+            filtered_refs = [ref for ref in filtered_refs if len(ref) > 0]
+            if filtered_refs:
+                self.scores1.append(sentence_bleu(filtered_refs, hyp, weights=(1, 0, 0, 0), smoothing_function=self.smooth))
+                self.scores2.append(sentence_bleu(filtered_refs, hyp, weights=(0.5, 0.5, 0, 0), smoothing_function=self.smooth))
+                self.scores3.append(sentence_bleu(filtered_refs, hyp, weights=(0.33, 0.33, 0.33, 0), smoothing_function=self.smooth))
+                self.scores4.append(sentence_bleu(filtered_refs, hyp, weights=(0.25, 0.25, 0.25, 0.25), smoothing_function=self.smooth))
 
-    def generate(self, features, h, c, max_len=20):
-        outputs = []
-        # using ones() which infers the shape correctly
-        inputs = torch.ones(features.size(0), dtype=torch.long, device=features.device)
+    def result(self):
+        # Return BLEU-4 for Optuna/your pipeline
+        return float(sum(self.scores4)) / max(len(self.scores4), 1)
 
-        for _ in range(max_len):
-            embeddings = self.dropout(self.embed(inputs))
-            lstm_input = torch.cat([embeddings, features], dim=1)
-            h, c = self.lstm(lstm_input, (h, c))
-            outputs.append(self.fc(h).argmax(1))
-            inputs = outputs[-1]
-        return torch.stack(outputs, dim=1)
+    def get_all(self):
+        # For manual evaluation/logging if you want
+        return {
+            'BLEU-1': float(sum(self.scores1)) / max(len(self.scores1), 1),
+            'BLEU-2': float(sum(self.scores2)) / max(len(self.scores2), 1),
+            'BLEU-3': float(sum(self.scores3)) / max(len(self.scores3), 1),
+            'BLEU-4': float(sum(self.scores4)) / max(len(self.scores4), 1)
+        }
 
-class Net(nn.Module):
-    def __init__(self, in_shape, out_shape, prm, device):
-        super().__init__()
-        self.encoder = VisualEncoder()
-        self.decoder = Decoder(out_shape[0], dropout=float(prm.get('dropout', 0.3)))
-        self.device = device
-        self.to(device)
-
-    def forward(self, images, captions=None):
-        features = self.encoder(images.to(self.device))
-        return self.decoder(features, captions.to(self.device) if captions is not None else None)
-
-    def train_setup(self, prm):
-        self.optimizer = torch.optim.AdamW(self.parameters(),
-                                  lr=prm['lr'], weight_decay=1e-5)
-        # Define n_total_steps, e.g., as a parameter or a fixed value
-        n_total_steps = prm.get('n_total_steps', 100)  # Set default or pass in prm
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-            self.optimizer, T_max=n_total_steps, eta_min=prm['lr'] * 0.01
-        )
-
-        self.criterion = nn.CrossEntropyLoss(ignore_index=0)
-
-    def learn(self, train_loader):
-        self.train()
-        total_loss = 0
-        for images, captions in train_loader:
-            images = images.to(self.device)
-            captions = captions.to(self.device)
-            
-            # Ensure consistent dimensions
-            if captions.dim() == 3:
-                captions = captions[:, 0, :]  # Use first caption
-            
-            # Input: all tokens except last, Target: all tokens except first
-            outputs = self(images, captions[:, :-1])  # Predict next tokens
-            targets = captions[:, 1:]  # Shifted by one
-            
-            # Final verification
-            assert outputs.size(0) == targets.size(0), "Batch size mismatch"
-            assert outputs.size(1) == targets.size(1), f"Seq len mismatch: {outputs.size(1)} vs {targets.size(1)}"
-            
-            loss = self.criterion(
-                outputs.reshape(-1, outputs.size(-1)),
-                targets.reshape(-1)
-            )
-            loss.backward()
-            nn.utils.clip_grad_norm_(self.parameters(), 0.5)
-            self.optimizer.step()
-            self.scheduler.step()
-            total_loss += loss.item()
-            
-        return total_loss / len(train_loader)
+def create_metric(out_shape=None):
+    return BLEUMetric(out_shape)
