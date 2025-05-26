@@ -1,158 +1,184 @@
 import os
-import requests
-from collections import Counter
 from os import makedirs
 from os.path import join, exists
+import requests
+from collections import Counter
 
 import torch
 from torch.utils.data import Dataset
 from PIL import Image
 from pycocotools.coco import COCO
 from torchvision.datasets.utils import download_and_extract_archive
-from torchvision import transforms
 
 from ab.nn.util.Const import data_dir
 
-# COCO URLs
-default_coco_ann = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
-default_coco_img = 'http://images.cocodataset.org/zips/{}2017.zip'
+coco_ann_url = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
+coco_img_url = 'http://images.cocodataset.org/zips/{}2017.zip'
 
-# Normalization stats
-__norm_mean = [0.485, 0.456, 0.406]
-__norm_std  = [0.229, 0.224, 0.225]
-
-minimum_bleu = 0.04
+__norm_mean = (104.01362025, 114.03422265, 119.9165958)
+__norm_dev = (73.6027665, 69.89082075, 70.9150767)
+minimum_bleu = 0.05
 
 class COCOCaptionDataset(Dataset):
-    def __init__(self, root, split='train', transform=None, max_length=20,
-                 ann_url=default_coco_ann, img_url=default_coco_img):
-        if split not in ('train', 'val'):
-            raise ValueError(f"Invalid split: {split}")
+    def __init__(self, transform, root, split='train', word2idx=None, idx2word=None):
+        super().__init__()
+        valid_splits = ['train', 'val']
+        if split not in valid_splits:
+            raise ValueError(f"Invalid split: {split}. Must be 'train' or 'val'.")
+
         self.root = root
-        self.split = split
         self.transform = transform
-        self.max_length = max_length
+        self.split = split
+        self.word2idx = word2idx
+        self.idx2word = idx2word
 
-        # Download annotations if missing
-        ann_dir = join(root, 'annotations')
-        if not exists(ann_dir):
+        ann_dir = os.path.join(root, 'annotations')
+        if not os.path.exists(ann_dir):
+            print("COCO annotations not found! Downloading...")
             makedirs(root, exist_ok=True)
-            download_and_extract_archive(ann_url, root,
-                                         filename='annotations_trainval2017.zip')
-        ann_file = join(ann_dir, f'captions_{split}2017.json')
-        self.coco = COCO(ann_file)
-        self.ids = sorted(self.coco.imgs.keys())
+            download_and_extract_archive(coco_ann_url, root, filename='annotations_trainval2017.zip')
+            print("Annotation download complete.")
 
-        # Download images if missing
-        img_dir = join(root, f'{split}2017')
-        first = self.coco.loadImgs(self.ids[0])[0]
-        if not exists(join(img_dir, first['file_name'])):
-            download_and_extract_archive(img_url.format(split), root,
-                                         filename=f'{split}2017.zip')
-        self.img_dir = img_dir
+        ann_file = os.path.join(ann_dir, f'captions_{split}2017.json')
+        if not os.path.exists(ann_file):
+            raise RuntimeError(f"Missing {ann_file}. Check that 'annotations_trainval2017.zip' was properly extracted.")
+
+        self.coco = COCO(ann_file)
+        self.ids = list(sorted(self.coco.imgs.keys()))
+
+        self.img_dir = os.path.join(root, f'{split}2017')
+        first_image_info = self.coco.loadImgs(self.ids[0])[0]
+        first_file_path = os.path.join(self.img_dir, first_image_info['file_name'])
+        if not os.path.exists(first_file_path):
+            print(f"COCO {split} images not found! Downloading...")
+            download_and_extract_archive(coco_img_url.format(split), root, filename=f'{split}2017.zip')
+            print(f"COCO {split} image download complete.")
 
     def __len__(self):
         return len(self.ids)
 
-    def __getitem__(self, idx):
-        img_id = self.ids[idx]
-        info = self.coco.loadImgs(img_id)[0]
-        path = join(self.img_dir, info['file_name'])
+    def __getitem__(self, index):
+        img_id = self.ids[index]
+        img_info = self.coco.loadImgs(img_id)[0]
+        file_path = os.path.join(self.img_dir, img_info['file_name'])
 
-        # Load (or download) image
-        try:
-            with Image.open(path) as img:
-                image = img.convert('RGB')
-        except Exception:
-            resp = requests.get(info['coco_url'])
-            resp.raise_for_status()
-            makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, 'wb') as f:
-                f.write(resp.content)
-            with Image.open(path) as img:
-                image = img.convert('RGB')
+        # Robust image loading + on-the-fly download if not present
+        for attempt in range(2):  # Try twice: once local, once download
+            try:
+                with Image.open(file_path) as img_file:
+                    image = img_file.convert('RGB')
+                    image = image.copy()
+                break
+            except Exception as e:
+                if attempt == 0:
+                    print(f'Image read error ({file_path}). Attempting to download on the fly.')
+                    url = img_info.get('coco_url', None)
+                    if not url:
+                        raise RuntimeError(f"No coco_url found for image id {img_id}")
+                    response = requests.get(url, timeout=10)
+                    if response.status_code == 200:
+                        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                        with open(file_path, 'wb') as f:
+                            f.write(response.content)
+                    else:
+                        raise RuntimeError(f"Failed to download image: {img_info['file_name']} (status {response.status_code})")
+                else:
+                    raise RuntimeError(f"Could not load or download image: {file_path}")
 
-        if self.transform:
-            image = self.transform(image)
-
-        # Load captions (take first for simplicity)
         ann_ids = self.coco.getAnnIds(imgIds=img_id)
         anns = self.coco.loadAnns(ann_ids)
-        captions = [a['caption'] for a in anns][:1]
+        captions = []
+        for ann in anns:
+            if 'caption' in ann:
+                captions.append(ann['caption'])
+        if len(captions) == 0:
+            captions = [""]
 
+        if self.transform is not None:
+            image = self.transform(image)
+            if image.dim() == 4 and image.size(0) == 1:
+                image = image.squeeze(0)
         return image, captions
 
-    def collate_fn(self, batch):
-        # Use dataset-specific vocab mapping
-        w2i = getattr(self, 'word2idx', None)
-        if w2i is None:
-            raise ValueError("Dataset missing 'word2idx' for collate_fn")
+    @staticmethod
+    def collate_fn(batch, word2idx):
+        images = []
+        all_captions = []
+        for img, caps in batch:
+            images.append(img)
+            # Add <SOS> and <EOS> to every caption!
+            tokenized_captions = [
+                [word2idx['<SOS>']] +
+                [word2idx.get(word, word2idx['<UNK>']) for word in cap.lower().split()] +
+                [word2idx['<EOS>']]
+                for cap in caps
+            ]
+            all_captions.append(tokenized_captions)
 
-        images, cap_lists = zip(*batch)
         images = torch.stack(images, dim=0)
+        max_len = max(len(cap) for caps in all_captions for cap in caps)
+        max_captions = max(len(caps) for caps in all_captions)
 
-        sequences = []
-        for caps in cap_lists:
-            seq = [w2i['<SOS>']]
-            seq += [w2i.get(w.lower(), w2i['<UNK>']) for w in caps[0].split()]
-            seq = seq[:self.max_length]
-            seq.append(w2i['<EOS>'])
-            sequences.append(seq)
+        padded_captions = []
+        for caps in all_captions:
+            padded_caps = [cap + [word2idx['<PAD>']] * (max_len - len(cap)) for cap in caps]
+            num_to_pad = max_captions - len(caps)
+            for _ in range(num_to_pad):
+                padded_caps.append([word2idx['<PAD>']] * max_len)
+            padded_captions.append(torch.tensor(padded_caps))
 
-        max_len = max(len(s) for s in sequences)
-        padded = [s + [w2i['<PAD>']] * (max_len - len(s)) for s in sequences]
-        captions_tensor = torch.tensor(padded, dtype=torch.long)
+        captions_tensor = torch.stack(padded_captions, dim=0)
         return images, captions_tensor
 
+    def collate(self, batch):
+        return self.__class__.collate_fn(batch, self.word2idx)
 
-def build_vocab(dataset, threshold=5):
+def build_vocab(dataset, threshold=1):
     counter = Counter()
-    for _, caps in dataset:
-        for c in caps:
-            counter.update(c.lower().split())
-
+    for i in range(len(dataset)):
+        _, captions = dataset[i]
+        for caption in captions:
+            tokens = caption.lower().split()
+            counter.update(tokens)
     specials = ['<PAD>', '<SOS>', '<EOS>', '<UNK>']
-    words = sorted(w for w, cnt in counter.items() if cnt >= threshold)
-    vocab = specials + words
-    word2idx = {w: i for i, w in enumerate(vocab)}
-    idx2word = {i: w for w, i in word2idx.items()}
+    vocab_words = [word for word, count in counter.items() if count >= threshold]
+    vocab_words = sorted(vocab_words)
+    vocab = specials + vocab_words
+    word2idx = {word: idx for idx, word in enumerate(vocab)}
+    idx2word = {idx: word for idx, word in enumerate(vocab)}
     return word2idx, idx2word
 
-
-def get_transform():
-    return transforms.Compose([
-        transforms.Resize(256),
-        transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize(__norm_mean, __norm_std)
-    ])
-
-
 def loader(transform_fn, task):
-    if task not in ('img-captioning', 'image-captioning'):
-        raise ValueError(f"Task '{task}' not supported by Caption loader")
-
-    try:
-        transform = transform_fn()
-    except TypeError:
-        transform = get_transform()
-
+    if task != 'img-captioning':
+        raise Exception(f"The task '{task}' is not implemented in this file.")
+    transform = transform_fn((__norm_mean, __norm_dev))
     path = join(data_dir, 'coco')
-    train_ds = COCOCaptionDataset(path, 'train', transform)
-    val_ds   = COCOCaptionDataset(path, 'val', transform)
-
-    vocab_path = join(path, 'vocab.pth')
-    if exists(vocab_path):
-        vdata = torch.load(vocab_path)
-        w2i, i2w = vdata['word2idx'], vdata['idx2word']
+    train_dataset = COCOCaptionDataset(transform=transform, root=path, split='train')
+    val_dataset = COCOCaptionDataset(transform=transform, root=path, split='val')
+    vocab_path = os.path.join(path, 'vocab.pth')
+    if os.path.exists(vocab_path):
+        vocab_data = torch.load(vocab_path)
+        word2idx = vocab_data['word2idx']
+        idx2word = vocab_data['idx2word']
     else:
-        w2i, i2w = build_vocab(train_ds, threshold=5)
-        torch.save({'word2idx': w2i, 'idx2word': i2w}, vocab_path)
+        word2idx, idx2word = build_vocab(train_dataset, threshold=1)
+        torch.save({'word2idx': word2idx, 'idx2word': idx2word}, vocab_path)
+    train_dataset.word2idx = word2idx
+    train_dataset.idx2word = idx2word
+    val_dataset.word2idx = word2idx
+    val_dataset.idx2word = idx2word
 
-    for ds in (train_ds, val_ds):
-        ds.word2idx = w2i
-        ds.idx2word = i2w
+    train_dataset.collate_fn = lambda batch: train_dataset.__class__.collate_fn(batch, train_dataset.word2idx)
+    val_dataset.collate_fn = lambda batch: val_dataset.__class__.collate_fn(batch, val_dataset.word2idx)
 
-    vocab_size = len(w2i)
-    return (vocab_size,), minimum_bleu, train_ds, val_ds
+    vocab_size = len(word2idx)
+
+    # Set Net class-level attributes for printing sentences
+    try:
+        from ab.nn.nn.RESNETLSTM import Net as RESNETLSTMNet
+        RESNETLSTMNet.idx2word = idx2word
+        RESNETLSTMNet.eos_index = word2idx['<EOS>']
+    except Exception:
+        pass
+
+    return (vocab_size,), minimum_bleu, train_dataset, val_dataset
