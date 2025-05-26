@@ -1,58 +1,52 @@
 import torch
-from ab.nn.metric.base.base import BaseMetric
-import nltk
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 
-class BLEU(BaseMetric):
-    """
-    Computes BLEU metric scores for image captioning.
-    """
+class BLEUMetric:
     def __init__(self, out_shape=None):
-        # out_shape is not used for BLEU, but included for compatibility
-        super().__init__()
         self.smooth = SmoothingFunction().method1
         self.reset()
-    
+
     def reset(self):
-        """
-        Resets the internal evaluation result to its initial state.
-        """
-        self.scores = []
+        self.scores1 = []  # BLEU-1
+        self.scores2 = []  # BLEU-2
+        self.scores3 = []  # BLEU-3
+        self.scores4 = []  # BLEU-4
 
-    def update(self, preds, labels):
-        """
-        Updates the internal evaluation result for a batch.
-        :param preds: Model predictions. Expected shape: [batch, seq_len, vocab_size] (logits).
-        :param labels: Ground truth labels. Expected shape: [batch, seq_len].
-        """
-        # Convert logits to predicted token indices
-        pred_tokens = torch.argmax(preds, dim=-1)  # shape: [batch, seq_len]
-        pred_tokens = pred_tokens.cpu().tolist()
-        labels = labels.cpu().tolist()
-        
-        # For each predicted caption and its reference, compute the BLEU score.
-        for pred, ref in zip(pred_tokens, labels):
-            score = sentence_bleu([ref], pred, smoothing_function=self.smooth)
-            self.scores.append(score)
-
-    def __call__(self, outputs, targets):
-        """
-        Processes a batch, updates internal scores, and returns the current average BLEU score.
-        """
-        self.update(outputs, targets)
-        return self.result()
+    def __call__(self, preds, labels):
+        # Accepts logits [batch, seq, vocab] or token ids [batch, seq]
+        if preds.dim() == 3:
+            pred_ids = torch.argmax(preds, -1).cpu().tolist()
+        elif preds.dim() == 2:
+            pred_ids = preds.cpu().tolist()
+        else:
+            raise ValueError(f"Preds shape not supported for BLEUMetric: {preds.shape}")
+        # All references for each sample
+        if labels.dim() == 3:
+            targets = labels.cpu().tolist()
+        else:
+            targets = [[t] for t in labels.cpu().tolist()]
+        for p, refs in zip(pred_ids, targets):
+            hyp = [w for w in p if w != 0]
+            filtered_refs = [[w for w in r if w != 0] for r in refs]
+            filtered_refs = [ref for ref in filtered_refs if len(ref) > 0]
+            if filtered_refs:
+                self.scores1.append(sentence_bleu(filtered_refs, hyp, weights=(1, 0, 0, 0), smoothing_function=self.smooth))
+                self.scores2.append(sentence_bleu(filtered_refs, hyp, weights=(0.5, 0.5, 0, 0), smoothing_function=self.smooth))
+                self.scores3.append(sentence_bleu(filtered_refs, hyp, weights=(0.33, 0.33, 0.33, 0), smoothing_function=self.smooth))
+                self.scores4.append(sentence_bleu(filtered_refs, hyp, weights=(0.25, 0.25, 0.25, 0.25), smoothing_function=self.smooth))
 
     def result(self):
-        """
-        Computes and returns the average BLEU score.
-        """
-        if not self.scores:
-            return 0.0
-        result_val = sum(self.scores) / len(self.scores)
-        if result_val is None:
-            return 0.0
-        return result_val
+        # Return BLEU-4 for Optuna/your pipeline
+        return float(sum(self.scores4)) / max(len(self.scores4), 1)
 
+    def get_all(self):
+        # For manual evaluation/logging if you want
+        return {
+            'BLEU-1': float(sum(self.scores1)) / max(len(self.scores1), 1),
+            'BLEU-2': float(sum(self.scores2)) / max(len(self.scores2), 1),
+            'BLEU-3': float(sum(self.scores3)) / max(len(self.scores3), 1),
+            'BLEU-4': float(sum(self.scores4)) / max(len(self.scores4), 1)
+        }
 
 def create_metric(out_shape=None):
-    return BLEU(out_shape)
+    return BLEUMetric(out_shape)
