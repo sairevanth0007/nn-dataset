@@ -1,9 +1,12 @@
 import argparse
 import datetime
 import gc
+import hashlib
 import importlib.util
 import inspect
 import random
+import re
+
 import torch
 from os import makedirs, remove
 from os.path import exists
@@ -19,7 +22,8 @@ def create_file(file_dir, file_name, content=''):
     file_path = file_dir / file_name
     if not exists(file_path):
         makedirs(file_dir, exist_ok=True)
-    else: remove(file_path)
+    else:
+        remove(file_path)
     with open(file_path, 'w') as file:
         file.write(content if content else '')
     return file_path
@@ -97,6 +101,10 @@ def good(result, minimum_accuracy, duration):
     return result > minimum_accuracy * 1.2
 
 
+def uuid4(obj):
+    s = re.sub('\\s', '', str(obj))
+    res = hashlib.md5(s.encode())
+    return res.hexdigest()
 
 
 def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max, dropout_min, dropout_max):

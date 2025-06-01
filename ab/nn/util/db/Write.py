@@ -1,15 +1,7 @@
 import json
-import hashlib
-import re
 
 from ab.nn.util.Util import *
 from ab.nn.util.db.Init import init_db, sql_conn, close_conn
-
-
-def uuid4(obj):
-    s= re.sub('\\s', '', str(obj))
-    res = hashlib.md5(s.encode())
-    return res.hexdigest()
 
 
 def init_population():
@@ -19,7 +11,7 @@ def init_population():
 
 
 def code_to_db(cursor, table_name, code=None, code_file=None, force_name = None):
-    # If model does not exist, insert it with a new UUID
+    # If the model does not exist, insert it with a new UUID
     if code_file:
         nm = code_file.stem 
     elif force_name is None:
