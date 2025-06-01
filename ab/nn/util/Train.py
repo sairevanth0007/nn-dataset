@@ -157,7 +157,7 @@ class Train:
             raise ValueError(f"Metric '{metric_name}' not found. Ensure a corresponding file and function exist. Ensure the metric module has create_metric()") \
                 from e
 
-    def train_n_eval(self, num_epochs, nn_code):
+    def train_n_eval(self, num_epochs):
         """ Training and evaluation """
 
         start_time = time.time_ns()
@@ -179,7 +179,8 @@ class Train:
                                         f"Accuracy is too low: {accuracy}."
                                         f" The minimum accepted accuracy for the '{self.config[1]}"
                                         f"' dataset is {self.minimum_accuracy}.")
-            prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4(nn_code)})
+            prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy})
+            prm = merge_prm(self.prm, {'uid': DB_Write.uuid4(prm)})
             if self.save_to_db:
                 if self.is_code:  # We don't want the filename contain full codes
                     if self.save_path is None:

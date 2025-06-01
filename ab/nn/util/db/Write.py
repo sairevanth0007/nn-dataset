@@ -1,13 +1,13 @@
 import json
-import uuid
 import hashlib
+import re
 
 from ab.nn.util.Util import *
 from ab.nn.util.db.Init import init_db, sql_conn, close_conn
 
 
-def uuid4(nn_code: str):
-    s= nn_code.replace(" ", "").replace("\n", "").replace("\r", "")
+def uuid4(obj):
+    s= re.sub('\\s', '', str(obj))
     res = hashlib.md5(s.encode())
     return res.hexdigest()
 

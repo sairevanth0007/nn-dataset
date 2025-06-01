@@ -97,6 +97,8 @@ def good(result, minimum_accuracy, duration):
     return result > minimum_accuracy * 1.2
 
 
+
+
 def validate_prm(batch_min, batch_max, lr_min, lr_max, momentum_min, momentum_max, dropout_min, dropout_max):
     if batch_min and batch_max and batch_min > batch_max: raise Exception(f"min_batch_binary_power {batch_min} > max_batch_binary_power {batch_max}")
     if lr_min and lr_max and lr_min > lr_max: raise Exception(f"min_learning_rate {lr_min} > max_learning_rate {lr_max}")
