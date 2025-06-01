@@ -157,7 +157,7 @@ class Train:
             raise ValueError(f"Metric '{metric_name}' not found. Ensure a corresponding file and function exist. Ensure the metric module has create_metric()") \
                 from e
 
-    def train_n_eval(self, num_epochs):
+    def train_n_eval(self, num_epochs, nn_code):
         """ Training and evaluation """
 
         start_time = time.time_ns()
@@ -179,7 +179,7 @@ class Train:
                                         f"Accuracy is too low: {accuracy}."
                                         f" The minimum accepted accuracy for the '{self.config[1]}"
                                         f"' dataset is {self.minimum_accuracy}.")
-            prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
+            prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4(nn_code)})
             if self.save_to_db:
                 if self.is_code:  # We don't want the filename contain full codes
                     if self.save_path is None:
@@ -228,7 +228,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
     return:
         (str, float): Name of the model and the accuracy
     """
-    model_name = DB_Write.uuid4()
+    model_name = DB_Write.uuid4(nn_code)
     if prefix:
         model_name = prefix + "-" + model_name  # Create temporal name for processing
 
@@ -262,7 +262,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
             is_code=True,
             save_path=save_path)
         epoch = prm['epoch']
-        result, duration = trainer.train_n_eval(epoch)
+        result, duration = trainer.train_n_eval(epoch, nn_code)
         if save_to_db:
             # if result fits the requirement, save the model to database
             if good(result, minimum_accuracy, duration):
