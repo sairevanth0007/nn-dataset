@@ -1,12 +1,15 @@
 import json
 import uuid
+import hashlib
 
 from ab.nn.util.Util import *
 from ab.nn.util.db.Init import init_db, sql_conn, close_conn
 
 
-def uuid4():
-    return str(uuid.uuid4())
+def uuid4(nn_code: str):
+    s= nn_code.replace(" ", "").replace("\n", "").replace("\r", "")
+    res = hashlib.md5(s.encode())
+    return res.hexdigest()
 
 
 def init_population():
@@ -20,7 +23,7 @@ def code_to_db(cursor, table_name, code=None, code_file=None, force_name = None)
     if code_file:
         nm = code_file.stem 
     elif force_name is None:
-        nm = uuid4()
+        nm = uuid4(code)
     else:
         nm = force_name
     if not code:
