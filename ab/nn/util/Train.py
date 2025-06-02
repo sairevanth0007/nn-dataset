@@ -179,7 +179,8 @@ class Train:
                                         f"Accuracy is too low: {accuracy}."
                                         f" The minimum accepted accuracy for the '{self.config[1]}"
                                         f"' dataset is {self.minimum_accuracy}.")
-            prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy, 'uid': DB_Write.uuid4()})
+            prm = merge_prm(self.prm, {'duration': duration, 'accuracy': accuracy})
+            prm = merge_prm(self.prm, {'uid': uuid4(prm)})
             if self.save_to_db:
                 if self.is_code:  # We don't want the filename contain full codes
                     if self.save_path is None:
@@ -228,7 +229,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
     return:
         (str, float): Name of the model and the accuracy
     """
-    model_name = DB_Write.uuid4()
+    model_name = uuid4(nn_code)
     if prefix:
         model_name = prefix + "-" + model_name  # Create temporal name for processing
 
@@ -264,7 +265,7 @@ def train_new(nn_code, task, dataset, metric, prm, save_to_db=True, prefix: Unio
         epoch = prm['epoch']
         result, duration = trainer.train_n_eval(epoch)
         if save_to_db:
-            # if result fits the requirement, save the model to database
+            # If the result meets the requirements, save the model to the database.
             if good(result, minimum_accuracy, duration):
                 model_name = DB_Write.save_nn(nn_code, task, dataset, metric, epoch, prm, force_name=model_name)
                 print(f"Model saved to database with accuracy: {result}")
