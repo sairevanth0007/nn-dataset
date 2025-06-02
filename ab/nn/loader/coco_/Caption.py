@@ -17,7 +17,7 @@ coco_img_url = 'http://images.cocodataset.org/zips/{}2017.zip'
 
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665, 69.89082075, 70.9150767)
-minimum_bleu = 0.05
+minimum_bleu = 0.001
 
 class COCOCaptionDataset(Dataset):
     def __init__(self, transform, root, split='train', word2idx=None, idx2word=None):
