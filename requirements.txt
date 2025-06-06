@@ -12,6 +12,7 @@ requests~=2.32.3
 pillow>=11.0.0
 setuptools<=80.0.0
 nltk>=3.9.1
+gdown
 
 # For the code evaluator
 flake8~=7.1.1
