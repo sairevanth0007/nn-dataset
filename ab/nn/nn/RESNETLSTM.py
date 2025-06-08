@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torchvision
 
 def supported_hyperparameters():
     # Supported hyperparameters for Optuna or manual tuning
