@@ -10,14 +10,16 @@ from PIL import Image
 from pycocotools.coco import COCO
 from torchvision.datasets.utils import download_and_extract_archive
 
+from nltk.tokenize import word_tokenize
 from ab.nn.util.Const import data_dir
+GLOBAL_CAPTION_VOCAB = {}
 
 coco_ann_url = 'http://images.cocodataset.org/annotations/annotations_trainval2017.zip'
 coco_img_url = 'http://images.cocodataset.org/zips/{}2017.zip'
 
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665, 69.89082075, 70.9150767)
-minimum_bleu = 0.001
+minimum_bleu = 0.05
 
 class COCOCaptionDataset(Dataset):
     def __init__(self, transform, root, split='train', word2idx=None, idx2word=None):
@@ -62,8 +64,7 @@ class COCOCaptionDataset(Dataset):
         img_info = self.coco.loadImgs(img_id)[0]
         file_path = os.path.join(self.img_dir, img_info['file_name'])
 
-        # Robust image loading + on-the-fly download if not present
-        for attempt in range(2):  # Try twice: once local, once download
+        for attempt in range(2):  
             try:
                 with Image.open(file_path) as img_file:
                     image = img_file.convert('RGB')
@@ -106,10 +107,10 @@ class COCOCaptionDataset(Dataset):
         all_captions = []
         for img, caps in batch:
             images.append(img)
-            # Add <SOS> and <EOS> to every caption!
+
             tokenized_captions = [
                 [word2idx['<SOS>']] +
-                [word2idx.get(word, word2idx['<UNK>']) for word in cap.lower().split()] +
+                [word2idx.get(word, word2idx['<UNK>']) for word in word_tokenize(cap.lower())] +
                 [word2idx['<EOS>']]
                 for cap in caps
             ]
@@ -133,12 +134,12 @@ class COCOCaptionDataset(Dataset):
     def collate(self, batch):
         return self.__class__.collate_fn(batch, self.word2idx)
 
-def build_vocab(dataset, threshold=1):
+def build_vocab(dataset, threshold=5):
     counter = Counter()
     for i in range(len(dataset)):
         _, captions = dataset[i]
         for caption in captions:
-            tokens = caption.lower().split()
+            tokens = word_tokenize(caption.lower())
             counter.update(tokens)
     specials = ['<PAD>', '<SOS>', '<EOS>', '<UNK>']
     vocab_words = [word for word, count in counter.items() if count >= threshold]
@@ -155,6 +156,9 @@ def loader(transform_fn, task):
     path = join(data_dir, 'coco')
     train_dataset = COCOCaptionDataset(transform=transform, root=path, split='train')
     val_dataset = COCOCaptionDataset(transform=transform, root=path, split='val')
+    # Reduce validation set size for fast debugging
+    val_dataset.ids = val_dataset.ids[:500]
+    
     vocab_path = os.path.join(path, 'vocab.pth')
     if os.path.exists(vocab_path):
         vocab_data = torch.load(vocab_path)
@@ -168,6 +172,9 @@ def loader(transform_fn, task):
     val_dataset.word2idx = word2idx
     val_dataset.idx2word = idx2word
 
+    GLOBAL_CAPTION_VOCAB['word2idx'] = word2idx
+    GLOBAL_CAPTION_VOCAB['idx2word'] = idx2word
+    
     train_dataset.collate_fn = lambda batch: train_dataset.__class__.collate_fn(batch, train_dataset.word2idx)
     val_dataset.collate_fn = lambda batch: val_dataset.__class__.collate_fn(batch, val_dataset.word2idx)
 
@@ -178,6 +185,13 @@ def loader(transform_fn, task):
         from ab.nn.nn.RESNETLSTM import Net as RESNETLSTMNet
         RESNETLSTMNet.idx2word = idx2word
         RESNETLSTMNet.eos_index = word2idx['<EOS>']
+    except Exception:
+        pass
+    
+    try:
+        from ab.nn.nn.CNNTransformer import Net as CNNTransformerNet
+        CNNTransformerNet.word2idx = word2idx
+        CNNTransformerNet.idx2word = idx2word
     except Exception:
         pass
 

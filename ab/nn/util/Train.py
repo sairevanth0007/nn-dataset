@@ -196,6 +196,12 @@ class Train:
 
     def eval(self, test_loader):
         """Evaluation with standardized metric interface"""
+        for inputs, labels in test_loader:
+            print(f"[EVAL DEBUG] labels type: {type(labels)}")
+            if isinstance(labels, torch.Tensor):
+                print(f"[EVAL DEBUG] labels shape: {labels.shape}")
+            else:
+                print(f"[EVAL DEBUG] labels sample: {labels[:2]}")
         self.model.eval()
 
         # Reset the metric at the start of evaluation
