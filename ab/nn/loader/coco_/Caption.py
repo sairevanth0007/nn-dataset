@@ -19,7 +19,7 @@ coco_img_url = 'http://images.cocodataset.org/zips/{}2017.zip'
 
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665, 69.89082075, 70.9150767)
-minimum_bleu = 0.005
+minimum_bleu = 0.05
 
 class COCOCaptionDataset(Dataset):
     def __init__(self, transform, root, split='train', word2idx=None, idx2word=None):
@@ -64,8 +64,7 @@ class COCOCaptionDataset(Dataset):
         img_info = self.coco.loadImgs(img_id)[0]
         file_path = os.path.join(self.img_dir, img_info['file_name'])
 
-        # Robust image loading + on-the-fly download if not present
-        for attempt in range(2):  # Try twice: once local, once download
+        for attempt in range(2):  
             try:
                 with Image.open(file_path) as img_file:
                     image = img_file.convert('RGB')
@@ -91,11 +90,8 @@ class COCOCaptionDataset(Dataset):
         anns = self.coco.loadAnns(ann_ids)
         captions = []
         for ann in anns:
-            cap = ann.get('caption', "")
-            if isinstance(cap, str):
-                captions.append(cap)
-            else:
-                captions.append(str(cap))
+            if 'caption' in ann:
+                captions.append(ann['caption'])
         if len(captions) == 0:
             captions = [""]
 
@@ -111,18 +107,13 @@ class COCOCaptionDataset(Dataset):
         all_captions = []
         for img, caps in batch:
             images.append(img)
-            # Defensive: ensure caps is a list
-            if not isinstance(caps, list):
-                caps = [caps]
-            tokenized_captions = []
-            for cap in caps:
-                # Defensive: ensure each caption is a string
-                if not isinstance(cap, str):
-                    cap = str(cap)
-                # Now tokenize and convert to indices
-                words = word_tokenize(cap.lower())
-                tokens = [word2idx['<SOS>']] + [word2idx.get(word, word2idx['<UNK>']) for word in words] + [word2idx['<EOS>']]
-                tokenized_captions.append(tokens)
+
+            tokenized_captions = [
+                [word2idx['<SOS>']] +
+                [word2idx.get(word, word2idx['<UNK>']) for word in word_tokenize(cap.lower())] +
+                [word2idx['<EOS>']]
+                for cap in caps
+            ]
             all_captions.append(tokenized_captions)
 
         images = torch.stack(images, dim=0)
@@ -135,11 +126,9 @@ class COCOCaptionDataset(Dataset):
             num_to_pad = max_captions - len(caps)
             for _ in range(num_to_pad):
                 padded_caps.append([word2idx['<PAD>']] * max_len)
-            padded_captions.append(torch.tensor(padded_caps, dtype=torch.long))
+            padded_captions.append(torch.tensor(padded_caps))
 
-        captions_tensor = torch.stack(padded_captions, dim=0)  # [batch, max_caps, max_len]
-        #print(f"[DLOADER] images shape: {images.shape}, captions_tensor shape: {captions_tensor.shape}, dtype: {captions_tensor.dtype}")
-        #print(f"[DLOADER] captions_tensor type: {type(captions_tensor)}, first entry: {captions_tensor[0,0,:5]}")
+        captions_tensor = torch.stack(padded_captions, dim=0)
         return images, captions_tensor
 
     def collate(self, batch):
@@ -168,7 +157,7 @@ def loader(transform_fn, task):
     train_dataset = COCOCaptionDataset(transform=transform, root=path, split='train')
     val_dataset = COCOCaptionDataset(transform=transform, root=path, split='val')
     # Reduce validation set size for fast debugging
-    val_dataset.ids = val_dataset.ids[:100]
+    val_dataset.ids = val_dataset.ids[:500]
     
     vocab_path = os.path.join(path, 'vocab.pth')
     if os.path.exists(vocab_path):
@@ -199,13 +188,11 @@ def loader(transform_fn, task):
     except Exception:
         pass
     
-    # This block is after train_dataset.word2idx = word2idx etc.
     try:
         from ab.nn.nn.CNNTransformer import Net as CNNTransformerNet
         CNNTransformerNet.word2idx = word2idx
         CNNTransformerNet.idx2word = idx2word
     except Exception:
         pass
-
 
     return (vocab_size,), minimum_bleu, train_dataset, val_dataset
