@@ -36,11 +36,11 @@ class BLEUMetric:
                 self.scores4.append(sentence_bleu(filtered_refs, hyp, weights=(0.25, 0.25, 0.25, 0.25), smoothing_function=self.smooth))
 
     def result(self):
-        # Return BLEU-4 for Optuna/your pipeline
+        # Return BLEU-4 for Optuna/pipeline
         return float(sum(self.scores4)) / max(len(self.scores4), 1)
 
     def get_all(self):
-        # For manual evaluation/logging if you want
+
         return {
             'BLEU-1': float(sum(self.scores1)) / max(len(self.scores1), 1),
             'BLEU-2': float(sum(self.scores2)) / max(len(self.scores2), 1),
