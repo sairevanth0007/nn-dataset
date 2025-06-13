@@ -74,10 +74,10 @@ def data(
         if not only_best_accuracy:
             cur.execute(
                 f"""
-                SELECT s.task, s.dataset, s.metric, m.code AS metric_code,
-                       s.nn, n.code AS nn_code, s.epoch, s.accuracy, s.duration,
+                SELECT s.task, s.dataset, s.metric, m.code AS metric_code, m.id AS metric_id,
+                       s.nn, n.code AS nn_code, n.id AS nn_id, s.epoch, s.accuracy, s.duration,
                        s.id   AS stat_id, s.prm  AS stat_prm,
-                       t.code AS transform_code, s.transform
+                       t.code AS transform_code, t.id AS transform_id, s.transform
                 FROM   stat s
                 LEFT JOIN nn      n ON s.nn      = n.name
                 LEFT JOIN metric  m ON s.metric  = m.name
@@ -104,9 +104,9 @@ def data(
                     FROM   filtered
                     GROUP  BY task, dataset, metric, nn, epoch
                 )
-                SELECT f.task, f.dataset, f.metric, m.code AS metric_code,
-                       f.nn, n.code AS nn_code, f.epoch, f.accuracy, f.duration,
-                       f.stat_id, f.stat_prm, t.code AS transform_code, f.transform
+                SELECT f.task, f.dataset, f.metric, m.code AS metric_code,  m.id AS metric_id,
+                       f.nn, n.code AS nn_code, n.id AS nn_id,, f.epoch, f.accuracy, f.duration,
+                       f.stat_id, f.stat_prm, t.code AS transform_code, t.id AS transform_id, f.transform
                 FROM   filtered  f
                 JOIN   best      b ON f.task = b.task
                                    AND f.dataset = b.dataset
