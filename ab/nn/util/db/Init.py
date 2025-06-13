@@ -20,7 +20,8 @@ def create_code_table(name, cursor):
     cursor.execute(f"""
     CREATE TABLE IF NOT EXISTS {name} (
         name TEXT PRIMARY KEY,
-        code TEXT NOT NULL)""")
+        code TEXT NOT NULL,
+        id TEXT NOT NULL)""")
 
 def create_param_table(name, cursor):
     cursor.execute(f"""

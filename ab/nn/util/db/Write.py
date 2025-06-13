@@ -21,6 +21,7 @@ def code_to_db(cursor, table_name, code=None, code_file=None, force_name = None)
     if not code:
         with open(code_file, 'r') as file:
             code = file.read()
+    id_val = uuid4(code)
     # Check if the model exists in the database
     cursor.execute(f"SELECT code FROM {table_name} WHERE name = ?", (nm,))
     existing_entry = cursor.fetchone()
@@ -29,9 +30,9 @@ def code_to_db(cursor, table_name, code=None, code_file=None, force_name = None)
         existing_code = existing_entry[0]
         if existing_code != code:
             print(f"Updating code for model: {nm}")
-            cursor.execute("UPDATE nn SET code = ? WHERE name = ?", (code, nm))
+            cursor.execute("UPDATE nn SET code = ?, id = ? WHERE name = ?", (code, id_val, nm))
     else:
-        cursor.execute(f"INSERT INTO {table_name} (name, code) VALUES (?, ?)", (nm, code))
+        cursor.execute(f"INSERT INTO {table_name} (name, code, id) VALUES (?, ?, ?)", (nm, code, id_val))
     return nm
 
 
