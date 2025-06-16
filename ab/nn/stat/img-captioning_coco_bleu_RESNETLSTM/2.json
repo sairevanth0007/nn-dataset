@@ -1,5 +1,41 @@
 [
     {
+        "accuracy": 0.17289756629999486,
+        "batch": 64,
+        "duration": 1177755849326,
+        "lr": 0.0009410756275281434,
+        "momentum": 0.9443187162907026,
+        "transform": "norm_299_flip",
+        "uid": "5d9cae75fb5bcaada9a63095d43b1745"
+    },
+    {
+        "accuracy": 0.1605721164135969,
+        "batch": 32,
+        "duration": 1072989699890,
+        "lr": 0.000361479899043112,
+        "momentum": 0.9777239735869752,
+        "transform": "norm_299",
+        "uid": "7ed61dbc1fc22f568bb6e8e0675d74ca"
+    },
+    {
+        "accuracy": 0.15138973925057694,
+        "batch": 64,
+        "duration": 1440818287522,
+        "lr": 0.00040293519563929664,
+        "momentum": 0.9684954221553451,
+        "transform": "norm_299_flip",
+        "uid": "e9dbe6b455baa75def3f9eecbc44fb17"
+    },
+    {
+        "accuracy": 0.14486948175828837,
+        "batch": 64,
+        "duration": 1179259248585,
+        "lr": 0.00020242870950147268,
+        "momentum": 0.9300818162063017,
+        "transform": "norm_299_flip",
+        "uid": "efd2a4bf4e7181160b7f033634ece299"
+    },
+    {
         "accuracy": 0.14252570951379018,
         "batch": 32,
         "duration": 1255848237307,
@@ -63,6 +99,15 @@
         "uid": "0808e6e8af4e596863cfe6095908e5af"
     },
     {
+        "accuracy": 0.13170858634167065,
+        "batch": 64,
+        "duration": 1305605579280,
+        "lr": 0.00024028414598325855,
+        "momentum": 0.9486516726845737,
+        "transform": "norm_299_flip",
+        "uid": "a9ab71dcd48ae878d7d6e82bb9832929"
+    },
+    {
         "accuracy": 0.13167463634293328,
         "batch": 64,
         "duration": 1311619826978,
@@ -70,6 +115,15 @@
         "momentum": 0.7235596996321214,
         "transform": "norm_299",
         "uid": "ba6000af6a2690bc342faeb0f161bed7"
+    },
+    {
+        "accuracy": 0.1299930003599061,
+        "batch": 64,
+        "duration": 1304900168344,
+        "lr": 0.00037652723229472966,
+        "momentum": 0.9828928258640758,
+        "transform": "norm_299_flip",
+        "uid": "1b244feba02cd617295a21ce55872ef5"
     },
     {
         "accuracy": 0.12671024686852275,
