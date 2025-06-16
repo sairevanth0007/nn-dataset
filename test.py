@@ -80,7 +80,7 @@ class Testing(unittest.TestCase):
     def test_data(self):
         all_rows = DB_Read.data()
         img_rows = DB_Read.data(task="img-classification", nn=default_nn_name)
-        img_3_rows = DB_Read.data(task="img-classification", nn=default_nn_name, max_rows=3)
+        img_3_rows = DB_Read.data(task="img-classification", nn=default_nn_name, max_rows=3, only_best_accuracy=True)
         print(img_3_rows)
         self.assertGreater(len(all_rows), len(img_rows))
         self.assertGreater(len(img_rows), len(img_3_rows))
