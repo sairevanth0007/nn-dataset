@@ -9,7 +9,7 @@
         "norm_eps": 0.03634550127418923,
         "norm_momentum": 0.7546362253959097,
         "transform": "echo_256",
-        "uid": "0f993e76-5b8c-4948-bb2e-12bc59b545fb"
+        "uid": "d8396b639e575b531ca3b7cc22fcb176"
     },
     {
         "accuracy": 0.29503184713375796,
@@ -21,7 +21,7 @@
         "norm_eps": 0.11369383818872358,
         "norm_momentum": 0.19070827825582193,
         "transform": "norm_512",
-        "uid": "573e2f48-4b13-4ecd-b6c7-05c64c18418d"
+        "uid": "4ae09e387e8ef4e64e1d55845a87a679"
     },
     {
         "accuracy": 0.267515923566879,
@@ -33,7 +33,7 @@
         "norm_eps": 0.039324940145354925,
         "norm_momentum": 0.30030585772572393,
         "transform": "echo_32_flip",
-        "uid": "34450301-8e38-4a05-a148-94e750733ad5"
+        "uid": "95f02a4c9002970a287695dd84a3b901"
     },
     {
         "accuracy": 0.2522292993630573,
@@ -45,7 +45,7 @@
         "norm_eps": 0.13743305245343596,
         "norm_momentum": 0.09829802907490648,
         "transform": "echo_256",
-        "uid": "6b0099f2-e9f0-47fe-85b0-268fcccfb1f9"
+        "uid": "d8b62d56cef1c1b9df0cfd06c915ffac"
     },
     {
         "accuracy": 0.21426751592356688,
@@ -57,7 +57,7 @@
         "norm_eps": 0.0019406367787009188,
         "norm_momentum": 0.1638936380423185,
         "transform": "norm_256",
-        "uid": "7c9dc2d6-6f4e-4dcf-a7c5-578d4e8ca03e"
+        "uid": "629c006b9b3d91fa7d77af8ee0979726"
     },
     {
         "accuracy": 0.19286624203821656,
@@ -69,7 +69,7 @@
         "norm_eps": 0.05367204342367338,
         "norm_momentum": 0.34094486438683824,
         "transform": "echo_64_flip",
-        "uid": "6dbfb876-d9ba-452a-b452-a4e29802c55b"
+        "uid": "2fddc4789d502f9a5dfcb5e8176859d8"
     },
     {
         "accuracy": 0.18904458598726115,
@@ -81,7 +81,7 @@
         "norm_eps": 0.14279445308246286,
         "norm_momentum": 0.9902560822765174,
         "transform": "echo_299_flip",
-        "uid": "36bf2d4b-fe62-4b08-9652-6e0efe575e60"
+        "uid": "29faa9227b9050530a2f154ac03ae354"
     },
     {
         "accuracy": 0.18828025477707006,
@@ -93,7 +93,7 @@
         "norm_eps": 0.08445553323258287,
         "norm_momentum": 0.21568742431103227,
         "transform": "norm_256",
-        "uid": "3e4d1528-6df7-45f2-bfbd-74ab2e3ec1fc"
+        "uid": "690b60ad824e8c6604bf1af47976a656"
     },
     {
         "accuracy": 0.1686624203821656,
@@ -105,7 +105,7 @@
         "norm_eps": 0.07977805041698438,
         "norm_momentum": 0.8964386014906185,
         "transform": "norm_512_flip",
-        "uid": "3d7a04b9-a395-4b5d-a511-e66b4ce069e2"
+        "uid": "a7c1e8b9749169e12cec4d268a5208de"
     },
     {
         "accuracy": 0.16203821656050954,
@@ -117,7 +117,7 @@
         "norm_eps": 0.041280968391688266,
         "norm_momentum": 0.38881313677511686,
         "transform": "norm_299",
-        "uid": "9ee1705d-2667-4eef-a559-b56eaa9a8469"
+        "uid": "c06fe8f9bf9202c67c9004ebc664e5de"
     },
     {
         "accuracy": 0.15745222929936306,
@@ -129,7 +129,7 @@
         "norm_eps": 0.19603563913315947,
         "norm_momentum": 0.13491365345434858,
         "transform": "norm_299_flip",
-        "uid": "8488376d-325d-4476-82fd-b51898fb3901"
+        "uid": "56a51ae6633d650bac619305bc303493"
     },
     {
         "accuracy": 0.10420382165605095,
@@ -141,7 +141,7 @@
         "norm_eps": 0.599999885498402,
         "norm_momentum": 0.3826903995883749,
         "transform": "echo_256",
-        "uid": "9c6924db-442c-404f-8dc0-3a3bb3dfd42d"
+        "uid": "085ccc614afb3b76305bf9e6d2e8aea4"
     },
     {
         "accuracy": 0.10420382165605095,
@@ -153,7 +153,7 @@
         "norm_eps": 0.806652674574037,
         "norm_momentum": 0.3008098593076085,
         "transform": "norm_512",
-        "uid": "7bd799a1-52a0-4d32-badd-f43d38c02a02"
+        "uid": "c87fcbe3eabb85622450938fad2fe820"
     },
     {
         "accuracy": 0.10318471337579618,
@@ -165,7 +165,7 @@
         "norm_eps": 0.06779496760647563,
         "norm_momentum": 0.8043926009666165,
         "transform": "norm_299",
-        "uid": "1a0d1d8c-a840-445c-a1fc-91dfa1b2377a"
+        "uid": "085edbdcf499681684a59e7f75326010"
     },
     {
         "accuracy": 0.10165605095541401,
@@ -177,7 +177,7 @@
         "norm_eps": 0.7136499404613258,
         "norm_momentum": 0.15007406036337523,
         "transform": "echo_64_flip",
-        "uid": "1b85c4ae-8acb-40df-b8b7-68520266bc5e"
+        "uid": "300f92610cf181d583dab6fad976e90e"
     },
     {
         "accuracy": 0.10165605095541401,
@@ -189,7 +189,7 @@
         "norm_eps": 0.8007556822658629,
         "norm_momentum": 0.306308341650266,
         "transform": "echo_32_flip",
-        "uid": "4d123913-3521-4809-8653-4bf65053a490"
+        "uid": "5847b6bdd891f72aa7c4c8512716cf5a"
     },
     {
         "accuracy": 0.10165605095541401,
@@ -201,7 +201,7 @@
         "norm_eps": 0.8673663509617003,
         "norm_momentum": 0.10255242302272771,
         "transform": "echo_256_flip",
-        "uid": "fd4a9239-dc37-4fdb-8b19-9a4ff45cc95b"
+        "uid": "83afd1ac3e21f0224dd1ef96738bd16e"
     },
     {
         "accuracy": 0.10063694267515924,
@@ -213,7 +213,7 @@
         "norm_eps": 0.7196860817632171,
         "norm_momentum": 0.28201843756696743,
         "transform": "echo_128",
-        "uid": "e6d91f0d-e6b5-4959-93b9-1b16fdcbb6da"
+        "uid": "a6ac3aade06e3c5004101528f4a8519e"
     },
     {
         "accuracy": 0.10063694267515924,
@@ -225,7 +225,7 @@
         "norm_eps": 0.5618395465434959,
         "norm_momentum": 0.30400061869896333,
         "transform": "norm_64_flip",
-        "uid": "b9b49ef2-6c75-4eb0-bb16-4c45b775153e"
+        "uid": "e857acf918ba1718f11ef93a6dcd328c"
     },
     {
         "accuracy": 0.10038216560509554,
@@ -237,7 +237,7 @@
         "norm_eps": 0.7764753287571438,
         "norm_momentum": 0.587388080018493,
         "transform": "echo_128_flip",
-        "uid": "d6645bf7-3d52-4ecb-a2dc-01754c8f66b5"
+        "uid": "07704abdfc8178d1e30cde2bd3ee582e"
     },
     {
         "accuracy": 0.10038216560509554,
@@ -249,6 +249,6 @@
         "norm_eps": 0.42689993172009044,
         "norm_momentum": 0.9722138757886684,
         "transform": "norm_512",
-        "uid": "7d28cf27-6482-40c1-9b20-e941171471d4"
+        "uid": "3cbc8720f0aa2554d4d0ccfadc3c83ac"
     }
 ]
