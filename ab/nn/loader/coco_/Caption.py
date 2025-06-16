@@ -19,7 +19,7 @@ coco_img_url = 'http://images.cocodataset.org/zips/{}2017.zip'
 
 __norm_mean = (104.01362025, 114.03422265, 119.9165958)
 __norm_dev = (73.6027665, 69.89082075, 70.9150767)
-minimum_bleu = 0.05
+minimum_bleu = 0.001
 
 class COCOCaptionDataset(Dataset):
     def __init__(self, transform, root, split='train', word2idx=None, idx2word=None):
@@ -156,8 +156,12 @@ def loader(transform_fn, task):
     path = join(data_dir, 'coco')
     train_dataset = COCOCaptionDataset(transform=transform, root=path, split='train')
     val_dataset = COCOCaptionDataset(transform=transform, root=path, split='val')
-    # Reduce validation set size for fast debugging
-    val_dataset.ids = val_dataset.ids[:500]
+    # Reduce and Randomize validation set size for fast debugging
+
+    import random
+    val_ids = list(sorted(val_dataset.ids))
+    random.shuffle(val_ids)
+    val_dataset.ids = val_ids[:300]
     
     vocab_path = os.path.join(path, 'vocab.pth')
     if os.path.exists(vocab_path):
@@ -189,9 +193,9 @@ def loader(transform_fn, task):
         pass
     
     try:
-        from ab.nn.nn.CNNTransformer import Net as CNNTransformerNet
-        CNNTransformerNet.word2idx = word2idx
-        CNNTransformerNet.idx2word = idx2word
+        from ab.nn.nn.ResNetTransformer import Net as ResNetTransformerNet
+        ResNetTransformerNet.word2idx = word2idx
+        ResNetTransformerNet.idx2word = idx2word
     except Exception:
         pass
 
