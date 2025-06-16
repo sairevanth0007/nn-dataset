@@ -29,18 +29,19 @@ class BLEUMetric:
             hyp = [w for w in p if w != 0]
             filtered_refs = [[w for w in r if w != 0] for r in refs]
             filtered_refs = [ref for ref in filtered_refs if len(ref) > 0]
-            if filtered_refs:
-                self.scores1.append(sentence_bleu(filtered_refs, hyp, weights=(1, 0, 0, 0), smoothing_function=self.smooth))
-                self.scores2.append(sentence_bleu(filtered_refs, hyp, weights=(0.5, 0.5, 0, 0), smoothing_function=self.smooth))
-                self.scores3.append(sentence_bleu(filtered_refs, hyp, weights=(0.33, 0.33, 0.33, 0), smoothing_function=self.smooth))
-                self.scores4.append(sentence_bleu(filtered_refs, hyp, weights=(0.25, 0.25, 0.25, 0.25), smoothing_function=self.smooth))
+            if not filtered_refs:
+                print("[BLEUMetric WARN] Empty reference for sample; this should not happen often.")
+                continue
+            self.scores1.append(sentence_bleu(filtered_refs, hyp, weights=(1, 0, 0, 0), smoothing_function=self.smooth))
+            self.scores2.append(sentence_bleu(filtered_refs, hyp, weights=(0.5, 0.5, 0, 0), smoothing_function=self.smooth))
+            self.scores3.append(sentence_bleu(filtered_refs, hyp, weights=(0.33, 0.33, 0.33, 0), smoothing_function=self.smooth))
+            self.scores4.append(sentence_bleu(filtered_refs, hyp, weights=(0.25, 0.25, 0.25, 0.25), smoothing_function=self.smooth))
 
     def result(self):
         # Return BLEU-4 for Optuna/pipeline
         return float(sum(self.scores4)) / max(len(self.scores4), 1)
 
     def get_all(self):
-
         return {
             'BLEU-1': float(sum(self.scores1)) / max(len(self.scores1), 1),
             'BLEU-2': float(sum(self.scores2)) / max(len(self.scores2), 1),

@@ -68,6 +68,9 @@ checkpoints/
 tmp/
 temp/
 
-# ignore Dataset Coco
+# ignore Dataset
 data/
 db/
+
+# Igonore Output results
+output/
