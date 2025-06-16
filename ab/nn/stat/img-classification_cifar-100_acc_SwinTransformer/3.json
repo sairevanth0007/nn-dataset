@@ -9,7 +9,7 @@
         "momentum": 0.899589117447646,
         "stochastic_depth_prob": 0.8855908159223974,
         "transform": "norm_32_flip",
-        "uid": "98b21f94-4593-463b-8f59-b602cf5e86d2"
+        "uid": "3ecc1c5ca25f7398eca41e631159dadb"
     },
     {
         "accuracy": 0.2728,
@@ -21,7 +21,7 @@
         "momentum": 0.7965675630346166,
         "stochastic_depth_prob": 0.2544170877144408,
         "transform": "echo_32_flip",
-        "uid": "80e8735b-2e65-4c35-a32b-e7168a992a7f"
+        "uid": "0b11ab07c7594bbd65a77ae786ac4d95"
     },
     {
         "accuracy": 0.2383,
@@ -33,7 +33,7 @@
         "momentum": 0.4675332068380982,
         "stochastic_depth_prob": 0.5616074309660417,
         "transform": "echo",
-        "uid": "1696593b-a025-4773-92c4-c7c4eb1d6b81"
+        "uid": "e405f0b9abe2f2064af14f311c906582"
     },
     {
         "accuracy": 0.233,
@@ -45,7 +45,7 @@
         "momentum": 0.962659773950119,
         "stochastic_depth_prob": 0.03755526487669325,
         "transform": "norm_256_flip",
-        "uid": "782895df-79e4-4aeb-9046-732a184c4e2e"
+        "uid": "c305df6901c4aba06775da1ee639f001"
     },
     {
         "accuracy": 0.2249,
@@ -57,7 +57,7 @@
         "momentum": 0.857600739750508,
         "stochastic_depth_prob": 0.5240082106687568,
         "transform": "norm_64_flip",
-        "uid": "65712b5b-b09a-499a-b8cb-db386db0702c"
+        "uid": "b490433e878e24b88ba0e745efad6b37"
     },
     {
         "accuracy": 0.223,
@@ -69,7 +69,7 @@
         "momentum": 0.5365494214202566,
         "stochastic_depth_prob": 0.9246795345700111,
         "transform": "echo_32",
-        "uid": "eefa5ec6-d445-4bfa-a513-446e2faa5859"
+        "uid": "3c1492da70ddba35a83591adc184fd83"
     },
     {
         "accuracy": 0.2202,
@@ -81,7 +81,7 @@
         "momentum": 0.856164453195236,
         "stochastic_depth_prob": 0.08007132420988605,
         "transform": "norm_128_flip",
-        "uid": "1c5304dc-56fc-41cb-8245-cd53225d6a6c"
+        "uid": "a3c8abfde774a3d6ee1434c5eac1dce0"
     },
     {
         "accuracy": 0.1982,
@@ -93,7 +93,7 @@
         "momentum": 0.03093250424995586,
         "stochastic_depth_prob": 0.7791116231093544,
         "transform": "echo_32",
-        "uid": "7e827c0f-201f-478b-a48f-16c780e2259c"
+        "uid": "b755f655e44f1d7de613be6eecdc4c3f"
     },
     {
         "accuracy": 0.1967,
@@ -105,7 +105,7 @@
         "momentum": 0.3148591027646882,
         "stochastic_depth_prob": 0.48294059526459776,
         "transform": "norm_32",
-        "uid": "f00de056-8a5d-4c23-b1b5-f38190ed432e"
+        "uid": "26229dcb3f449d57ac439f8d6047bad5"
     },
     {
         "accuracy": 0.1006,
@@ -117,7 +117,7 @@
         "momentum": 0.2759822334015365,
         "stochastic_depth_prob": 0.5309942511082892,
         "transform": "norm_flip",
-        "uid": "7a499727-5819-4160-b6d1-718ba8b55b33"
+        "uid": "789507b3d6d935732fda2f1e4c5807fd"
     },
     {
         "accuracy": 0.0835,
@@ -129,7 +129,7 @@
         "momentum": 0.7653663264350765,
         "stochastic_depth_prob": 0.057121069051069506,
         "transform": "echo_128_flip",
-        "uid": "e553e849-86a2-45da-ac31-10543bbd9b2e"
+        "uid": "334ab7627564c0dfe762687a1ddb5859"
     },
     {
         "accuracy": 0.0423,
@@ -141,7 +141,7 @@
         "momentum": 0.03604540750809648,
         "stochastic_depth_prob": 0.4546154968976788,
         "transform": "echo_128",
-        "uid": "a96c7709-eb11-4520-b16a-288f4b82e6d3"
+        "uid": "3137403af7519f825d245fd954858807"
     },
     {
         "accuracy": 0.0359,
@@ -153,7 +153,7 @@
         "momentum": 0.17328239321922734,
         "stochastic_depth_prob": 0.7957185839972127,
         "transform": "norm_299_flip",
-        "uid": "78c5e8c2-5610-4f3f-9b91-d166471e23e5"
+        "uid": "a503a67567ee15c1db1549e95c33313d"
     },
     {
         "accuracy": 0.035,
@@ -165,6 +165,6 @@
         "momentum": 0.3458461399649855,
         "stochastic_depth_prob": 0.052643240483866705,
         "transform": "echo_64",
-        "uid": "39720cc0-5606-46e6-bc2e-9ef42c025ab4"
+        "uid": "fd46b65a3e7d77fce5fcfb0c6aac3e20"
     }
 ]

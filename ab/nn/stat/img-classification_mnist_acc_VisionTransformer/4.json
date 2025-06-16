@@ -9,7 +9,7 @@
         "momentum": 0.07704577595595918,
         "patch_size": 0.2517081746590155,
         "transform": "soft_pad",
-        "uid": "3f2e3467-3ceb-4770-bde3-aa7ef1361b5d"
+        "uid": "e11cadbaa4b7686e5aa828807731ca1a"
     },
     {
         "accuracy": 0.9546,
@@ -21,7 +21,7 @@
         "momentum": 0.49580203287687685,
         "patch_size": 0.7435981512678017,
         "transform": "norm_299",
-        "uid": "afffa73d-ae19-47c6-b677-863a204701c5"
+        "uid": "0a308bcf806406379917e27f4fe800da"
     },
     {
         "accuracy": 0.9396,
@@ -33,7 +33,7 @@
         "momentum": 0.2157957559377477,
         "patch_size": 0.8474019379990563,
         "transform": "norm_64_flip",
-        "uid": "ef19ff84-d61b-4d7f-8f1f-d5835c9faa9d"
+        "uid": "f7fab99b4ede722e7f9ba4548e339c8d"
     },
     {
         "accuracy": 0.9279,
@@ -45,7 +45,7 @@
         "momentum": 0.14249130989352776,
         "patch_size": 0.22899052745358417,
         "transform": "echo_flip",
-        "uid": "35809b1e-0326-4fd0-881a-e244bbc6b594"
+        "uid": "e369d003ed136d30338b4eebc795d529"
     },
     {
         "accuracy": 0.9077,
@@ -57,7 +57,7 @@
         "momentum": 0.7433473654477347,
         "patch_size": 0.7720714157977254,
         "transform": "norm_64",
-        "uid": "3da9ea5e-e545-49a0-83c2-8828d8509304"
+        "uid": "98b9417dd24de1af23ecec1f594a004d"
     },
     {
         "accuracy": 0.8825,
@@ -69,7 +69,7 @@
         "momentum": 0.7248669156714693,
         "patch_size": 0.3748471170537031,
         "transform": "echo_128_flip",
-        "uid": "68316d22-2754-4f02-9ccd-f4fbe6c7ca0b"
+        "uid": "05c0e06079ab4b440d25eca924bcda53"
     },
     {
         "accuracy": 0.8705,
@@ -81,7 +81,7 @@
         "momentum": 0.005283731091216715,
         "patch_size": 0.7243033258341592,
         "transform": "norm_256",
-        "uid": "6b3dde81-5b30-44d9-9aa0-a96d887b0af8"
+        "uid": "8c1346077d4dd858b4e1f6ae50ce247e"
     },
     {
         "accuracy": 0.8553,
@@ -93,7 +93,7 @@
         "momentum": 0.6999897395400042,
         "patch_size": 0.5021337056224858,
         "transform": "norm_256_flip",
-        "uid": "118fdd3f-ef3f-4fc6-a23f-e07096353d84"
+        "uid": "f2dc710ef6670b1eff918fbdaca1ccbb"
     },
     {
         "accuracy": 0.7932,
@@ -105,7 +105,7 @@
         "momentum": 0.5323061511850046,
         "patch_size": 0.30750729428174106,
         "transform": "echo_256_flip",
-        "uid": "675caa54-338e-41ba-a1bc-79fd66016dbb"
+        "uid": "3c772f0c444417d05d47af02d7a9e9b2"
     },
     {
         "accuracy": 0.7738,
@@ -117,7 +117,7 @@
         "momentum": 0.9853226519757081,
         "patch_size": 0.3704240753804052,
         "transform": "echo_256",
-        "uid": "c974a380-3eec-4413-b5c5-3628c6fa4c6c"
+        "uid": "2d941cce8918eb583591cacc97413189"
     },
     {
         "accuracy": 0.7645,
@@ -129,7 +129,7 @@
         "momentum": 0.08426565932071861,
         "patch_size": 0.12842019874553068,
         "transform": "norm_128",
-        "uid": "6c4f2300-3f90-424c-a65f-0c85404b62c0"
+        "uid": "0e0b6a0cd4fe481db7f4b9e78d12a520"
     },
     {
         "accuracy": 0.7493,
@@ -141,7 +141,7 @@
         "momentum": 0.9878808245698637,
         "patch_size": 0.7958139641305977,
         "transform": "norm_256",
-        "uid": "48a8c978-9137-469c-9fb7-12705fae2a7e"
+        "uid": "b7907f453c0badb8f646a614dc5ee6a6"
     },
     {
         "accuracy": 0.6103,
@@ -153,7 +153,7 @@
         "momentum": 0.662628580255873,
         "patch_size": 0.7870554251914181,
         "transform": "echo_256",
-        "uid": "f66cb11f-d6d6-4c98-8ba7-8b789d8073bd"
+        "uid": "00bf9e0dc227a34fbed801506746fae2"
     },
     {
         "accuracy": 0.5496,
@@ -165,7 +165,7 @@
         "momentum": 0.278708683821579,
         "patch_size": 0.6219031192202025,
         "transform": "echo_flip",
-        "uid": "a8547bcf-ca2b-4577-96cd-bc1e1a8bbcbe"
+        "uid": "3c94c96e4fb42ef096043ca5fc10bb27"
     },
     {
         "accuracy": 0.4725,
@@ -177,7 +177,7 @@
         "momentum": 0.1431086465437077,
         "patch_size": 0.3696385526084176,
         "transform": "echo_32_flip",
-        "uid": "183612df-9387-4790-a26b-8f7d54e5fac3"
+        "uid": "0dd4d1e62e1fd9fdafe34ac74e6cf1f6"
     },
     {
         "accuracy": 0.4703,
@@ -189,7 +189,7 @@
         "momentum": 0.28663426786258595,
         "patch_size": 0.7616585752389455,
         "transform": "echo_flip",
-        "uid": "6bf0620d-3650-4653-a350-7c61027ee290"
+        "uid": "d46aa5604ecf39aa4c8dd6f38657a632"
     },
     {
         "accuracy": 0.4006,
@@ -201,6 +201,6 @@
         "momentum": 0.8627456374029586,
         "patch_size": 0.5617389297382589,
         "transform": "norm_flip",
-        "uid": "9a3df231-4acc-4b71-be02-d13c99076475"
+        "uid": "3d52e21d71b24d517470ea96fdfb5077"
     }
 ]

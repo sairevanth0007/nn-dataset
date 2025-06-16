@@ -9,7 +9,7 @@
         "momentum": 0.899589117447646,
         "stochastic_depth_prob": 0.8855908159223974,
         "transform": "norm_32_flip",
-        "uid": "059b9c3a-8bf9-44b4-841d-7f65a60daa8f"
+        "uid": "213a8bd07ffa15e1adcf96c31a50dea2"
     },
     {
         "accuracy": 0.2981,
@@ -21,7 +21,7 @@
         "momentum": 0.7965675630346166,
         "stochastic_depth_prob": 0.2544170877144408,
         "transform": "echo_32_flip",
-        "uid": "363948fe-6a93-498d-8012-be4f4ad17417"
+        "uid": "90e9b8ab35a5228cf5f17e0fb5ac3928"
     },
     {
         "accuracy": 0.2706,
@@ -33,7 +33,7 @@
         "momentum": 0.4675332068380982,
         "stochastic_depth_prob": 0.5616074309660417,
         "transform": "echo",
-        "uid": "ebdc0ba2-dd1f-44b9-83d7-05382b55647d"
+        "uid": "845d70ee2f2489c32f4d43457f57fbfc"
     },
     {
         "accuracy": 0.2695,
@@ -45,7 +45,7 @@
         "momentum": 0.962659773950119,
         "stochastic_depth_prob": 0.03755526487669325,
         "transform": "norm_256_flip",
-        "uid": "62f3d291-36d0-4d25-b915-8332d9a01767"
+        "uid": "69fa179240b480dfd69e521e7d478822"
     },
     {
         "accuracy": 0.2679,
@@ -57,7 +57,7 @@
         "momentum": 0.857600739750508,
         "stochastic_depth_prob": 0.5240082106687568,
         "transform": "norm_64_flip",
-        "uid": "dcf667cb-6e5e-4219-b925-66b80c782343"
+        "uid": "582fcac61895f8a691cb44adbb6dd730"
     },
     {
         "accuracy": 0.2479,
@@ -69,7 +69,7 @@
         "momentum": 0.5365494214202566,
         "stochastic_depth_prob": 0.9246795345700111,
         "transform": "echo_32",
-        "uid": "35af38df-cb93-4bf0-a671-70a418e2e896"
+        "uid": "a4f483dbe6a5f7f258ca3a57e529e1ba"
     },
     {
         "accuracy": 0.2414,
@@ -81,7 +81,7 @@
         "momentum": 0.856164453195236,
         "stochastic_depth_prob": 0.08007132420988605,
         "transform": "norm_128_flip",
-        "uid": "9a2c91f1-2a21-4caa-856c-50ad0630869e"
+        "uid": "2c07f55fa9ff4d9133da9c324ca390a2"
     },
     {
         "accuracy": 0.2155,
@@ -93,7 +93,7 @@
         "momentum": 0.3148591027646882,
         "stochastic_depth_prob": 0.48294059526459776,
         "transform": "norm_32",
-        "uid": "cf55da9b-47a7-405f-b050-78c4325afb36"
+        "uid": "db6a806009248730b00be04bb6591553"
     },
     {
         "accuracy": 0.2084,
@@ -105,7 +105,7 @@
         "momentum": 0.03093250424995586,
         "stochastic_depth_prob": 0.7791116231093544,
         "transform": "echo_32",
-        "uid": "0e67d8e4-f433-400a-b3d1-dfae4db2f056"
+        "uid": "c1f6d273cd934308b50088ecaa66e69b"
     },
     {
         "accuracy": 0.1173,
@@ -117,7 +117,7 @@
         "momentum": 0.2759822334015365,
         "stochastic_depth_prob": 0.5309942511082892,
         "transform": "norm_flip",
-        "uid": "2e3974e4-47d4-4265-b3d6-c4ef429da731"
+        "uid": "650c9afe0d5da4fce750efd88c076b0a"
     },
     {
         "accuracy": 0.086,
@@ -129,7 +129,7 @@
         "momentum": 0.7653663264350765,
         "stochastic_depth_prob": 0.057121069051069506,
         "transform": "echo_128_flip",
-        "uid": "bafdd924-5170-438d-8c4f-52e8a8b1a92c"
+        "uid": "33a8019adad2db7495dd728db44a42f9"
     },
     {
         "accuracy": 0.0529,
@@ -141,7 +141,7 @@
         "momentum": 0.03604540750809648,
         "stochastic_depth_prob": 0.4546154968976788,
         "transform": "echo_128",
-        "uid": "4b4e316d-865c-4f50-bc20-dbe514dbd584"
+        "uid": "0acf5f105074606e5d708acb50ad8ee5"
     },
     {
         "accuracy": 0.0406,
@@ -153,7 +153,7 @@
         "momentum": 0.3458461399649855,
         "stochastic_depth_prob": 0.052643240483866705,
         "transform": "echo_64",
-        "uid": "fadd7996-f005-441d-802b-43654560381a"
+        "uid": "505ac46af19b2c1a51c6237f0b7d2192"
     },
     {
         "accuracy": 0.0361,
@@ -165,6 +165,6 @@
         "momentum": 0.17328239321922734,
         "stochastic_depth_prob": 0.7957185839972127,
         "transform": "norm_299_flip",
-        "uid": "991aeff2-86cd-49df-a155-ad6ad0833207"
+        "uid": "e76fecf5f9d03d4165a3b323aa1c8ddb"
     }
 ]
