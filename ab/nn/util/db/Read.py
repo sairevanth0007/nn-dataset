@@ -105,7 +105,7 @@ def data(
                     GROUP  BY task, dataset, metric, nn, epoch
                 )
                 SELECT f.task, f.dataset, f.metric, m.code AS metric_code,  m.id AS metric_id,
-                       f.nn, n.code AS nn_code, n.id AS nn_id,, f.epoch, f.accuracy, f.duration,
+                       f.nn, n.code AS nn_code, n.id AS nn_id, f.epoch, f.accuracy, f.duration,
                        f.stat_id, f.stat_prm, t.code AS transform_code, t.id AS transform_id, f.transform
                 FROM   filtered  f
                 JOIN   best      b ON f.task = b.task
