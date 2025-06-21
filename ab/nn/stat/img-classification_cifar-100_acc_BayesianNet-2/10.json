@@ -9,6 +9,15 @@
         "uid": "fd7299d4a76de26e5ee7257a50e5bfe5"
     },
     {
+        "accuracy": 0.1817,
+        "batch": 128,
+        "duration": 38665781687,
+        "lr": 0.0018826805766722651,
+        "momentum": 0.9047446848280214,
+        "transform": "echo_flip",
+        "uid": "8df21921033d46ca04d62f6c4b078afa"
+    },
+    {
         "accuracy": 0.0461,
         "batch": 64,
         "duration": 50995355553,
