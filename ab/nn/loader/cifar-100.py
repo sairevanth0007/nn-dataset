@@ -10,6 +10,10 @@ minimum_accuracy = 1.0 / __class_quantity
 
 def loader(transform_fn, task):
     transform = transform_fn((__norm_mean, __norm_dev))
-    train_set = torchvision.datasets.CIFAR100(root=data_dir, train=True, transform=transform, download=True)
-    test_set = torchvision.datasets.CIFAR100(root=data_dir, train=False, transform=transform, download=True)
+    # Make sure data_dir points to the folder containing the .tar.gz file (e.g., './data')
+    data_dir = './data'
+    train_set = torchvision.datasets.CIFAR10(root=data_dir, train=True, transform=transform, download=False)
+
+    # Also change it for the test set
+    test_set = torchvision.datasets.CIFAR10(root=data_dir, train=False, transform=transform, download=False)
     return (__class_quantity,), minimum_accuracy, train_set, test_set
