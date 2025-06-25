@@ -10,7 +10,7 @@ SEARCH_SPACE = {
     # Convolutional Layers
     'conv1_filters': [32, 64, 96],
     'conv1_kernel': [7, 9, 11],
-    'conv1_stride': [3, 4, 5],
+    'conv1_stride': [3, 4],  # Removed stride 5 as it's too aggressive for 32x32 images
     'conv2_filters': [128, 192, 256],
     'conv2_kernel': [3, 5],
     'conv3_filters': [256, 384, 440],
@@ -38,7 +38,7 @@ def create_random_chromosome():
 
 
 def supported_hyperparameters():
-    """Kept for compatibility with the nn-dataset framework."""
+    """Kept for compatibility with the nn-dataset framework (if used)."""
     return {'lr', 'momentum', 'dropout'}
 
 
@@ -75,14 +75,17 @@ class Net(nn.Module):
         # ---- Feature Extractor (Convolutional Layers) ----
         # We build this layer by layer to handle the changing number of input/output channels.
         layers = []
-        in_channels = in_shape[1]  # Starts with the image channels (e.g., 3 for RGB)
+
+        # CORRECTED: Use in_shape[0] for input channels (e.g., 3 for RGB images)
+        in_channels = in_shape[0]
 
         # Layer 1
         layers += [
             nn.Conv2d(in_channels, chromosome['conv1_filters'], kernel_size=chromosome['conv1_kernel'],
                       stride=chromosome['conv1_stride'], padding=2),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
+            # CORRECTED: MaxPool2d kernel_size changed from 3 to 2 for smaller images
+            nn.MaxPool2d(kernel_size=2, stride=2),
         ]
         in_channels = chromosome['conv1_filters']
 
@@ -90,7 +93,8 @@ class Net(nn.Module):
         layers += [
             nn.Conv2d(in_channels, chromosome['conv2_filters'], kernel_size=chromosome['conv2_kernel'], padding=2),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
+            # CORRECTED: MaxPool2d kernel_size changed from 3 to 2 for smaller images
+            nn.MaxPool2d(kernel_size=2, stride=2),
         ]
         in_channels = chromosome['conv2_filters']
 
@@ -112,7 +116,8 @@ class Net(nn.Module):
         layers += [
             nn.Conv2d(in_channels, chromosome['conv5_filters'], kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
+            # CORRECTED: MaxPool2d kernel_size changed from 3 to 2 for smaller images
+            nn.MaxPool2d(kernel_size=2, stride=2),
         ]
         in_channels = chromosome['conv5_filters']
 
